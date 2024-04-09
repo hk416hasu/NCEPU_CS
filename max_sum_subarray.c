@@ -1,3 +1,4 @@
+// 求两序列的最大子段和
 #include <stdio.h>
 
 int main() {
