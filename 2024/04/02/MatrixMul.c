@@ -1,3 +1,4 @@
+// 矩阵链连乘顺序问题（动态规划）
 #include <stdio.h>
 #include <string.h>
 

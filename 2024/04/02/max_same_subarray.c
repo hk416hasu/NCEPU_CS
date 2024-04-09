@@ -1,3 +1,4 @@
+// 求两序列最长相同子序列（动态规划）
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
