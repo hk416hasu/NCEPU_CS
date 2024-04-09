@@ -1,3 +1,4 @@
+// 求两序列的最长子序列
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
