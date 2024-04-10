@@ -3,39 +3,35 @@
     dp[i][j]含义：i为背包容量，j为物品个数(A1 - Aj), dp[i][j]就是在“容量为i的背包”中“装下A1至Aj这些个物品”的最大价值；
     最优子结构是：对于第j个物品，装？or不装？谁更大？max{dp[i-wj][j-1] + pj, dp[i][j-1]};
                 装：容量减小，价值增加，更新dp值  ；不装：容量与价值均不变，dp值等于装到第j-1个物品
+    遍历顺序：行从小到大，列从小到大；（由我找到的最优子结构 + 递推公式决定的）
 */
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <mem.h>
 
-void Input(int *arr, int len) {
-    arr[0] = 0;
-    for (int i = 1; i < len; i++) {
-        scanf("%d", &arr[i]);
+#define capacity 10
+#define c_len (capacity + 1)
+#define num 5
+#define n_len (num + 1)
+
+void Output2Darray(int (*arr)[n_len], int row, int col) {
+    for (int i = 0; i < row; i++) {
+        for (int j = 0; j < col; j++) {
+            printf("%d ", arr[i][j]);
+        }
+        printf("\n");
     }
 }
 
 int main() {
-    int capacity = 0, num = 0;
-    scanf("%d%d", &capacity, &num);
-    int n_len = num + 1;
-    int c_len = capacity + 1;
-
-    int *weight = (int *)malloc(n_len * sizeof(int));
-    Input(weight, n_len);
-    int *price = (int *)malloc(n_len * sizeof(int));
-    Input(price, n_len);
-
-
-    // int dp[c_len][n_len];
-    // memset(dp, 0, c_len * n_len * sizeof(int));
-    // int trace[c_len][n_len];
-    // memset(trace, 0, c_len * n_len * sizeof(int));
-    // int *select = (int *)malloc(n_len * sizeof(int));
-    // memset(select, 0, c_len * sizeof(int));
-
-    int w = 0, p = 0;
+    int weight[n_len] = {0,3,2,4,1,6};
+    int price[n_len] = {0,10,7,12,4,20};
+    int dp[c_len][n_len] = {0};
+    int trace[c_len][n_len] = {0};
+    int select[c_len] = {0};
+    int w = 0, p = 0;   // w 存储第j个物品的重量，p 存储第j个物品的价格
+    // 动态规划主体：遍历得dp数组与trace数组
     for (int i = 1; i < c_len; i++) {
         for (int j = 1; j < n_len; j++) {
             w = weight[j];
@@ -55,42 +51,23 @@ int main() {
         }
     }
     printf("dp:\n");
-    for (int i = 0; i < c_len; i++) {
-        for (int j = 0; j < n_len; j++) {
-            printf("%d ", dp[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\ntrace:\n");
-    for (int i = 0; i < c_len; i++) {
-        for (int j = 0; j < n_len; j++) {
-            printf("%d ", trace[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-
+    Output2Darray(dp, c_len, n_len);
+    printf("trace:\n");
+    Output2Darray(trace, c_len, n_len);
+    // traceback
     for (int i = capacity, j = num; j > 0; j--) {
         if (trace[i][j] == 1) {
             select[j] = 1;
             i -= weight[j];
         }
     }
+    printf("\n");
     for (int i = 1; i < n_len; i++) {
         if (select[i] == 1) {
             printf("A%d ", i);
         }
     }
-    printf("\n");
+    printf("\n\n");
 
-    getchar();
     return 0;
 }
-
-/*
-
-10 5
-3 2 4 1 6
-10 7 12 4 20
-
-*/
