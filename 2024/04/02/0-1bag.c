@@ -5,6 +5,7 @@
                 装：容量减小，价值增加，更新dp值  ；不装：容量与价值均不变，dp值等于装到第j-1个物品
 */
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <mem.h>
 
@@ -16,14 +17,23 @@ void Input(int *arr, int len) {
 }
 
 int main() {
-    int num = 5, capacity = 10;
+    int capacity = 0, num = 0;
+    scanf("%d%d", &capacity, &num);
     int n_len = num + 1;
     int c_len = capacity + 1;
-    int weight[n_len] = {0,3,2,4,1,6};
-    int price[n_len] = {0,10,7,12,4,20};
-    int dp[c_len][n_len], trace[c_len][n_len], select[n_len] = {0};
-    memset(dp, 0, c_len * n_len * sizeof(int));
-    memset(trace, 0, c_len * n_len * sizeof(int));
+
+    int *weight = (int *)malloc(n_len * sizeof(int));
+    Input(weight, n_len);
+    int *price = (int *)malloc(n_len * sizeof(int));
+    Input(price, n_len);
+
+
+    // int dp[c_len][n_len];
+    // memset(dp, 0, c_len * n_len * sizeof(int));
+    // int trace[c_len][n_len];
+    // memset(trace, 0, c_len * n_len * sizeof(int));
+    // int *select = (int *)malloc(n_len * sizeof(int));
+    // memset(select, 0, c_len * sizeof(int));
 
     int w = 0, p = 0;
     for (int i = 1; i < c_len; i++) {
@@ -76,3 +86,11 @@ int main() {
     getchar();
     return 0;
 }
+
+/*
+
+10 5
+3 2 4 1 6
+10 7 12 4 20
+
+*/
