@@ -8,7 +8,6 @@ int main() {
     capacity = capacity + 1;
     int weight[num] = {0,3,2,4,1,6};
     int price[num] = {0,10,7,12,4,20};
-    
     int dp[capacity][num];
     memset(dp, 0, capacity * num * sizeof(int));
 
@@ -21,7 +20,6 @@ int main() {
                 dp[i][j] = dp[i][j-1];
             } else {
                 dp[i][j] = fmax(dp[i-w][j-1] + p, dp[i][j-1]);
-                f
             }
         }
     }
