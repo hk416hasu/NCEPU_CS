@@ -73,7 +73,7 @@ int main() {
             printf("A%d ", i);
         }
     }
-    printf("\n\n");
+    printf("\n");
 
     return 0;
 }
