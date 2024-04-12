@@ -1,2 +1,7 @@
 .vscode/
 a
+*.exe
+*.txt
+*.in
+*.out
+*.c.swp
