@@ -30,6 +30,7 @@ bool Pop(SqStack *S, ElemType *data) {
     return true;
 }
 
+// ? 不就是pop么...
 bool GetTop_Rm(SqStack *S, ElemType *data) {
     if (EmptyStack(S)) {
         return false;
