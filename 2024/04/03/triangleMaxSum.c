@@ -10,11 +10,19 @@ int main() {
     InitStack(&S);
     int val[num][num+1] = {{0,5,0,0,0},{0,4,6,0,0},{0,10,2,8,0},{0,3,4,9,5}};
     int dp[num][num+1] = {0};
+    bool trace[num][num+1] = {0};
 
+    // 得到dp数组
     dp[0][1] = val[0][1];
     for (int i = 1; i < num; i++) {
         for (int j = 1; j <= i+1; j++) {
-            dp[i][j] = fmax(dp[i-1][j-1], dp[i-1][j]) + val[i][j];
+            if (dp[i-1][j-1] > dp[i-1][j]) {
+                trace[i][j] = 0;
+                dp[i][j] = dp[i-1][j-1] + val[i][j];
+            } else {
+                trace[i][j] = 1;
+                dp[i][j] = dp[i-1][j] + val[i][j];
+            }
         }   
     }
 
@@ -32,7 +40,7 @@ int main() {
     for (int i=max_i, j=max_j; i >= 0;) {
         tmp = val[i][j];
         Push(&S, &tmp);
-        if (val[i-1][j] > val[i-1][j-1]) {
+        if (trace[i][j] == 1) {
             i--;
         } else {
             i--;
@@ -40,7 +48,7 @@ int main() {
         }
     }
     int max_sum = 0;
-    while (GetTop_Rm(&S, &tmp)) {
+    while (Pop(&S, &tmp)) {
         max_sum += tmp;
         printf("%d ", tmp);
     }
