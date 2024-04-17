@@ -8,7 +8,7 @@
 int main() {
     SqStack S;
     InitStack(&S);
-    int val[num][num+1] = {{0,5,0,0,0},{0,4,6,0,0},{0,10,2,8,0},{0,3,4,9,5}};
+    int val[num][num+1] = {{0,1,0,0,0},{0,3,2,0,0},{0,4,10,1,0},{0,4,3,2,10}};
     int dp[num][num+1] = {0};
     bool trace[num][num+1] = {0};
 
