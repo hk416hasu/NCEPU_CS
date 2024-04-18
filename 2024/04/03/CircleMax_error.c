@@ -24,6 +24,8 @@ int main() {
 
     int val[num] = {-7,4,2,5};
     char op[num] = {'+','*','*','+'};
+    // int val[num] = {2,3,1,7,4};
+    // char op[num] = {'*','+','+','*','*'};
 
     int dp_max[num][num] = {0};
     int dp_min[num][num] = {0};
@@ -72,7 +74,7 @@ int main() {
         }
     }
     printf("you should delete the op[%d].\n", optimal_i);
-    printf("the max score is %d\n", max);
+    // printf("the max score is %d\n", max);
     
     getchar();
     return 0;
