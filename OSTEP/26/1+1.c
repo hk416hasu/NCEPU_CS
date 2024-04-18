@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <pthread.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 static volatile int counter = 0;
 
@@ -14,6 +16,7 @@ void * mythread(void * arg) {
 
 int main() {
 	pthread_t p1, p2;
+	printf("pid : %d\n", getpid());
 	printf("main: begin (counter = %d)\n", counter);
 	pthread_create(&p1, NULL, mythread, "A");
 	pthread_create(&p2, NULL, mythread, "B");
@@ -22,8 +25,7 @@ int main() {
 	pthread_join(p2, NULL);
 	printf("main: end with both (counter = %d)\n", counter);
 
-
-
-
+	fflush(stdout); // 刷新标准输出流
+    getchar(); // 等待用户输入
 	return 0;
 }
