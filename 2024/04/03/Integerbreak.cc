@@ -4,28 +4,24 @@
 int main() {
     int n = 0;
     scanf("%d", &n);
-    int len = (int)(sqrt(n));
-    std::vector<int> arr(len, len);
-    int base = len * len;
-    int bias = n - base;
-    for (int i = 0; i < bias; i++) {
-        arr[i]++;
+    std::vector<int> dp(n+1, 0);
+    dp[0] = 1;  dp[1] = 1;
+    dp[2] = 1;  dp[3] = 2;
+    dp[4] = 4;  dp[5] = 6;
+    dp[6] = 9;  dp[7] = 12;
+    for (int i = 8; i <= n; i++) {
+        for (int k = 2; k < i-1; k++) {
+            dp[i] = fmax(dp[i], k * dp[i-k]);   // 
+        }
     }
-    
-    int acc = 1;
-    for (int val : arr) {
-        acc *= val;
-    }
-    printf("%d\n", acc);
+
     getchar();
     return 0;
 }
 
 /*
 
-class Solution {
-    public int integerBreak(int n) {
-        if (n == 2) return 1;
+if (n == 2) return 1;
         else if (n == 3) return 2;
         else if (n == 4) return 4;
         else if (n == 5) return 6;
@@ -82,7 +78,5 @@ class Solution {
         else if (n == 56) return 774840978;
         else if (n == 57) return 1162261467;
         else return 1549681956;
-    }
-}
 
 */
