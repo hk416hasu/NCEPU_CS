@@ -11,7 +11,7 @@ int main() {
     dp[6] = 9;  dp[7] = 12;
     for (int i = 8; i <= n; i++) {
         for (int k = 2; k < i-1; k++) {
-            dp[i] = fmax(dp[i], k * dp[i-k]);   // 
+            dp[i] = fmax(dp[i], k * dp[i-k]);   // 逐个试最大值，（尽可能延续最优解）
         }
     }
 
