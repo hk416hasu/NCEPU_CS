@@ -1,3 +1,4 @@
+// 求最大子段和
 class Solution1 {
 public:
     // 最呆的初版
@@ -47,6 +48,7 @@ public:
 int main() {
     // 完整版
     // 如果过去是拖累，则全部舍弃，重置为当前值；如果过去有增益，则保留，+= 当前值。
+    // if sum <= 0 ,则 sum = curr; if sum > 0, 则 sum += curr.
     printf("To calculate the max_subarray_sum.\n");
     printf("plz input the len of original array:\n");
     int len = 0;
