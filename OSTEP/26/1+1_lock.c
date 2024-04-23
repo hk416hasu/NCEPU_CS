@@ -11,7 +11,7 @@ void * mythread(void * arg) {
 	printf("%s: begin\n", (char *)arg);
 	for (int i = 0; i < 1e7; i++) {
 		// 进入临界区前要先取锁
-		pthread_mutex_lock(&lock);
+		pthread_mutex_lock(&lock);	// ..._lock()里用的是原子指令(比如atomic_xchg), 以保证线程并发安全
 		// 进入临界区
 		counter = counter + 1;
 		//释放锁
@@ -26,7 +26,7 @@ int main() {
 	printf("pid : %d\n", getpid());
 	printf("main: begin (counter = %d)\n", counter);
 
-	// 初始化(动态)
+	// 初始化锁(动态)
 	int rc = pthread_mutex_init(&lock, NULL);
 	assert(rc == 0);
 
@@ -36,6 +36,8 @@ int main() {
 	pthread_join(p1, NULL);
 	pthread_join(p2, NULL);
 	printf("main: end with both (counter = %d)\n", counter);
+
+	pthread_mutex_destroy(&lock);	// 销毁锁
 
 	fflush(stdout); // 刷新标准输出流
 	return 0;
