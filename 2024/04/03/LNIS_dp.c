@@ -43,8 +43,8 @@ int main() {
 
     int min_num = 1;    // 最少使用导弹系统数
     for (int i = 1; i < num; i++) {
-        // if (dp[i] < dp[i-1]) {   // 根据dp数组求
-        if (height[i] > height[i-1]) {  // 根据原height数组求
+        if (dp[i] < dp[i-1]) {   // 根据dp数组求
+       	// if (height[i] > height[i-1]) {  // 根据原height数组求
             min_num++;
         }
     }
