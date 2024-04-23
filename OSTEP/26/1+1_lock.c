@@ -2,13 +2,24 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <assert.h>
 
 static volatile int counter = 0;
 
 void * mythread(void * arg) {
 	printf("%s: begin\n", (char *)arg);
+	// 定义一把互斥锁
+	pthread_mutex_t lock;
+	// 初始化(动态)
+	int rc = pthread_mutex_init(&lock, NULL);
+	assert(rc == 0);
 	for (int i = 0; i < 1e7; i++) {
+		// 进入临界区前要先取锁
+		pthread_mutex_lock(&lock);
+		// 进入临界区
 		counter = counter + 1;
+		//释放锁
+		pthread_mutex_unlock(&lock)i;
 	}
 	printf("%s: end\n", (char *)arg);
 	return NULL;
