@@ -11,7 +11,7 @@ void * mythread(void * arg) {
 	printf("%s: begin\n", (char *)arg);
 	for (int i = 0; i < 1e7; i++) {
 		// 进入临界区前要先取锁
-		pthread_mutex_lock(&lock);	// ..._lock()里用的是原子指令(比如atomic_xchg), 以保证线程并发安全
+		pthread_mutex_lock(&lock);	// ..._lock()里用的是原子指令, 以保证线程并发安全
 		// 进入临界区
 		counter = counter + 1;
 		//释放锁
@@ -28,7 +28,7 @@ int main() {
 
 	// 初始化锁(动态)
 	int rc = pthread_mutex_init(&lock, NULL);
-	assert(rc == 0);
+	assert(rc == 0);	// 别忘了断言
 
 	pthread_create(&p1, NULL, mythread, "A");
 	pthread_create(&p2, NULL, mythread, "B");
