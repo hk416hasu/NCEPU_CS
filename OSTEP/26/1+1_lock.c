@@ -24,18 +24,18 @@ void * mythread(void * arg) {
 int main() {
 	pthread_t p1, p2;
 	printf("pid : %d\n", getpid());
-	printf("main: begin (counter = %d)\n", counter);
+	printf("main: begin ( counter = %d )\n", counter);
 
 	// 初始化锁(动态)
 	int rc = pthread_mutex_init(&lock, NULL);
-	assert(rc == 0);
+	assert(rc == 0); // 加入断言, 确保正确初始化
 
 	pthread_create(&p1, NULL, mythread, "A");
 	pthread_create(&p2, NULL, mythread, "B");
 	
 	pthread_join(p1, NULL);
 	pthread_join(p2, NULL);
-	printf("main: end with both (counter = %d)\n", counter);
+	printf("main: end with both ( counter = %d )\n", counter);
 
 	pthread_mutex_destroy(&lock);	// 销毁锁
 
