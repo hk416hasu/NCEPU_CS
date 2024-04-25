@@ -8,8 +8,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-//static volatile int money = 500;
-size_t money = 500;
+static volatile int money = 500;
+// size_t money = 500;
 
 struct ThreadArgs {
 	char name;

@@ -28,7 +28,7 @@ int main() {
 
 	// 初始化锁(动态)
 	int rc = pthread_mutex_init(&lock, NULL);
-	assert(rc == 0);	// 别忘了断言
+	assert(rc == 0); // 加入断言, 确保正确初始化
 
 	pthread_create(&p1, NULL, mythread, "A");
 	pthread_create(&p2, NULL, mythread, "B");
