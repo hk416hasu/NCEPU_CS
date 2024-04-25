@@ -17,13 +17,13 @@ void * mythread(void * arg) {
 int main() {
 	pthread_t p1, p2;
 	printf("pid : %d\n", getpid());
-	printf("main: begin (counter = %d)\n", counter);
+	printf("main: begin ( counter = %d )\n", counter);
 	pthread_create(&p1, NULL, mythread, "A");
 	pthread_create(&p2, NULL, mythread, "B");
 	
 	pthread_join(p1, NULL);
 	pthread_join(p2, NULL);
-	printf("main: end with both (counter = %d)\n", counter);
+	printf("main: end with both ( counter = %d )\n", counter);
 
 	fflush(stdout); // 刷新标准输出流
 	return 0;
