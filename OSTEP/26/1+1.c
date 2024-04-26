@@ -4,8 +4,9 @@
 #include <unistd.h>
 
 static volatile int counter = 0;
+// int counter = 0;	// 试试不volatile 且 -O2 -O1优化？
 
-void * mythread(void * arg) {
+void * myroutine(void * arg) {
 	printf("%s: begin\n", (char *)arg);
 	for (int i = 0; i < 1e7; i++) {
 		counter = counter + 1;
@@ -18,8 +19,8 @@ int main() {
 	pthread_t p1, p2;
 	printf("pid : %d\n", getpid());
 	printf("main: begin ( counter = %d )\n", counter);
-	pthread_create(&p1, NULL, mythread, "A");
-	pthread_create(&p2, NULL, mythread, "B");
+	pthread_create(&p1, NULL, myroutine, "A");
+	pthread_create(&p2, NULL, myroutine, "B");
 	
 	pthread_join(p1, NULL);
 	pthread_join(p2, NULL);
