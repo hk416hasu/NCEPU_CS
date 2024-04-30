@@ -2,24 +2,27 @@
 #include <queue>
 #include <unordered_set>
 #include <vector>
+#include "NthUglyNumAnswer.h"
+
+typedef long long LL;
 
 int main() {
 
-    int N = 0;
-    scanf("%d", &N);
+    int n = 0;
+    scanf("%d", &n);
     int count = 0;
-    long target = 0;
+    LL target = 0;
 
-    std::vector<int> factors = {2, 3, 5};
-    std::priority_queue<long, std::vector<long>, std::greater<long>> MinHeap;
-    std::unordered_set<long> existed;
+    std::vector<LL> factors = {2, 3, 5};
+    std::priority_queue<LL, std::vector<LL>, std::greater<LL>> MinHeap;
+    std::unordered_set<LL> existed;
     MinHeap.push(1);
     existed.insert(1);
 
-    while (count < N) {
+    while (count < n) {
         target = MinHeap.top();
         MinHeap.pop();
-        for (int elem : factors) {
+        for (LL elem : factors) {
             if (existed.find(elem * target) == existed.end()) {
                 MinHeap.push(elem * target);
                 existed.insert(elem * target);
@@ -27,6 +30,7 @@ int main() {
         }
         count++;
     }
+    // printf("%ld\n", UglyNum_all[n-1]);
     printf("%ld\n", target);
 
     return 0;

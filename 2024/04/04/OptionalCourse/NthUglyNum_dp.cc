@@ -1,10 +1,12 @@
 #include <vector>
 #include <iostream>
 
+typedef long long LL;
+
 int main() {
     int n = 0;
     scanf("%d", &n);
-    std::vector<long> dp(n+1);
+    std::vector<LL> dp(n+1);
     dp[1] = 1;
     int i2 = 1, i3 = 1, i5 = 1;
     for (int i = 2; i <= n; i++) {
