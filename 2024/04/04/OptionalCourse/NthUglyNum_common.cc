@@ -1,3 +1,7 @@
+/* 利用vector的实现，主要思路是
+
+时间耗费大，主要消耗在
+*/
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -30,8 +34,8 @@ int main() {
         count++;
     }
 
-    printf("%d\n", UglyNum_all[N-1]);
-    printf("%d\n", target);
+    printf("%ld\n", UglyNum_all[N-1]);
+    printf("%ld\n", target);
 
     getchar();
     return 0;
