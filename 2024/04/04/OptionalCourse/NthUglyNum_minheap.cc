@@ -1,3 +1,5 @@
+// 如果x是丑数，则 2*x, 3*x, 5*x也是丑数
+// 我们可以利用小根堆来得到
 #include <algorithm>
 #include <queue>
 #include <unordered_set>

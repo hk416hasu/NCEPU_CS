@@ -30,7 +30,7 @@ int main() {
     std::iota(data.begin(), data.end(), 1);
 
     // 暴力枚举所有情况求符合题意的解，时间复杂度 O(2^n)
-    int ceiling = (int)pow(2, n), mask = 0;
+    int ceiling = (int)pow(2, n);
     std::vector<bool> access(ceiling);
     std::vector<int> sub;
     for (int i = 1; i < ceiling; i++) {
