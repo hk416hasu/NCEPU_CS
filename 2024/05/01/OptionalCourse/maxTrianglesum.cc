@@ -35,7 +35,6 @@ int main() {
     } while (i < n-1);
     printf("\n");
 
-    getchar();
     return 0;
 }
 
