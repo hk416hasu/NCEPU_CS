@@ -6,14 +6,13 @@
 #include <cmath>
 
 // 利用位运算，生成num的0/1序列
-void Access_Init(std::vector<bool> &vec, int num, int len) {
-    vec.clear();
-    for (int i = 0; i < len; i++) {
-        bool bit = (num >> i) & 1;
-        vec.push_back(bit);
+void Access_Init(std::vector<bool> &vec, int num) {
+    for (int i = 0; i < vec.size(); i++) {
+        vec[i] = (num >> i) & 1;
     }
 }
 
+// 打印数组
 void Print(std::vector<int> &vec) {
     for (int elem : vec) {
         printf("%d ", elem);
@@ -21,7 +20,7 @@ void Print(std::vector<int> &vec) {
     printf("\n");
 }
 
-// 全为true返回true
+// 若布尔数组中全为true返回true，否则返回false
 bool isAllTrue(std::vector<bool> vec) {
     for (bool elem : vec) {
         if (!elem) {
@@ -45,7 +44,7 @@ int main() {
     int i = 0;
     // 当且仅当access数组全为true时终止
     while (!isAllTrue(access)) {
-        Access_Init(access, i++, n);
+        Access_Init(access, i++);
         for (int j = 0; j < n; j++) {
             if (access[j]) {
                 sub.push_back(data[j]);
