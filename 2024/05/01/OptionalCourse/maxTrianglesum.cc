@@ -15,7 +15,8 @@ int main() {
     }
     std::vector<std::vector<int>> dp(n, std::vector<int>(n));
     dp.back().assign(data.back().begin(), data.back().end());   // dp数组最后一行初始化为data的最后一行
-    
+    // dp.back() = data.back();    // vector的=运算符重载真好用
+
     for (int i = n-2; i >= 0; i--) {
         for (int j = 0; j <= i; j++) {
             dp[i][j] = data[i][j] + std::max(dp[i+1][j+1], dp[i+1][j]);
