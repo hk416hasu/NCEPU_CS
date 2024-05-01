@@ -8,6 +8,7 @@
 #include <queue>
 #include <unordered_set>
 #include <vector>
+#include <cassert>
 
 typedef unsigned long long uLL;
 
@@ -15,11 +16,12 @@ int main() {
 
     int n = 0;
     scanf("%d", &n);
+    assert(n > 0);
     int count = 0;
     uLL curr = 0;
 
     std::vector<uLL> factors = {2, 3, 5};    // 2, 3, 5是丑数因子
-    std::priority_queue<uLL, std::vector<uLL>, std::greater<uLL>> MinHeap;
+std::priority_queue<uLL, std::vector<uLL>, std::greater<uLL>> MinHeap;
     std::unordered_set<uLL> existed;
     MinHeap.push(1);    // 初始化，第一个丑数是 1
     existed.insert(1);

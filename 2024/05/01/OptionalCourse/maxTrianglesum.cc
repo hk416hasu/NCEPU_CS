@@ -24,6 +24,7 @@ int main() {
     }
 
     // 贪心法traceback
+    printf("trace: ");
     int i = -1, j = 0, curr = 0;
     do {
         if (dp[i+1][j+1] > dp[i+1][j]) {
