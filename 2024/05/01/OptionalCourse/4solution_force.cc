@@ -1,4 +1,4 @@
-// 暴力算法, 借助它来理解题意
+// 暴力算法
 #include <iostream>
 #include <vector>
 #include <numeric>
@@ -33,16 +33,14 @@ int main() {
     int n = 0, target = 0, count = 0;
     scanf("%d %d", &n, &target);
 
-    // 初始化data序列为 1 ~ n。初始化题目没给，我就随便定了个
+    // 初始化data序列为 1 ~ n (题目没给，我就随便定了个)
     std::vector<int> data(n);
     std::iota(data.begin(), data.end(), 1);
 
     // 暴力枚举所有情况，时间复杂度 O(2^n)
-    std::vector<bool> access(n+1);  // 多申请一位
+    std::vector<bool> access(n+1);  // 多申请一位作为结束标志位
     std::vector<int> sub;   // 保存中间结果，以便打印
-    int i = 0;
-    // 当且仅当access数组全为true时终止
-    while (!access.back()) {
+    while (!access.back()) {    // access.back()是结束标志位
         sub.clear();
         for (int j = 0; j < n; j++) {
             if (access[j]) {
