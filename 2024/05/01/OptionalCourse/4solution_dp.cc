@@ -10,7 +10,7 @@ int main() {
     int target = 0; // 目标和
     scanf("%d %d", &n, &target);
     assert(n > 0);
-    std::vector<int> A(n+1); // 下标1-n有效
+    std::vector<int> A(n+1); // A存储了n个data，下标1-n有效
     // for (int i = 1; i <= n; i++) {
     //     scanf("%d", &A[i]);
     // }
@@ -29,6 +29,11 @@ int main() {
             2. 取A[n], 则问题转为求"对剩余n-1个数，求目标和为target-A[i]"的解个数;
         因此，dp[i][j] = dp[i-1][j] + dp[i-1][j-A[i]] (下标合法 且 A[i]<=target情况下);
         本质上类似于0-1背包问题，目标和target就是我们的背包大小。
+        
+        递推公式：
+                    dp[i-1][j], A[i] > target时
+        dp[i][j] =  dp[i-1][j], (A[i] <= target) && ((j-A[i]) < 0) 时;
+                    dp[i-1][j] + dp[i-1][j-A[i]], (A[i] <= target) && ((j-A[i]) >= 0)时
     */
     for (int i = 1; i <= n; i++) {
         for (int j = 1; j <= target; j++) {
@@ -43,6 +48,7 @@ int main() {
             }
         }
     }
+    printf("%d\n", dp[n][target]);
 
     getchar();
     return 0;
