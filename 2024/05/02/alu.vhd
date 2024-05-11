@@ -45,10 +45,12 @@ begin
 			-- if state == 4, then optput Flags and input a
 			
 			when 0 => state <= 1; stateCnt <= not "1000000";
-				if (INPUT /= zero) then a <= INPUT; end if;	-- 只在input有效(不为0)时更新a值
+				-- if (INPUT /= zero) then a <= INPUT; end if;	-- 只在input有效(不为0)时更新a值
+				a <= input;
 				OUTPUT <= (others=>'0');
 			when 1 => state <= 2; stateCnt <= not "1111001";
-				if (INPUT /= zero) then b <= INPUT; end if;	-- 只在input有效(不为0)时更新b值
+				-- if (INPUT /= zero) then b <= INPUT; end if;	-- 只在input有效(不为0)时更新b值
+				b <= input;
 				OUTPUT <= a;
 			when 2 => state <= 3; stateCnt <= not "0100100";
 				cin <= (0=>input(15), others=>'0'); opCode <= input(3 downto 0); 
@@ -98,17 +100,16 @@ begin
 			cout     <= y_17bits(16);
 			sF       <= y(15);
 			cF       <= y_17bits(16) xor '0';
-			-- overF <= (a(15) AND b(15) AND (not y(15))) OR ((not a(15)) AND (not b(15)) AND y(15));
 			overF    <= (a(15) xnor b(15)) AND (a(15) xor y(15));
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 			
 		when "0011"	=> -- SBB
 			y        <= a + (not b) + 1 + (not cin) + 1;
-			y_17bits <= ('0' & a) + ('0' & ((not b) + 1)) + ('0' & ((not cin) + 1));
+			y_17bits <= ('0' & a) + ('0' & (not b)) + 1 + ('0' & ((not cin) + 1)); 
+				-- ('0' & ((not cin) + 1)) 使得 -0等效为+00000h; -1等效为+0FFFFh, 先变补再高位补0
 			cout     <= y_17bits(16);
 			sF       <= y(15);
 			cF       <= y_17bits(16) xor '1';
-			-- overF <= (a(15) AND (not b(15)) AND (not y(15))) OR ((not a(15)) AND b(15) AND y(15));
 			overF    <= (a(15) xnor (not b(15))) AND (a(15) xor y(15));
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 			
