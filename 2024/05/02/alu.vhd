@@ -45,10 +45,10 @@ begin
 			-- if state == 4, then optput Flags and input a
 			
 			when 0 => state <= 1; stateCnt <= not "1000000";
-				if (INPUT /= zero) then a <= INPUT; end if;	-- 只在input有效(不为0)时更新值
+				if (INPUT /= zero) then a <= INPUT; end if;	-- 只在input有效(不为0)时更新a值
 				OUTPUT <= (others=>'0');
 			when 1 => state <= 2; stateCnt <= not "1111001";
-				if (INPUT /= zero) then b <= INPUT; end if;	-- 只在input有效(不为0)时更新值
+				if (INPUT /= zero) then b <= INPUT; end if;	-- 只在input有效(不为0)时更新b值
 				OUTPUT <= a;
 			when 2 => state <= 3; stateCnt <= not "0100100";
 				cin <= (0=>input(15), others=>'0'); opCode <= input(3 downto 0); 
@@ -64,7 +64,7 @@ end process;
 	
 process(RST, opCode)
 
-	variable ub: unsigned(15 downto 0) := unsigned(b); -- unsigned b_value
+	variable b_value: unsigned(15 downto 0) := unsigned(b);
 	
 begin
 	cF <= '0'; sF <= '0'; zF <= '0'; overF <= '0'; cout <= '0';
@@ -78,7 +78,8 @@ begin
 			cout     <= y_17bits(16);
 			sF       <= y(15);
 			cF       <= y_17bits(16) xor '0';
-			overF    <= (a(15) AND b(15) AND (not y(15))) OR ((not a(15)) AND (not b(15)) AND y(15));
+			-- overF <= (a(15) AND b(15) AND (not y(15))) OR ((not a(15)) AND (not b(15)) AND y(15));
+			overF    <= (a(15) xnor b(15)) AND (a(15) xor y(15)); -- 仅当a与b’同符号且与y不同时, OF := 1 
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 			
 		when "0001"	=> -- Sub
@@ -87,7 +88,8 @@ begin
 			cout     <= y_17bits(16);
 			sF       <= y(15);
 			cF       <= y_17bits(16) xor '1';
-			overF    <= (a(15) AND (not b(15)) AND (not y(15))) OR ((not a(15)) AND b(15) AND y(15));
+			-- overF <= (a(15) AND (not b(15)) AND (not y(15))) OR ((not a(15)) AND b(15) AND y(15));
+			overF    <= (a(15) xnor (not b(15))) AND (a(15) xor y(15));
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 			
 		when "0010"	=> -- ADC
@@ -96,7 +98,8 @@ begin
 			cout     <= y_17bits(16);
 			sF       <= y(15);
 			cF       <= y_17bits(16) xor '0';
-			overF    <= (a(15) AND b(15) AND (not y(15))) OR ((not a(15)) AND (not b(15)) AND y(15));
+			-- overF <= (a(15) AND b(15) AND (not y(15))) OR ((not a(15)) AND (not b(15)) AND y(15));
+			overF    <= (a(15) xnor b(15)) AND (a(15) xor y(15));
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 			
 		when "0011"	=> -- SBB
@@ -105,7 +108,8 @@ begin
 			cout     <= y_17bits(16);
 			sF       <= y(15);
 			cF       <= y_17bits(16) xor '1';
-			overF    <= (a(15) AND (not b(15)) AND (not y(15))) OR ((not a(15)) AND b(15) AND y(15));
+			-- overF <= (a(15) AND (not b(15)) AND (not y(15))) OR ((not a(15)) AND b(15) AND y(15));
+			overF    <= (a(15) xnor (not b(15))) AND (a(15) xor y(15));
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 			
 		-- 逻辑运算影响一部分标志位 ( SF, ZF )
@@ -126,32 +130,32 @@ begin
 		
 		-- 逻辑/算数移位运算影响所有标志位
 		when "1000" => -- SLL
-			y        <= std_logic_vector(unsigned(a) sll to_integer(ub));
-			y_17bits <= to_stdlogicvector(to_bitvector('0' & a) sll to_integer(ub));
-			cF       <= y_17bits(16);
+			y        <= std_logic_vector(unsigned(a) sll to_integer(b_value));
+			y_17bits <= to_stdlogicvector(to_bitvector('0' & a) sll to_integer(b_value));
+			cF       <= y_17bits(16); -- 逻辑左移中, 最高位移入CF
 			sF       <= y(15);
-			overF    <= a(15) xor y(15);
+			overF    <= a(15) xor y(15); -- 若移位前后标志位不同, 则溢出
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 			
 		when "1001" => -- SRL
-			y        <= std_logic_vector(unsigned(a) srl to_integer(ub));
-			y_17bits <= to_stdlogicvector(to_bitvector(a & '0') srl to_integer(ub));
-			cF       <= y_17bits(0);
+			y        <= std_logic_vector(unsigned(a) srl to_integer(b_value));
+			y_17bits <= to_stdlogicvector(to_bitvector(a & '0') srl to_integer(b_value));
+			cF       <= y_17bits(0); -- 逻辑右移中, 最低位移入CF
 			sF       <= y(15);
 			overF    <= a(15) xor y(15);
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 			
 		when "1010" => -- SLA
-			y        <= std_logic_vector(unsigned(a) sll to_integer(ub));
-			y_17bits <= to_stdlogicvector(to_bitvector('0' & a) sll to_integer(ub));
+			y        <= std_logic_vector(unsigned(a) sll to_integer(b_value));
+			y_17bits <= to_stdlogicvector(to_bitvector('0' & a) sll to_integer(b_value));
 			cF       <= y_17bits(16);
 			sF       <= y(15);
 			overF    <= a(15) xor y(15);
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 			
 		when "1011" => -- SRA
-			y        <= to_stdlogicvector(to_bitvector(a) sra to_integer(ub));
-			y_17bits <= to_stdlogicvector(to_bitvector(a & '0') sra to_integer(ub));
+			y        <= to_stdlogicvector(to_bitvector(a) sra to_integer(b_value));
+			y_17bits <= to_stdlogicvector(to_bitvector(a & '0') srl to_integer(b_value));
 			cF       <= y_17bits(0);
 			sF       <= y(15);
 			overF    <= a(15) xor y(15);
@@ -159,12 +163,12 @@ begin
 			
 		-- 逻辑循环移位影响部分标志位 ( CF, OF )
 		when "1100" => -- ROL
-			y        <= std_logic_vector(unsigned(a) rol to_integer(ub));
-			cf       <= y(0);
+			y        <= std_logic_vector(unsigned(a) rol to_integer(b_value));
+			cf       <= y(0); -- 循环左移中, 最高位移入最低位, 同时移入CF
 			overF    <= a(15) xor y(15);
 			
 		when "1101" => -- ROR
-			y        <= std_logic_vector(unsigned(a) ror to_integer(ub));	
+			y        <= std_logic_vector(unsigned(a) ror to_integer(b_value));	
 			cf       <= y(15);
 			overF    <= a(15) xor y(15);
 			
