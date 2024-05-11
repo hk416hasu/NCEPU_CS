@@ -5,3 +5,4 @@ a
 *.in
 *.out
 *.c.swp
+*.vhd
