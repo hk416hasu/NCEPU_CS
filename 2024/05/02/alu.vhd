@@ -40,9 +40,9 @@ begin
 			-- if state == 8, then input a
 			-- if state == 0, then input b 					(a is stored)
 			-- if state == 1, then input opCode and cin 	(b is stored)
-			-- if state == 2, then calcuate over 			(output is ready)
-			-- if state == 3, then OUTPUT
-			-- if state == 4, then optput Flags and input a
+			-- if state == 2, then calcuate over 			(y is ready)
+			-- if state == 3, then output y
+			-- if state == 4, then output Flags and input a
 			
 			when 0 => state <= 1; stateCnt <= not "1000000";
 				-- if (INPUT /= zero) then a <= INPUT; end if;	-- 只在input有效(不为0)时更新a值
@@ -69,13 +69,14 @@ process(RST, opCode)
 	variable b_value: unsigned(15 downto 0) := unsigned(b);
 	
 begin
-	cF <= '0'; sF <= '0'; zF <= '0'; overF <= '0'; cout <= '0';
+	cF <= '0'; sF <= '0'; zF <= '0'; overF <= '0'; cout <= '0'; -- 清空标志位, 需要清空么?
 	case opCode is
-		-- 下列标志位设置参考《汇编语言 基于x86处理器》
+		-- 为什么不根据y_17bits得到y? 答: 解耦, 更好debug;
+		-- 下列标志位设置参考《汇编语言 基于x86处理器》;
 		
 		-- 加减法影响全部标志位 + 产生Cout
 		when "0000"	=> -- Add
-			y        <= a + b + cin;
+			y        <= a + b;
 			y_17bits <= ('0' & a) + ('0' & b); -- 仅y(16)是y的最高位进位信号, 其余都不是,下省略注释
 			cout     <= y_17bits(16);
 			sF       <= y(15);
@@ -105,8 +106,7 @@ begin
 			
 		when "0011"	=> -- SBB
 			y        <= a + (not b) + 1 + (not cin) + 1;
-			y_17bits <= ('0' & a) + ('0' & (not b)) + 1 + ('0' & ((not cin) + 1)); 
-				-- ('0' & ((not cin) + 1)) 使得 -0等效为+00000h; -1等效为+0FFFFh, 先变补再高位补0
+			y_17bits <= ('0' & a) + ('0' & (not b)) + 1 - ('0' & cin); -- '-'运算符会转换为整数来做减法
 			cout     <= y_17bits(16);
 			sF       <= y(15);
 			cF       <= y_17bits(16) xor '1';
@@ -119,7 +119,7 @@ begin
 			sF       <= y(15);
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 		when "0101" => -- OR
-			y        <= a or b;
+			y        <= a OR b;
 			sF       <= y(15);
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 		when "0110" => -- XOR
@@ -127,12 +127,12 @@ begin
 			sF       <= y(15);
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 		when "0111" => -- not
-			y        <= not a; -- 不影响标志位
+			y        <= not a; -- not运算不影响标志位
 		
 		-- 逻辑/算数移位运算影响所有标志位
 		when "1000" => -- SLL
 			y        <= std_logic_vector(unsigned(a) sll to_integer(b_value));
-			y_17bits <= to_stdlogicvector(to_bitvector('0' & a) sll to_integer(b_value));
+			y_17bits <= to_stdlogicvector(to_bitvector('0' & a) sll to_integer(b_value)); -- y(17)就是cF位
 			cF       <= y_17bits(16); -- 逻辑左移中, 最高位移入CF
 			sF       <= y(15);
 			overF    <= a(15) xor y(15); -- 若移位前后标志位不同, 则溢出
@@ -140,7 +140,7 @@ begin
 			
 		when "1001" => -- SRL
 			y        <= std_logic_vector(unsigned(a) srl to_integer(b_value));
-			y_17bits <= to_stdlogicvector(to_bitvector(a & '0') srl to_integer(b_value));
+			y_17bits <= to_stdlogicvector(to_bitvector(a & '0') srl to_integer(b_value)); -- y(0)是cF位
 			cF       <= y_17bits(0); -- 逻辑右移中, 最低位移入CF
 			sF       <= y(15);
 			overF    <= a(15) xor y(15);
@@ -156,7 +156,7 @@ begin
 			
 		when "1011" => -- SRA
 			y        <= to_stdlogicvector(to_bitvector(a) sra to_integer(b_value));
-			y_17bits <= to_stdlogicvector(to_bitvector(a & '0') srl to_integer(b_value));
+			y_17bits <= to_stdlogicvector(to_bitvector(a & '0') sra to_integer(b_value));
 			cF       <= y_17bits(0);
 			sF       <= y(15);
 			overF    <= a(15) xor y(15);
@@ -176,6 +176,9 @@ begin
 		when others=>  y <= (others=>'0');
 		
 	end case;
+	
+	-- sF <= y(15); -- 有些运算不影响sF, 故而为每个运算单独设置
+	
 end process;
 
 end Behavioral;
