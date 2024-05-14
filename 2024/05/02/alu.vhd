@@ -173,9 +173,13 @@ begin
 			y        <= std_logic_vector(unsigned(a) ror to_integer(b_value));	
 			cf       <= y(15);
 			overF    <= a(15) xor y(15);
+
+		when "1110" => -- pass
+			y        <= a;
 			
-		when others=>  y <= (others=>'0');
-		
+		when "1111" => -- bzero
+			y        <= (others => '0');
+			
 	end case;
 	
 	-- sF <= y(15); -- 有些运算不影响sF, 故而为每个运算单独设置
