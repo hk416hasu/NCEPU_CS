@@ -71,7 +71,7 @@ process(RST, opCode)
 	
 begin
 	cF <= '0'; sF <= '0'; zF <= '0'; overF <= '0'; cout <= '0'; -- 清空标志位, 需要清空么?
-	b_val := unsigned(b);
+	b_val := unsigned(b); -- should be updated here
 	
 	case opCode is
 		-- 为什么不根据y_17bits得到y? 答: 解耦, 更好debug;
