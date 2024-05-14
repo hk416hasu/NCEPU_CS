@@ -20,7 +20,7 @@ architecture Behavioral of alu is
 	signal a, b, y	: std_logic_vector (15 downto 0); -- a b存放输入信号, y用于输出
 	signal y_17bits: std_logic_vector (16 downto 0); -- 用于生成flag
 	signal opCode	: std_logic_vector (3  downto 0); -- 操作码
-	signal cin		: std_logic_vector (15 downto 0); -- carry-in, 用vecotr存储便于后续操作
+	signal cin  	: std_logic_vector (15 downto 0); -- carry-in, 用vecotr存储便于后续操作
 	signal zF    	: std_logic; -- zero     flag
 	signal cF    	: std_logic; -- carry    flag
 	signal sF    	: std_logic; -- sign  	 flag
