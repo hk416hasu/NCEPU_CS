@@ -8,29 +8,29 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static volatile unsigned int money = 500;	// 账户里有500元
+static volatile int money = 500;	// 账户里有500元
 
 struct ThreadArgs {
 	char name;  // 取钱人
-	unsigned int want;  // 想取 want 元
+	int want;  // 想取 want 元
 };
 
 void * getMoney(void * arg) {
 	struct ThreadArgs *p = (struct ThreadArgs *)arg;
-	printf("%c: begin, money is %u.\n", p->name, money);
+	printf("%c: begin, money is %d.\n", p->name, money);
 	if (money >= p->want) {	// time to check
 		sleep(1); // 引发OS调度, 展示并发可能的错误
 		// time to use, 但是money可能已经被修改, 不满足条件了!
 		money -= p->want;
 	}
-	printf("%c: end, money is %u.\n", p->name, money);
+	printf("%c: end, money is %d.\n", p->name, money);
 	return NULL;
 }
 
 int main() {
 	pthread_t p1, p2;
 	printf("pid: %d\n", getpid());
-	printf("main: begin ( money = %u )\n", money);	// 输出起始的钱数
+	printf("main: begin ( money = %d )\n", money);	// 输出起始的钱数
 	
 	struct ThreadArgs arg1 = { 'A', 500 };  // A 想取 500 元
 	struct ThreadArgs arg2 = { 'B', 300 };  // B 想取 300 元
@@ -41,7 +41,7 @@ int main() {
 	pthread_join(p1, NULL); // 等待线程 1 结束
 	pthread_join(p2, NULL); // 等待线程 2 结束
 
-	printf("main: end ( money = %u )\n", money);	// 输出剩余的钱数
+	printf("main: end ( money = %d )\n", money);	// 输出剩余的钱数
 
 	fflush(stdout);
 	return 0;

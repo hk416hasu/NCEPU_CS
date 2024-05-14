@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static volatile int counter = 0;
-// int counter = 0;	// 试试不volatile 且 -O2 -O1优化？
+// static volatile int counter = 0;
+int counter = 0;	// 试试没有volatile修饰 且-O2 -O1优化？
 
 void * myroutine(void * arg) {
 	printf("%s: begin\n", (char *)arg);
@@ -19,7 +19,9 @@ int main() {
 	pthread_t p1, p2;
 	printf("pid : %d\n", getpid());
 	printf("main: begin ( counter = %d )\n", counter);
-	pthread_create(&p1, NULL, myroutine, "A");
+	
+    // 创建两个线程, 执行myroutine()
+    pthread_create(&p1, NULL, myroutine, "A");
 	pthread_create(&p2, NULL, myroutine, "B");
 	
 	pthread_join(p1, NULL);
