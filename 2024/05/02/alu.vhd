@@ -65,12 +65,14 @@ begin
 	end if;
 end process;
 	
-process(RST, opCode)
-
-	variable b_value: unsigned(15 downto 0) := unsigned(b);
+process(RST, opCode)	
+	
+	variable b_val	: unsigned(15 downto 0); -- b的无符号数值
 	
 begin
 	cF <= '0'; sF <= '0'; zF <= '0'; overF <= '0'; cout <= '0'; -- 清空标志位, 需要清空么?
+	b_val := unsigned(b);
+	
 	case opCode is
 		-- 为什么不根据y_17bits得到y? 答: 解耦, 更好debug;
 		-- 下列标志位设置参考《汇编语言 基于x86处理器》;
@@ -116,7 +118,7 @@ begin
 		
 		when "0100" => -- SBB (生成标志位时, 按补码减去cin, cf = cout, cout是第16位（比如0-0-0的cout是0，第17位弃之）)
 			y        <= a + (not b) + 1 + (not cin) + 1;
-			y_17bits <= ('0' & a) + ('0' & (not b)) + 1 - ('0' & (not cin)) + 1; -- 按补码减去cin
+			y_17bits <= ('0' & a) + ('0' & (not b)) + 1 + ('0' & (not cin)) + 1; -- 按补码减去cin
 			cout     <= y_17bits(16);
 			sF       <= y(15);
 			cF       <= cout;
@@ -141,32 +143,32 @@ begin
 		
 		-- 逻辑/算数移位运算影响所有标志位
 		when "1001" => -- SLL
-			y        <= std_logic_vector(unsigned(a) sll to_integer(b_value));
-			y_17bits <= to_stdlogicvector(to_bitvector('0' & a) sll to_integer(b_value)); -- y(17)就是cF位
+			y        <= to_stdlogicvector(to_bitvector(a) 		sll to_integer(b_val));
+			y_17bits <= to_stdlogicvector(to_bitvector('0' & a) sll to_integer(b_val)); -- y(17)就是cF位
 			cF       <= y_17bits(16); -- 逻辑左移中, 最高位移入CF
 			sF       <= y(15);
 			overF    <= a(15) xor y(15); -- 若移位前后标志位不同, 则溢出
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 			
 		when "1010" => -- SRL
-			y        <= std_logic_vector(unsigned(a) srl to_integer(b_value));
-			y_17bits <= to_stdlogicvector(to_bitvector(a & '0') srl to_integer(b_value)); -- y(0)是cF位
+			y        <= to_stdlogicvector(to_bitvector(a) 		srl to_integer(b_val));
+			y_17bits <= to_stdlogicvector(to_bitvector(a & '0') srl to_integer(b_val)); -- y(0)是cF位
 			cF       <= y_17bits(0); -- 逻辑右移中, 最低位移入CF
 			sF       <= y(15);
 			overF    <= a(15) xor y(15);
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 			
 		when "1011" => -- SLA
-			y        <= std_logic_vector(unsigned(a) sll to_integer(b_value));
-			y_17bits <= to_stdlogicvector(to_bitvector('0' & a) sll to_integer(b_value));
+			y        <= to_stdlogicvector(to_bitvector(a) 		sll to_integer(b_val));
+			y_17bits <= to_stdlogicvector(to_bitvector('0' & a) sll to_integer(b_val));
 			cF       <= y_17bits(16);
 			sF       <= y(15);
 			overF    <= a(15) xor y(15);
 			if y = zero then zF <= '1'; else zF <= '0'; end if;
 			
 		when "1100" => -- SRA
-			y        <= to_stdlogicvector(to_bitvector(a) sra to_integer(b_value));
-			y_17bits <= to_stdlogicvector(to_bitvector(a & '0') sra to_integer(b_value));
+			y        <= to_stdlogicvector(to_bitvector(a) 		sra to_integer(b_val));
+			y_17bits <= to_stdlogicvector(to_bitvector(a & '0') sra to_integer(b_val));
 			cF       <= y_17bits(0);
 			sF       <= y(15);
 			overF    <= a(15) xor y(15);
@@ -174,17 +176,19 @@ begin
 			
 		-- 逻辑循环移位影响部分标志位 ( CF, OF )
 		when "1101" => -- ROL
-			y        <= std_logic_vector(unsigned(a) rol to_integer(b_value));
+			y        <= to_stdlogicvector(to_bitvector(a) rol to_integer(b_val));
 			cf       <= y(0); -- 循环左移中, 最高位移入最低位, 同时移入CF
 			overF    <= a(15) xor y(15);
 			
 		when "1110" => -- ROR
-			y        <= std_logic_vector(unsigned(a) ror to_integer(b_value));	
+			y        <= to_stdlogicvector(to_bitvector(a) ror to_integer(b_val));	
 			cf       <= y(15);
 			overF    <= a(15) xor y(15);
 
 		when "1111" => -- pass
 			y        <= a;
+		
+		when others => y <= (others => '0');
 			
 	end case;
 	
