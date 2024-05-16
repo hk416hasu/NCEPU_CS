@@ -38,19 +38,18 @@ begin
 		a <= (others=>'0'); d <= (others=>'0');
 		stateCnt1 <= (others=>'1'); stateCnt2 <= (others=>'1');
 		Wstat <= 0; Rstat <= 0;
-		op <= input(0);
+		M_WE <= '1';  -- 先不允许写
+		OUTPUT <= (others=>'0');
+		op <= '0'; -- 默认先写
 	elsif CLK'event and CLK = '1' then
 		-- instructions:
-		-- before RST, you need to input op, then RST
-		-- 	now op is stored, you need to CLK
 		-- if 88 then input addr
-		
 		-- if 00 then input data
 		-- if 01 or 10 then do nothing
 		-- if 02 or 11 then input new op
 		-- if 03 or 12 then input addr
 		
-		-- i wish it can work.
+		OUTPUT <= (others=>'0');
 		
 		if op = '0' then -- Write
 			M_OE <= '1'; -- 不输出
@@ -71,6 +70,7 @@ begin
 					Wstat <= 0; 
 					M_WE <= '1'; -- 不允许写了
 					op <= input(0);
+				when others => NULL;
 			end case;
 			
 		elsif op = '1' then -- Read
@@ -83,13 +83,15 @@ begin
 				when 1 => stateCnt2 <= "0000110";
 					Rstat <= 2;
 					Addr <= "00" & a;
+					Data <= (others=>'Z'); -- 将Data设置为高阻态, 以接收数据
 				when 2 => StateCnt2 <= "1011011";
 					Rstat <= 0;
 					OUTPUT <= data;
 					op <= input(0);
+				when others => NULL;	
 			end case;
+			
 		end if; -- end op
-		
 	end if; -- end RST & CLK
 end process;
 
