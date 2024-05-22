@@ -55,20 +55,20 @@ begin
 			stateCnt1 <= "0111111";
 			case Wstat is
 				when 0 => stateCnt2 <= "0111111";
-					Wstat <= 1; 
-					a     <= input;
+					Wstat  <= 1; 
+					a      <= input;
 				when 1 => stateCnt2 <= "0000110";
-					Wstat <= 2; 
-					d     <= input;
+					Wstat  <= 2; 
+					d      <= input;
 				when 2 => stateCnt2 <= "1011011"; -- data 和 addr 送往
-					Wstat <= 3; 
-					M_WE  <= '0'; -- 允许写
-					Data  <= d;
-					Addr  <= "00" & a;
+					Wstat  <= 3; 
+					M_WE   <= '0'; -- 允许写
+					Data   <= d;
+					Addr   <= "00" & a;
 				when 3 => stateCnt2 <= "1001111";
-					Wstat <= 0; 
-					M_WE  <= '1'; -- 不允许写了
-					op    <= input(0);
+					Wstat  <= 0; 
+					M_WE   <= '1'; -- 不允许写了
+					op     <= input(0);
 				when others => NULL;
 			end case;
 			
