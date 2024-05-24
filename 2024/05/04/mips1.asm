@@ -10,10 +10,7 @@ Write:
 	li	$t2,	1		# 数值val
 
 Loop_W:
-	bnez	$t1,	Store		# 根据计数器的值决定跳转与否
-	b	Read
-
-Store:
+	beqz	$t1,	Read		# 根据计数器的值决定跳转与否
 	sw	$t2,	($t0)		# 将数值$t2存入内存($t0)
 	addiu	$t0,	$t0,	4	# 更新数组下标
 	addiu	$t2,	$t2,	1	# 更新数值
@@ -27,10 +24,7 @@ Read:
 	li	$t3,	0		# 和寄存器sum
 	
 Loop_R:
-	bnez	$t1,	Load		# 根据计数器的值决定跳转与否
-	b	End
-	
-Load:
+	beqz	$t1,	End		# 根据计数器的值决定跳转与否
 	lw	$t2,	($t0)		# 从内存($t0)中读取数值, 放到t2
 	add	$t3,	$t3,	$t2	# 累加: sum = sum + val
 	addiu	$t1,	$t1,	-1	# 更新计数器
