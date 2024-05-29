@@ -16,22 +16,28 @@ entity cpu is
 		M_EN      : out STD_LOGIC; -- Memory_Enable
 		M_OE      : out STD_LOGIC; -- Memory_Output_Enable
 		M_WE      : out STD_LOGIC; -- Memory_Write_Enable
-		Addr      : out   STD_LOGIC_VECTOR(17 downto 0); -- 地址信号, 18位, 与外总线连接
-		Data      : inout STD_LOGIC_VECTOR(15 downto 0)  -- Data信号, 16位, 与外总线连接
+		M_Addr      : out   STD_LOGIC_VECTOR(17 downto 0); -- SRAM地址信号, 18位, 与外总线连接
+		M_Data      : inout STD_LOGIC_VECTOR(15 downto 0)  -- SRAM数据信号, 16位, 与外总线连接
 	);
 end entity cpu;
 
 architecture bhv of cpu is
 	signal r0, r1, r2, r3, r4, r5, r6, r7 : STD_LOGIC_VECTOR(15 downto 0); -- 通用寄存器组
-	signal acc : STD_LOGIC_VECTOR(15 downto 0); -- 累加寄存器
-	signal b : STD_LOGIC_VECTOR(15 downto 0);
-	signal pc : STD_LOGIC_VECTOR(15 downto 0); -- 程序计数器
-	signal ir : STD_LOGIC_VECTOR(15 downto 0); -- 指令寄存器
+	signal ACC : STD_LOGIC_VECTOR(15 downto 0); -- 累加寄存器
+	signal B : STD_LOGIC_VECTOR(15 downto 0);
+	signal PC : STD_LOGIC_VECTOR(15 downto 0); -- 程序计数器
+	signal IR : STD_LOGIC_VECTOR(15 downto 0); -- 指令寄存器
+	signal OP : STD_LOGIC_VECTOR(4 downto 0); -- 
 	signal MAR : STD_LOGIC_VECTOR(17 downto 0);
 	signal MBR : STD_LOGIC_VECTOR(15 downto 0);
 	signal SR : STD_LOGIC_VECTOR(15 downto 0); -- 移位寄存器
+	signal data : STD_LOGIC_VECTOR(15 downto 0); -- 内总线
+	signal immd : STD_LOGIC_VECTOR(15 downto 0); -- 立即数
+	signal MachineState : integer range 0 to 1;
+	signal ClockState : integer range 0 to 3;
 	
 	signal rx, ry, rz : STD_LOGIC_VECTOR(2 downto 0); -- 目的寄存器
+	signal
 	
 	signal T0 : STD_LOGIC;
 	signal T1 : STD_LOGIC;
@@ -41,11 +47,22 @@ architecture bhv of cpu is
 	signal Ex : STD_LOGIC; -- Execute
 	signal Fe : STD_LOGIC; -- Fetch
 	
+	signal LW : STD_LOGIC;
+	signal SW : STD_LOGIC;
+	signal LI : STD_LOGIC;
+	signal BEQZ : STD_LOGIC;
+	signal ADDIU : STD_LOGIC;
+	signal ADDU : STD_LOGIC;
+	signal Branch : STD_LOGIC;
+	
+	-- 一些cu将会发出的控制信号
 	signal SendPCtoAcc : STD_LOGIC;
 	signal Pass_ALU : STD_LOGIC;
 	signal DM_SR : STD_LOGIC;
 	signal CPMAR : STD_LOGIC;
 	signal EMAR : STD_LOGIC;
+	signal R : STD_LOGIC;
+	signal W : STD_LOGIC;
 	signal SIR : STD_LOGIC;
 	signal Add_ALU : STD_LOGIC;
 	signal CPPC : STD_LOGIC;
@@ -67,3 +84,106 @@ architecture bhv of cpu is
 	signal CPPSW : STD_LOGIC;
 	signal SendMBRtoACC : STD_LOGIC;
 	
+begin
+process(RST, CLK) begin
+	if ( RST = '0' ) then
+		-- 记得清零指令信号
+		LED <= (others => '0');
+		MachineState <= 0;
+		ClockState <= 0;
+	elsif ( CLK'event and CLK = '1' ) then
+		case MachineState is
+			when 0 => 
+				Fe <= '1'; Ex <= '0';
+				MachineState <= 1;
+			when 1 =>
+				Fe <= '0'; Ex <= '1';
+				MachineState <= 0;
+			when others => NULL;
+		end case;
+	end if;
+end process;
+
+process(Fe) begin
+	if (Fe = '1') then
+		SIR <= '1';
+	end if;
+end process;
+
+-- 从拨码开关取指, 顺便decode
+process(SIR) begin
+	if (SIR = '1') then 
+		IR <= INPUT;
+		op <= INPUT(15 downto 11);
+		SIR <= '0';
+	end if;
+end process;
+
+-- decode
+process(op) begin
+	case op is
+		when "10011" => 
+			LW <= '1'; SW <= '0'; LI <= '0'; BEQZ <= '0'; ADDIU <= '0'; ADDU <= '0'; Branch <= '0'; 
+		when "11011" => 
+			LW <= '0'; SW <= '1'; LI <= '0'; BEQZ <= '0'; ADDIU <= '0'; ADDU <= '0'; Branch <= '0'; 
+		when "01101" => 
+			LW <= '0'; SW <= '0'; LI <= '1'; BEQZ <= '0'; ADDIU <= '0'; ADDU <= '0'; Branch <= '0'; 
+		when "00100" => 
+			LW <= '0'; SW <= '0'; LI <= '0'; BEQZ <= '1'; ADDIU <= '0'; ADDU <= '0'; Branch <= '0'; 
+		when "01001" => 
+			LW <= '0'; SW <= '0'; LI <= '0'; BEQZ <= '0'; ADDIU <= '1'; ADDU <= '0'; Branch <= '0'; 
+		when "11100" =>
+			LW <= '0'; SW <= '0'; LI <= '0'; BEQZ <= '0'; ADDIU <= '0'; ADDU <= '1'; Branch <= '0'; 
+		when "00010" =>
+			LW <= '0'; SW <= '0'; LI <= '0'; BEQZ <= '0'; ADDIU <= '0'; ADDU <= '0'; Branch <= '1'; 
+		when others => NULL;
+	end case;
+end process;
+
+-- 节拍发生器
+process(Ex, CLK0) begin
+
+	ClockState <= 0;
+
+	if Ex = '1' then
+		if ( CLK0'event and CLK0 = '1' ) then
+			case ClockState is
+				when 0 =>
+					ClockState <= 1;
+					T0 <= '1'; T1 <= '0'; T2 <= '0'; T3 <= '0';
+				when 1 =>
+					ClockState <= 2;
+					T0 <= '0'; T1 <= '1'; T2 <= '0'; T3 <= '0';
+				when 2 =>
+					ClockState <= 3;
+					T0 <= '0'; T1 <= '0'; T2 <= '1'; T3 <= '0';
+				when 3 =>
+					ClockState <= 0;
+					T0 <= '0'; T1 <= '0'; T2 <= '0'; T3 <= '1';	
+			end case;
+		end if;
+	end if;
+end process;
+
+-- control unit: send many signals
+process(T0, T1, T2, T3) begin
+	SendPCtoAcc <= (Fe and T1) or (Ex and T3 and BEQZ);
+	Pass_ALU <= (Fe and T1) or (Ex and T2 and SW) or (Ex and T3 and LW);
+	DM_SR <= (Fe and T1) or (Ex and T1 and LW) or (Ex and T2 and SW) or (Ex and T3 and (LW or ADDIU or ADDU or Branch));
+	CPMAR <= (Fe and T1) or (Ex and T1 and (LW or SW)) or (Ex and T2 and SW);
+	EMAR <= (Fe and T2) or (Ex and T2 and LW) or (Ex and T3 and SW);
+	R <= (Fe and T2) or (Ex and T2 and LW);
+	-- SIR <=
+	-- Send1ToB <=
+	Add_ALU <= (Fe and T2) or (Ex and T1 and (LW or SW)) or (Ex and T3 and (BEQZ or ADDIU or ADDU or Branch));
+	CPPC <= (Fe and T2) or (Ex and T3 and (BEQZ or Branch));
+	SendIRtoAcc <= Ex and ((T0 and (LW or SW)) or (T2 and (BEQZ or ADDIU or Branch)) or (T3 and LI));
+	SLL11_ALU <= Ex and T0 and (LW or SW);
+	SRA11_SR <= Ex and T0 and (LW or SW);
+	CPACC <= (Ex and T0 and (LW or SW)) or (Ex and T2 and (BEQZ or ADDIU or Branch));
+	SendRiToB <= Ex and ((T1 and (SW or LW)) or (T3 and (ADDIU or ADDU)));
+end process;
+
+
+
+end bhv;
