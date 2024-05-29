@@ -16,7 +16,7 @@ int min_index(vector<int> vec) {
 
 void traceback(vector<vector<int>> &trace, int begin, int end) {
     if (begin != end) {
-        int BestPoint = trace[begin][end];
+        int BestPoint = trace[begin][end];  // trace中记录了最佳断开点
         traceback(trace, begin, begin + BestPoint);
         traceback(trace, begin + BestPoint + 1, end);
         printf("%d * %d\n", begin, end);
@@ -26,14 +26,14 @@ void traceback(vector<vector<int>> &trace, int begin, int end) {
 int main() {
     int n = 0;
     scanf("%d", &n);
-    int Matrix[n+1] = {0}; // 有异常
+    vector<int> Matrix(n+1);
     for (int i = 0; i <= n; i++) {
         scanf("%d", &Matrix[i]);
     }
 
     vector<vector<int>> dp(n, vector<int>(n));
     vector<vector<int>> trace(n, vector<int>(n));
-    vector<int> vec(0);
+    vector<int> vec;    // 策略暂存数组
 
     // slash-visit
     for (int offset = 1; offset < n; offset++) {
@@ -50,8 +50,9 @@ int main() {
     }
 
     traceback(trace, 0, n-1);
+    
+    printf("%d\n", dp[0][n-1]);
 
-    getchar();
     return 0;
 }
 // 5 4 2 3 4 5 6
