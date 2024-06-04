@@ -60,29 +60,36 @@ bool GetFrequency(const vector<char> &str, vector<foo> &Frequency) {
 vector<char> result;
 int count = 0;
 
+// 检测index之后还有没有可取的元素组
 bool NoMore(int &index, const vector<foo> &Frequency) {
     for (int i = index; i < Frequency.size(); i++) {
         if (Frequency[i].m_times >= 1) {
-            index = i;
+            index = i;  // 顺便在此更新index, 其实应该单独写个函数的, 偷懒了
             return false;
         }
     }
     return true;
 }
 
+// 子集树回溯法 赏心悦目
 void func(int index, vector<foo> &Frequency) {
     if (NoMore(index, Frequency)) {
         count++;
         output(result);
     } else {
+        // 选中当前元素组, 加入result并更新状态
         result.push_back(Frequency[index].m_ch);
         Frequency[index].m_times -= 1;
         
+        // (选中当前元素组)进入回溯子集树下一层
         func(index, Frequency);
         
+        // 不选当前元素组, 回滚状态
         result.pop_back();
-        func(index + 1, Frequency); // 妙笔! 强制跳过当前元素组, 就相当于剪枝
         Frequency[index].m_times += 1;
+
+        // (不选中当前元素组)进入回溯子集树下一层
+        func(index + 1, Frequency); // 妙笔! 改变index以跳过当前元素组, 就相当于剪枝
     }
 }
 
