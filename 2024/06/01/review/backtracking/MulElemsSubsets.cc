@@ -1,4 +1,5 @@
 // 尝试使用打包重复元素的思路 解决重复元素子集问题, 但失败了
+// 因为我需要记录每个元素选中与否, 不论它是否重复
 
 #include <iostream>
 #include <vector>
@@ -102,6 +103,7 @@ void func(int index, vector<foo> &Frequency) {
         Frequency[index].m_enable = false;
         func(index, Frequency);
         Frequency[index].m_times += 1;
+        Frequency[index].m_enable = true;
     }
 }
 
