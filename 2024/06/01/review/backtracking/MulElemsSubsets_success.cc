@@ -1,5 +1,4 @@
-// 尝试使用打包重复元素的思路 解决重复元素子集问题, 但失败了
-// 这个版本可以输出所有子集
+// 尝试使用打包重复元素的思路 解决重复元素子集问题, 成功！
 
 #include <iostream>
 #include <vector>
@@ -60,20 +59,18 @@ bool GetFrequency(const vector<char> &str, vector<foo> &Frequency) {
 vector<char> result;
 int count = 0;
 
-void updateIndex(int &index, const vector<foo> &Frequency) {
-    for (int i = 0; i < Frequency.size(); i++) {
-        if (Frequency[i].m_times > 0) {
+bool NoMore(int &index, const vector<foo> &Frequency) {
+    for (int i = index; i < Frequency.size(); i++) {
+        if (Frequency[i].m_times >= 1) {
             index = i;
-            return;
+            return false;
         }
     }
-    index = -1;
-    return;
+    return true;
 }
 
 void func(int index, vector<foo> &Frequency) {
-    updateIndex(index, Frequency);
-    if (index == -1) {
+    if (NoMore(index, Frequency)) {
         count++;
         output(result);
     } else {
@@ -83,7 +80,7 @@ void func(int index, vector<foo> &Frequency) {
         func(index, Frequency);
         
         result.pop_back();
-        func(index, Frequency);
+        func(index + 1, Frequency);
         Frequency[index].m_times += 1;
     }
 }
@@ -101,7 +98,7 @@ int main() {
     GetFrequency(str, Frequency);
 
     printf("output:\n");
-    func(-1, Frequency);
+    func(0, Frequency);
 
     printf("%d\n", count);
 
