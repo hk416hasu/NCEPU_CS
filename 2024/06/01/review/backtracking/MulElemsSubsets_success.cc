@@ -80,7 +80,7 @@ void func(int index, vector<foo> &Frequency) {
         func(index, Frequency);
         
         result.pop_back();
-        func(index + 1, Frequency);
+        func(index + 1, Frequency); // 妙笔! 强制跳过当前元素组, 就相当于剪枝
         Frequency[index].m_times += 1;
     }
 }
