@@ -11,9 +11,9 @@ void hano(int n, char A, char B, char C) {
         printf("%d->%c\n", n, C);
         return;
     }
-    hano(n-1, A, C, B);         // 先将“较大的那n-1个盘子”从A运到B
-    printf("%d->%c\n", n, C);   // 再将剩下的“那个最小”的运到C
-    hano(n-1, B, A, C);         // 最后将“较大的那n-1个”从B运到C
+    hano(n-1, A, C, B);         // 先将“较小的那n-1个盘子”从A运到B
+    printf("%d->%c\n", n, C);   // 再将剩下的“那个最大”的运到C
+    hano(n-1, B, A, C);         // 最后将“较小的那n-1个”从B运到C
 }
 
 void hano(int n) {
