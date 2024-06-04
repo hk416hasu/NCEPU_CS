@@ -21,6 +21,7 @@ public:
 bool input(vector<char> &str) {
     size_t n = 0;
     scanf("%d", &n);
+    assert(n > 0);
     str.resize(n);
     for (size_t i = 0; i < n; i++) {
         scanf("%c", &str[i]);   // 多读取一次, 
@@ -41,7 +42,7 @@ bool GetFrequency(const vector<char> &str, vector<foo> &Frequency) {
     size_t bucket[10] = {0};    // 存放各数字字符的出现频次
     size_t index = 0;
     for (size_t i = 0; i < str.size(); i++) {
-        assert(str[i] >= '1' && str[i] <= '9');
+        assert(str[i] >= '0' && str[i] <= '9');
         index = str[i] - 48;
         bucket[index]++;
     }
