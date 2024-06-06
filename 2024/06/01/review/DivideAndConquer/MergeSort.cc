@@ -14,15 +14,10 @@ void output(const vector<int> &vec) {
 
 void Merge(vector<int> &arr, int low, int high) {
     // 拷贝一份待处理数组, 待会从这里取数
-    // int len = high - low + 1;
     vector<int> tmp(arr);
-    // for (int i = low; i <= high; i++) {
-    //     tmp[i] = arr[i];
-    // }
 
     int mid = (low + high) / 2;
     int i = low, j = mid + 1, k = low;
-    // for (i = low, j = mid; i < mid && j <= high; k++) {
     while (i <= mid && j <= high) {
         if (tmp[i] <= tmp[j]) {
             arr[k++] = tmp[i++];
@@ -38,7 +33,7 @@ void Merge(vector<int> &arr, int low, int high) {
 }
 
 void Merge2(vector<int> &arr, int low, int high) {
-    // 拷贝部分/待排序的数组, 节约空间
+    // 拷贝部分待排序的数组, 节约空间
     int len = high - low + 1;
     vector<int> tmp(len);
     for (int i = low; i <= high; i++) {
