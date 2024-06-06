@@ -69,6 +69,7 @@ void MergeSort(vector<int> &arr, int low, int high) {
 }
 
 void MergeSort(vector<int> &arr) {
+    assert(arr.size() > 0);
     MergeSort(arr, 0, arr.size() - 1);
 }
 
