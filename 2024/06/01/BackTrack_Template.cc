@@ -1,6 +1,6 @@
 
 // 排列树
-// 还没搞懂swap那块
+// 还没搞懂swap那块 // 搞懂了https://www.cnblogs.com/nullzx/p/7712747.html
 void backtrack(int t) {     // t 表示在解空间树中所处的层次
     if(t > n) {             // n 表示问题的规模
         output(x);          // x 是当前解
@@ -19,9 +19,9 @@ void backtrack(int t) {     // t 表示在解空间树中所处的层次
 // 子集树: 本质就是元素i选or不选
 void backtrack() {
     if (okay) {
-        x[i] = 0;
-        backtrack(target);
         x[i] = 1;
         backtrack(target - i);
+        x[i] = 0;
+        backtrack(target);
     }
 }
