@@ -64,6 +64,7 @@ void func(size_t t, vector<foo> &CharFrequency, int limit) {
         output(vec);
     } else {
         // 遍历CharFrequency, 取一个频次为>=1的字符
+        // for (size_t i = t; i < 10; i++) {
         for (size_t i = 0; i < 10; i++) {
             if (CharFrequency[i].m_times >= 1) { // 剪枝
                 // 状态更新
