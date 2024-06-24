@@ -10,9 +10,8 @@ void * mythread(void * arg) {
 	for (int i = 0; i < 1e7; i++) {
 		// 内联汇编：直接利用原子操作对counter进行操作; "+m"表示读写memory操作数
 		asm volatile(
-           		"lock addq $1, %0" : "+m"(counter)	// 原子 += 1
-           		// "lock addq $10, %0" : "+m"(counter)	// 原子 += 10
-            		// "addq $1, %0" : "+m"(counter)	// 非原子 += 1
+           		// "lock addq $1, %0" : "+m"(counter)	// 原子 += 1
+                "addq $1, %0" : "+m"(counter)	// 非原子 += 1
         );
 	}
 	printf("%s: end\n", (char *)arg);
