@@ -10,5 +10,7 @@ int main() {
 
     printf("%lf\n", c);
 
+    while (1);
+
     return 0;
 }
