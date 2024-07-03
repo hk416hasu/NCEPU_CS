@@ -11,7 +11,7 @@ using std::vector, std::string;
 #define VMSize 32   // VirtualMemorySize(0 ~ n (int)) for every process
 
 
-
+// 物理内存
 class PMPFAE { // PhysicalMemoryPageFrameAllocationElem
 public:
     bool m_owned;
@@ -26,6 +26,8 @@ public:
 
 vector<PMPFAE> MemoryVector(PMSize);   // 主存物理块管理向量
 
+
+// 虚拟内存
 class PTE {   // PageTableElem
 public:
     bool m_existence;   // 存在位
@@ -103,11 +105,20 @@ public:
         }
     }
 
-    // int Execute() {
-    //     for (int VPageAsk : m_VPageCurrent) {
+    int Execute() {
+        for (int VPage : m_VPageCurrent) {
+            AskFor(VPage);
+            PrintMem(MemoryVector);
+        }
+    }
 
-    //     }
-    // }
+    void AskFor(int VPage, int) {
+
+    }
+
+    void PrintMem() {
+        
+    }
 
 };
 
