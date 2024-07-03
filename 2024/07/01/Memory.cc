@@ -7,23 +7,42 @@
 using std::vector;
 
 #define InstucSize 320
-#define PMSize 4 // PhysicalMemorySize
-#define VMSize 32   // VirtualMemorySize for every process
+// #define PMSize 4 // PhysicalMemorySize
+#define VMSize 32   // VirtualMemorySize(0 ~ n (int)) for every process
 
-vector<bool> MemoryMap(PMSize);
 
-// class PageTableMember
+
+class PTE {   // PageTableElem
+public:
+    bool m_existence;   // 存在位
+    bool m_visit; // 访问位, 实现近似LRU
+    // bool dirty; // 脏位
+    int m_VPN;    // virtual page num
+    int m_PPN;    // physical page num
+
+    PTE() {
+        m_existence = 0;
+        m_visit = 0;
+        // m_dirty = 0;
+        m_VPN = 0;
+        m_PPN = 0;
+    }
+    ~PTE() {}
+};
 
 class Process {
 public:
-    vector<int> m_Instuc;   // 存储页面流
-    vector<int> m_PageTable; // 页表
+    int VPagePointer;  // 虚页指针
+    vector<int> m_VPageCurrent;   // 存储虚拟页流
+    vector<PTE> m_PageTable; // 页表, 存储虚页放到了哪个实页中
 
     Process() {
-        CreateInstructions(m_Instuc);
-        TransToPage(m_Instuc);
-        m_PageTable = vector<int> (VMSize);
+        VPagePointer = 0;
+        CreateInstructions(m_VPageCurrent);
+        TransToPage(m_VPageCurrent);
+        m_PageTable = vector<PTE> (VMSize);
     }
+    ~Process() {}
 
     // 生成指令流
     void CreateInstructions(vector<int> &instructions) {
@@ -53,7 +72,11 @@ public:
 
 
 
-int main() {
+int main(int argc, char *argv[]) {
+    static int PMSize = 4;  // 可以循环修改PMSize 以改变物理内存大小
+    vector<bool> MemoryMap(PMSize);
+
+
     Process a;
 
 
