@@ -5,13 +5,17 @@
 #include <vector>
 #include <cassert>
 
-using std::vector, std::string;
+using std::vector;
+using std::string;
 
-#define InstucSize 80
-#define PMSize 2 // PhysicalMemorySize
-static int VMSize = InstucSize / 10;   // VirtualMemorySize(0 ~ n (int)) for every process
+#define InstucSize 320
+#define PMSize 4 // PhysicalMemorySize
+static int VMSize = (InstucSize / 10);   // VirtualMemorySize(0 ~ n (int)) for every process
 #define ProcessNum 1
-#define Step 80 // 一步执行80条指令
+// #define Step 80 // 一步执行80条指令
+
+int totalTimes = 0;
+int lackPageTimes = 0;
 
 /**************************Physical Memory**************************/
 class PMPFAE { // PhysicalMemoryPageFrameAllocationElem
@@ -181,10 +185,11 @@ public:
         }
     }
 
-    // 转换为虚页流（10个指令占一页，每个进程的虚存共32页）
+    // 转换为虚页流（10个指令占一页）
     void TransToPage(vector<int> &instuctions) {
         for (int &elem : instuctions) {
             elem /= 10;
+            elem = elem % VMSize;
         }
     }
 
@@ -194,12 +199,14 @@ public:
         // }
         for (int VPN : m_VPageCurrent) {
             AskOSFor(VPN);
+            totalTimes++;
             // PrintMem();
         }
     }
 
     void AskOSFor(int VPN) {
         while(!m_PT.isInPM(m_id, VPN)) { // 如果主存中没有对应实页 
+            lackPageTimes++;
             CallOStoDealWithPageLack(VPN);
         }
         // then okay, page is in Phycical Memory now!
@@ -254,13 +261,17 @@ void CreateProcessArray(vector<Process> &ProcessArray, int num) {
 }
 
 int main(int argc, char *argv[]) {
-    // int PMSize = 4;  // 可以循环修改PMSize 以改变物理内存大小
+    // PMSize = std::atoi(argv[1]); // 尝试使用static全局修改变量PMSize 失败
+
+    assert(PMSize > 0);
     
     vector<Process> ProcessArray;
     CreateProcessArray(ProcessArray, ProcessNum);
     ProcessArray[0].Execute();
 
-    // ProcessArray[0].Exit(); // 
+    ProcessArray[0].Exit();
+
+    printf("lackPageFrequency: %lf\n", (lackPageTimes / (double)totalTimes));
 
     return 0;
 }
