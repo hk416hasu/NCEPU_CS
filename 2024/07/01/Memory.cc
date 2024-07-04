@@ -9,25 +9,22 @@ using std::vector, std::string;
 #define InstucSize 320
 #define PMSize 4 // PhysicalMemorySize
 #define VMSize 32   // VirtualMemorySize(0 ~ n (int)) for every process
+#define ProcessNum 5
 
-
-// 物理内存
+/**************************Physical Memory**************************/
 class PMPFAE { // PhysicalMemoryPageFrameAllocationElem
 public:
-    bool m_owned;
+    bool m_isOwned;
     int m_owner;
 
-    PMPFAE() {
-        m_owned = false;
-        m_owned = -1;
-    }
+    PMPFAE() : m_isOwned(false), m_owner(-1) {}
     ~PMPFAE() {}
 };
 
 vector<PMPFAE> MemoryVector(PMSize);   // 主存物理块管理向量
 
 
-// 虚拟内存
+/**************************Virtual Memory**************************/
 class PTE {   // PageTableElem
 public:
     bool m_existence;   // 存在位
@@ -36,15 +33,8 @@ public:
     // int m_VPN;    // virtual page num
     int m_PPN;    // physical page num
 
-    PTE() {
-        m_existence = 0;
-        m_visit = 0;
-        // m_dirty = 0;
-        // m_VPN = 0;
-        m_PPN = 0;
-    }
+    PTE() : m_existence(0), m_visit(0), m_PPN(0) {}
     ~PTE() {}
-
 };
 
 class PageTable {
@@ -73,9 +63,7 @@ public:
     vector<int> m_VPageCurrent;   // 存储虚拟页流
     PageTable m_PT;
 
-    Process(int id) {
-        m_id = id;
-        VPagePointer = 0;
+    Process(int id) : m_id(id), VPagePointer(0) {
         CreateInstructions(m_VPageCurrent);
         TransToPage(m_VPageCurrent);
     }
@@ -83,7 +71,7 @@ public:
 
     // 生成指令流
     void CreateInstructions(vector<int> &instructions) {
-        std::srand(std::time(0)); // 用当前时间作为随机数种子
+        std::srand(std::time(0) + std::rand()); // 设置随机数种子
         instructions.clear();
         int count = 0;
         while (count < InstucSize) {
@@ -105,16 +93,18 @@ public:
         }
     }
 
-    int Execute() {
-        for (int VPage : m_VPageCurrent) {
-            AskFor(VPage);
-            PrintMem(MemoryVector);
-        }
+    // int Execute() {
+    //     for (int VPage : m_VPageCurrent) {
+    //         // AskOSFor(VPage);
+    //         // PrintMem(MemoryVector);
+    //     }
+    // }
+
+    void AskOSFor(int VPage, int) {
+
     }
 
-    void AskFor(int VPage, int) {
-
-    }
+    void OSDealWithPageLack() {}
 
     void PrintMem() {
         
@@ -122,15 +112,17 @@ public:
 
 };
 
-
+void CreateProcessArray(vector<Process> &ProcessArray, int num) {
+    for (int i = 1; i <= num; i++) {
+        ProcessArray.emplace_back(i);
+    }
+}
 
 int main(int argc, char *argv[]) {
     // int PMSize = 4;  // 可以循环修改PMSize 以改变物理内存大小
-
-
-
-    Process a(1);
-
+    
+    vector<Process> ProcessArray;
+    CreateProcessArray(ProcessArray, ProcessNum);
 
 
     return 0;
