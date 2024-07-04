@@ -9,13 +9,14 @@ using std::vector;
 using std::string;
 
 #define InstucSize 320
-#define PMSize 4 // PhysicalMemorySize
+#define PMSize 30 // PhysicalMemorySize
 static int VMSize = (InstucSize / 10);   // VirtualMemorySize(0 ~ n (int)) for every process
 #define ProcessNum 1
 // #define Step 80 // 一步执行80条指令
 
 int totalTimes = 0;
 int lackPageTimes = 0;
+int exchangeTimes = 0;
 
 /**************************Physical Memory**************************/
 class PMPFAE { // PhysicalMemoryPageFrameAllocationElem
@@ -222,6 +223,7 @@ public:
             // 没满, 则申请一个空闲块
             PPN = Memory.ApplyPPage(m_id);
         } else { // 如果满了
+            exchangeTimes++;
             // LRU算法选择一个最近最不常访问块，遍历过程中要更新visit
             PPN = Memory.ApplyPPageWithLRU(m_id, SwapOutAPageInSameProcess);
         }
@@ -272,6 +274,8 @@ int main(int argc, char *argv[]) {
     ProcessArray[0].Exit();
 
     printf("lackPageFrequency: %lf\n", (lackPageTimes / (double)totalTimes));
+    printf("hitPageFrequency: %lf\n", 1.0 - (lackPageTimes / (double)totalTimes));
+    printf("exchangeTimes: %d\n", exchangeTimes);
 
     return 0;
 }
