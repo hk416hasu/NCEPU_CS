@@ -8,7 +8,7 @@
 using std::vector, std::string;
 
 #define InstucSize 80
-#define PMSize 4 // PhysicalMemorySize
+#define PMSize 2 // PhysicalMemorySize
 static int VMSize = InstucSize / 10;   // VirtualMemorySize(0 ~ n (int)) for every process
 #define ProcessNum 1
 #define Step 80 // 一步执行80条指令
@@ -82,8 +82,8 @@ public:
 
     // 按照近似LRU算法“分配”(置换)一物理块
     int ApplyPPageWithLRU(int id) {
-        while (m_MemoryVector[ClockPointer].m_isOwned) {
-            m_MemoryVector[ClockPointer].m_isOwned = false;
+        while (m_MemoryVector[ClockPointer].m_visit) {
+            m_MemoryVector[ClockPointer].m_visit = false;
             ClockPointer = (ClockPointer + 1) % PMSize;
         }
         AllocatePPage(id, ClockPointer);   // 调入主存
@@ -200,7 +200,7 @@ public:
             PPN = Memory.ApplyPPage(m_id);
         } else { // 如果满了
             // LRU算法选择一个最近最不常访问块，遍历过程中要更新visit
-            Memory.ApplyPPageWithLRU(m_id);
+            PPN = Memory.ApplyPPageWithLRU(m_id);
         }
         // 更新页表
         assert(PPN >= 0);
