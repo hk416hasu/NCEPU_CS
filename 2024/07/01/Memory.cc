@@ -77,7 +77,7 @@ public:
 
     // 
     void ReleasePPage(int id) {
-        for (PMPFAE elem : m_MemoryVector) {
+        for (PMPFAE &elem : m_MemoryVector) {
             if (elem.m_owner == id) {
                 elem.m_isOwned = false;
             }
