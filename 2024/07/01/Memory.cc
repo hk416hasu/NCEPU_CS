@@ -80,12 +80,18 @@ public:
         }
     }
 
-    // 按照近似LRU算法“分配”(置换)一物理块
-    int ApplyPPageWithLRU(int id) {
+    // 按照近似LRU算法“分配”(置换)一物理块, 并要记录被换出的VPN(如果是同owner), 非同一进程的页表不太好改，还是用主存owner辨别就可以 不需要特别去修改
+    // 如果换掉的是同一进程的页, 仅有主存owner位不够
+    // 因此需要更新当前进程的页表, 将被换出去的页的页表项存在位置为false
+    int ApplyPPageWithLRU(int id, bool &SwapOutSameProcess) {
+        // 找一个最近最不常访问的物理页
         while (m_MemoryVector[ClockPointer].m_visit) {
             m_MemoryVector[ClockPointer].m_visit = false;
             ClockPointer = (ClockPointer + 1) % PMSize;
         }
+
+        SwapOutSameProcess = (m_MemoryVector[ClockPointer].m_owner == id);
+
         AllocatePPage(id, ClockPointer);   // 调入主存
         return ClockPointer;
     }
@@ -117,6 +123,7 @@ public:
     }
 
     // is in Physical Memory
+    // 注意！！本实验中，有效位有效不代表虚页一定在主存中，还需要对比owner
     bool isInPM (int id, int VPN) {
         // 页表有效位有效 且 对应实页owner与当前进程id号相同
         if (m_PageTable[VPN].m_existence == true &&
@@ -126,6 +133,14 @@ public:
             return true;
         }
         return false;
+    }
+
+    void OneVPNisNotExistInThisPPNnow(int PPN) {
+        for (PTE &elem : m_PageTable) {
+            if (elem.m_PPN == PPN) {
+                elem.m_existence = false;
+            }
+        }
     }
 };
 
@@ -195,17 +210,26 @@ public:
     //     这个放到Memory class里会不会更适合？
     void CallOStoDealWithPageLack(int VPN) {
         int PPN = -1;
+        bool SwapOutAPageInSameProcess = false;
         if (Memory.isNotFull()) { // 检查主存是否满了
             // 没满, 则申请一个空闲块
             PPN = Memory.ApplyPPage(m_id);
         } else { // 如果满了
             // LRU算法选择一个最近最不常访问块，遍历过程中要更新visit
-            PPN = Memory.ApplyPPageWithLRU(m_id);
+            PPN = Memory.ApplyPPageWithLRU(m_id, SwapOutAPageInSameProcess);
         }
+        
         // 更新页表
+        // 首先取消在此PPN的页表项(旧的那个)
+        if (SwapOutAPageInSameProcess) {
+            m_PT.OneVPNisNotExistInThisPPNnow(PPN);
+        }
+        // 再更新页表表示:此VPN位于PPN
         assert(PPN >= 0);
         m_PT.m_PageTable[VPN].m_PPN = PPN;
         m_PT.m_PageTable[VPN].m_existence = true;
+
+
     }
 
     void PrintMem() {
