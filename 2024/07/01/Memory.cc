@@ -195,7 +195,7 @@ public:
     }
 
     void Execute(int step) {
-        for (int i = 0; i < step && VPagePointer < InstucSize; i++, VPagePointer++) {
+        for (int i = 0; VPagePointer < InstucSize && i < step; i++, VPagePointer++) {
             AskOSFor(m_VPageCurrent[VPagePointer]);
             totalTimes++;
         }
@@ -267,13 +267,14 @@ int main(int argc, char *argv[]) {
     // PMSize = std::atoi(argv[1]); // 尝试使用static全局修改变量PMSize 失败
 
     assert(InstucSize > 0);
-    assert(PMSize > 0);
+    assert(PMSize >= 4);
     assert(ProcessNum > 0);
 
     vector<Process> ProcessArray;
     CreateProcessArray(ProcessArray, ProcessNum);
 
     
+    // 此为演示序列 输出的命中率不应作为参考依据
     ProcessArray[0].Exit();
     ProcessArray[1].Execute(3);
     ProcessArray[2].Execute(3);

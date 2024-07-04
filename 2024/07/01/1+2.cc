@@ -330,6 +330,8 @@ int main(int argc, char *argv[]) {
 
     RR(ProcessArray);
 
+
+    // 生成的指令序列的循环不够多, 对命中率有一定的影响
     printf("lackPageFrequency: %lf\n", (lackPageTimes / (double)totalTimes));
     printf("hitPageFrequency: %lf\n", 1.0 - (lackPageTimes / (double)totalTimes));
     printf("exchangeTimes: %d\n", exchangeTimes);
