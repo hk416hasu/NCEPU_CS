@@ -266,8 +266,10 @@ void CreateProcessArray(vector<Process> &ProcessArray, int num) {
 int main(int argc, char *argv[]) {
     // PMSize = std::atoi(argv[1]); // 尝试使用static全局修改变量PMSize 失败
 
+    assert(InstucSize > 0);
     assert(PMSize > 0);
-    
+    assert(ProcessNum > 0);
+
     vector<Process> ProcessArray;
     CreateProcessArray(ProcessArray, ProcessNum);
 
