@@ -20,7 +20,7 @@ public:
     ProcessState m_stat;
 
     Process(int id, int NeedServeTime) : m_id(id), m_ServedTime(0), m_stat(R) {
-        m_next = (id + 1) % ProcessNum;
+        m_next = id % ProcessNum + 1;
         m_NeedServeTime = NeedServeTime;
     }
 
@@ -41,7 +41,7 @@ public:
 void CreateProcessArray(vector<Process> &ProcessArray, int num) {
     assert(num >= 1);
     std::srand(std::time(0) + std::rand()); // 设置随机数种子
-    for (int i = 0; i < num; i++) {
+    for (int i = 1; i <= num; i++) {
         ProcessArray.emplace_back( i, ((std::rand() % 5) + 1) );
     }
 }
@@ -64,17 +64,17 @@ void Print(const vector<Process> &PArr) {
 
 void RR(vector<Process> &PArr) {
 
-    int RP = 0; // RunningPointer
+    int RP = 1; // RunningPointer
 
     while (!isAllEnd(PArr)) {   // RR结束条件
         printf("\n\n\n");
         Print(PArr);    // 输出状态
 
-        if (PArr[RP].m_stat == R) {
-            PArr[RP].Execute();
+        if (PArr[RP-1].m_stat == R) {
+            PArr[RP-1].Execute();
         }
 
-        RP = PArr[RP].m_next;
+        RP = PArr[RP-1].m_next;
 
     }
 
