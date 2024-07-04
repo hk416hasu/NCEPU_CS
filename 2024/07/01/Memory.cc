@@ -9,7 +9,7 @@ using std::vector;
 using std::string;
 
 #define InstucSize 320
-#define PMSize 30 // PhysicalMemorySize
+#define PMSize 4 // PhysicalMemorySize
 static int VMSize = (InstucSize / 10);   // VirtualMemorySize(0 ~ n (int)) for every process
 #define ProcessNum 1
 // #define Step 80 // 一步执行80条指令
@@ -194,15 +194,16 @@ public:
         }
     }
 
-    void Execute() {
-        // for (int i = ; i < Step??; i++) {
-
-        // }
-        for (int VPN : m_VPageCurrent) {
-            AskOSFor(VPN);
+    void Execute(int step) {
+        for (int i = 0; i < step && VPagePointer < InstucSize; i++, VPagePointer++) {
+            AskOSFor(m_VPageCurrent[VPagePointer]);
             totalTimes++;
-            // PrintMem();
         }
+        // for (int VPN : m_VPageCurrent) {
+        //     AskOSFor(VPN);
+        //     totalTimes++;
+        //     // PrintMem();
+        // }
     }
 
     void AskOSFor(int VPN) {
@@ -269,7 +270,7 @@ int main(int argc, char *argv[]) {
     
     vector<Process> ProcessArray;
     CreateProcessArray(ProcessArray, ProcessNum);
-    ProcessArray[0].Execute();
+    ProcessArray[0].Execute(500);
 
     ProcessArray[0].Exit();
 
