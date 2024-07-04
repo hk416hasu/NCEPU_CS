@@ -11,7 +11,7 @@ using std::string;
 #define InstucSize 320
 #define PMSize 4 // PhysicalMemorySize
 static int VMSize = (InstucSize / 10);   // VirtualMemorySize(0 ~ n (int)) for every process
-#define ProcessNum 1
+#define ProcessNum 4
 // #define Step 80 // 一步执行80条指令
 
 int totalTimes = 0;
@@ -270,9 +270,16 @@ int main(int argc, char *argv[]) {
     
     vector<Process> ProcessArray;
     CreateProcessArray(ProcessArray, ProcessNum);
-    ProcessArray[0].Execute(500);
 
+    
     ProcessArray[0].Exit();
+    ProcessArray[1].Execute(3);
+    ProcessArray[2].Execute(3);
+    ProcessArray[3].Execute(1);
+    ProcessArray[1].Exit();
+    ProcessArray[2].Exit();
+    ProcessArray[3].Execute(1);
+
 
     printf("lackPageFrequency: %lf\n", (lackPageTimes / (double)totalTimes));
     printf("hitPageFrequency: %lf\n", 1.0 - (lackPageTimes / (double)totalTimes));
