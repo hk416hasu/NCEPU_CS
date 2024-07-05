@@ -283,6 +283,8 @@ int main(int argc, char *argv[]) {
     ProcessArray[2].Exit();
     ProcessArray[3].Execute(1);
 
+    // ProcessArray[0].Execute(100);
+
 
     printf("lackPageFrequency: %lf\n", (lackPageTimes / (double)totalTimes));
     printf("hitPageFrequency: %lf\n", 1.0 - (lackPageTimes / (double)totalTimes));
