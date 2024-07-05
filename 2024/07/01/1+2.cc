@@ -11,14 +11,14 @@ using std::string;
 #define InstucSize 320
 #define PMSize 4 // PhysicalMemorySize
 static int VMSize = (InstucSize / 10);   // VirtualMemorySize(0 ~ n (int)) for every process
-#define ProcessNum 4
-// #define Step 80 // 一步执行80条指令
+#define ProcessNum 1
+#define Step 3 // 一步执行80条指令
 
 int totalTimes = 0;
 int lackPageTimes = 0;
 int exchangeTimes = 0;
 
-/**************************Physical Memory**************************/
+/************************************** Physical Memory **************************************/
 class PMPFAE { // PhysicalMemoryPageFrameAllocationElem
 public:
     bool m_isOwned;
@@ -106,7 +106,7 @@ public:
 PhysicalMemory Memory;   // 主存物理块 们
 
 
-/**************************Virtual Memory**************************/
+/************************************** Virtual Memory **************************************/
 class PTE {   // PageTableElem
 public:
     bool m_existence;   // 存在位
@@ -311,7 +311,7 @@ void RR(vector<Process> &PArr) {
         Print(PArr);    // 输出状态
 
         if (PArr[RP-1].m_stat == R) {
-            PArr[RP-1].Execute(3);
+            PArr[RP-1].Execute(Step);
         }
 
         RP = PArr[RP-1].m_next;
@@ -332,6 +332,7 @@ int main(int argc, char *argv[]) {
 
 
     // 生成的指令序列的循环不够多, 对命中率有一定的影响
+    printf("totalTimes: %d\n", totalTimes);
     printf("lackPageFrequency: %lf\n", (lackPageTimes / (double)totalTimes));
     printf("hitPageFrequency: %lf\n", 1.0 - (lackPageTimes / (double)totalTimes));
     printf("exchangeTimes: %d\n", exchangeTimes);
