@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <vector>
 #include <cassert>
+#include <unistd.h>
 
 using std::vector;
 
@@ -25,8 +26,8 @@ public:
     }
 
     void Print() {
-        printf("Process %d:\n\tnext -> %d,\n\tNeedServeTime: %d,\n\tServedTime: %d,\n\tstate: %d\n", \
-            m_id, m_next, m_NeedServeTime, m_ServedTime, m_stat);
+        printf("Process %d:\n\tnext -> %d,\n\tNeedServeTime: %d,\n\tServedTime: %d,\n\tstate: %c\n", \
+            m_id, m_next, m_NeedServeTime, m_ServedTime, ((m_stat == 0) ? 'R' : 'E') );
     }
 
     void Execute() {
@@ -66,17 +67,21 @@ void RR(vector<Process> &PArr) {
 
     int RP = 1; // RunningPointer
 
+
     while (!isAllEnd(PArr)) {   // RR结束条件
-        printf("\n\n\n");
-        Print(PArr);    // 输出状态
 
         if (PArr[RP-1].m_stat == R) {
+            printf("\n\n\nselected Process: %d\n\n", PArr[RP-1].m_id);
+            Print(PArr);    // 输出状态
             PArr[RP-1].Execute();
         }
 
         RP = PArr[RP-1].m_next;
-
+        sleep(5);
     }
+
+    printf("\n\n\n");
+    Print(PArr);    // 输出结束状态
 
 }
 
