@@ -57,31 +57,30 @@ bool isAllEnd(const vector<Process> &PArr) {
     return true;
 }
 
-void Print(const vector<Process> &PArr) {
+void Print(const vector<Process> &PArr, int selectId) {
+    printf("\n\n\nselected Process: %d\n\n", selectId);
     for (Process elem : PArr) {
         elem.Print();
     }
+    sleep(5);
 }
 
 void RR(vector<Process> &PArr) {
 
     int RP = 1; // RunningPointer
 
+    Print(PArr, -1);    // 输出状态
 
     while (!isAllEnd(PArr)) {   // RR结束条件
 
         if (PArr[RP-1].m_stat == R) {
-            printf("\n\n\nselected Process: %d\n\n", PArr[RP-1].m_id);
-            Print(PArr);    // 输出状态
             PArr[RP-1].Execute();
+            Print(PArr, PArr[RP-1].m_id);    // 输出状态
         }
 
         RP = PArr[RP-1].m_next;
-        sleep(5);
     }
 
-    printf("\n\n\n");
-    Print(PArr);    // 输出结束状态
 
 }
 
