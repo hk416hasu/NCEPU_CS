@@ -11,7 +11,7 @@ using std::string;
 #define InstucSize 320
 #define PMSize 4 // PhysicalMemorySize
 static int VMSize = (InstucSize / 10);   // VirtualMemorySize(0 ~ n (int)) for every process
-#define ProcessNum 1
+#define ProcessNum 4
 #define Step 3 // 一步执行80条指令
 
 int totalTimes = 0;

@@ -62,7 +62,7 @@ void Print(const vector<Process> &PArr, int selectId) {
     for (Process elem : PArr) {
         elem.Print();
     }
-    sleep(5);
+    // sleep(5);
 }
 
 void RR(vector<Process> &PArr) {

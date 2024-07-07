@@ -27,9 +27,12 @@ public:
 
     PMPFAE() : m_isOwned(false), m_owner(-1), m_visit(false) {}
     ~PMPFAE() {}
-    // void Print(int PPid) {  // Physical Page id
-    //     printf("usage ...\n");
-    // }
+
+    void Print() {
+        printf("\tIsOwned: %d\n", m_isOwned);
+        printf("\tOwner: %d\n", m_owner);
+        printf("\tvisit word: %d\n", m_visit);
+    }
 };
 
 class PhysicalMemory {
@@ -39,6 +42,15 @@ public:
     
     PhysicalMemory() : ClockPointer(0) {
         m_MemoryVector = vector<PMPFAE>(PMSize);
+    }
+
+    void print() {
+        int i = 0;
+        for (PMPFAE elem : m_MemoryVector) {
+            printf("Memory[%d]:\n", i++);
+            elem.Print();
+        }
+        printf("\n\n\n");
     }
 
     // 查找储存中是否有空闲块, 有则返回索引, 没有则返回-1
@@ -76,7 +88,7 @@ public:
         m_MemoryVector[index].m_visit = 1;
     }
 
-    // 
+    // 释放进程号为id的进程占据的所有物理页
     void ReleasePPage(int id) {
         for (PMPFAE &elem : m_MemoryVector) {
             if (elem.m_owner == id) {
@@ -140,6 +152,7 @@ public:
         return false;
     }
 
+    // update PT
     void OneVPNisNotExistInThisPPNnow(int PPN) {
         for (PTE &elem : m_PageTable) {
             if (elem.m_PPN == PPN) {
@@ -159,6 +172,9 @@ public:
     Process(int id) : m_id(id), VPagePointer(0) {
         CreateInstructions(m_VPageCurrent);
         TransToPage(m_VPageCurrent);
+
+        // PrintVPage();
+
     }
     ~Process() {
         m_id = -1;
@@ -194,6 +210,15 @@ public:
         }
     }
 
+    void PrintVPage() {
+        printf("Process %d : \n\t", m_id);
+        for (auto elem : m_VPageCurrent) {
+            printf("%d ", elem);
+        }
+        printf("\n");
+    }
+
+    // 执行step步指令
     void Execute(int step) {
         for (int i = 0; VPagePointer < InstucSize && i < step; i++, VPagePointer++) {
             AskOSFor(m_VPageCurrent[VPagePointer]);
@@ -206,6 +231,7 @@ public:
         // }
     }
 
+    // 虚拟地址转换
     void AskOSFor(int VPN) {
         while(!m_PT.isInPM(m_id, VPN)) { // 如果主存中没有对应实页 
             lackPageTimes++;
@@ -246,6 +272,7 @@ public:
         // 先直接调试吧
     }
 
+    // 撤销进程，资源回收
     void Exit() {
         // OS遍历主存, 取消所有此进程的实页分配() : owner对的上的主存全部 改标志位
         Memory.ReleasePPage(m_id);
@@ -269,6 +296,7 @@ int main(int argc, char *argv[]) {
     assert(InstucSize > 0);
     assert(PMSize >= 4);
     assert(ProcessNum > 0);
+    printf("PMsize: %d\n", PMSize);
 
     vector<Process> ProcessArray;
     CreateProcessArray(ProcessArray, ProcessNum);
@@ -276,14 +304,23 @@ int main(int argc, char *argv[]) {
     
     // 此为演示序列 输出的命中率不应作为参考依据
     ProcessArray[0].Exit();
+    Memory.print();
     ProcessArray[1].Execute(3);
+    printf("Process 2 .Execute(3);\n");    Memory.print();
     ProcessArray[2].Execute(3);
+    printf("Process 3 .Execute(3);\n");    Memory.print();
     ProcessArray[3].Execute(1);
+    printf("Process 4 .Execute(1);\n");    Memory.print();
     ProcessArray[1].Exit();
+    printf("release Process 2\n");         Memory.print();
     ProcessArray[2].Exit();
+    printf("release Process 3\n");         Memory.print();
     ProcessArray[3].Execute(1);
+    printf("Process 4 .Execute(1);\n");    Memory.print();
 
-    // ProcessArray[0].Execute(100);
+    // for (int i = 0; i < ProcessNum; i++) {
+    //     ProcessArray[i].Execute(300);
+    // }
 
 
     printf("lackPageFrequency: %lf\n", (lackPageTimes / (double)totalTimes));
