@@ -94,5 +94,5 @@ int main() {
     printf("enum ProcessState { R, E }");
     RR(ProcessArray);
 
-    return 0;
+    return 100;
 }
