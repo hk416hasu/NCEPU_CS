@@ -1,5 +1,6 @@
 #!/bin/env bash
 
+# how to make brightness -mc ??
 
 MAX_BRIGHTNESS=`cat /sys/class/backlight/amdgpu_bl0/max_brightness`
 BRIGHTNESS_PATH='/sys/class/backlight/amdgpu_bl0/brightness'
