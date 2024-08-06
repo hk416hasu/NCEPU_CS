@@ -9,5 +9,5 @@ a
 *.7z
 *.rar
 *.swp
-*.png
+# *.png
 *.jpg
