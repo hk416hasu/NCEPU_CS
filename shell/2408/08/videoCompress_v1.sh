@@ -1,9 +1,12 @@
 #!/bin/env bash
 
+# plz use findallsuffix.sh to collect all suffix of your target dir
+# then u need to modify those suffix in this script
+
 shopt -s globstar
 
 # use varible to replace static path
-echo "plz enter the path of target dir"
+echo "plz give the absolute path(from /) of target dir"
 read -r tardir     # get target directory from input 
 if [[ ! -d "$tardir" ]]; then
     echo "$tardir" "doesn't exist."
@@ -22,10 +25,10 @@ if [[ "$flag" != "yes" ]]; then
 fi
 
 cd "$(dirname "$tardir")" || exit 1
+    echo "$PWD" >log
 relapath='./'$(basename "$tardir")
 name=$(basename "$tardir")
 newname="[abab]""$name"
-
 for file in "$relapath"/**/*.{jpg,png}; do
     newpath="${file/"$name"/"$newname"}"
     newdir="$(dirname "$newpath")"
