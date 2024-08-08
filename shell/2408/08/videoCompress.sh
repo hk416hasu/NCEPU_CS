@@ -25,18 +25,17 @@ if [[ "$flag" != "yes" ]]; then
 fi
 
 cd "$(dirname "$tardir")" || exit 1
-relapath='./'$(basename "$tardir")
 name=$(basename "$tardir")
-newname="[abab]""$name"
+newname="[abab]$name"
 
-for file in "$relapath"/**/*.{jpg,png}; do
+for file in "./$name"/**/*.{jpg,png}; do
     newpath="${file/"$name"/"$newname"}"
     newdir="$(dirname "$newpath")"
     mkdir -p "$newdir"
     cp "$file" "$newpath"
 done
 
-for file in "$relapath"/**/*.mp4; do
+for file in "./$name"/**/*.mp4; do
     newpath="${file/"$name"/"$newname"}"
     newdir="$(dirname "$newpath")"
     mkdir -p "$newdir"

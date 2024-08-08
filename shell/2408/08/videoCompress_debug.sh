@@ -25,14 +25,15 @@ if [[ "$flag" != "yes" ]]; then
 fi
 
 cd "$(dirname "$tardir")" || exit 1
-    echo "$PWD" >log
-relapath='./'$(basename "$tardir")
+    echo "$PWD" > log
+# relapath='./'$(basename "$tardir")
 name=$(basename "$tardir")
-newname="[abab]""$name"
-    echo "relapath: $relapath" >> log
+newname="[abab]$name"
+#    echo "relapath: $relapath" >> log
     echo "name: $name" >> log
     echo "newname: $newname" >> log
-for file in "$relapath"/**/*.{jpg,png}; do
+
+for file in "./$name"/**/*.{jpg,png}; do
     newpath="${file/"$name"/"$newname"}"
     newdir="$(dirname "$newpath")"
         echo "file: $file" >> log
@@ -42,7 +43,7 @@ for file in "$relapath"/**/*.{jpg,png}; do
     cp "$file" "$newpath"
 done
 
-for file in "$relapath"/**/*.mp4; do
+for file in "./$name"/**/*.mp4; do
     newpath="${file/"$name"/"$newname"}"
         echo "file: $file" >> log
         echo "$newpath" >> log
