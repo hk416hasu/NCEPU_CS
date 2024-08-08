@@ -6,14 +6,14 @@
 shopt -s globstar
 
 # use varible to replace static path
-echo "plz enter the path of target dir"
+echo "plz enter the path of target dir:"
 read -r tardir     # get target directory from input 
 if [[ ! -d "$tardir" ]]; then
     echo "$tardir" "doesn't exist."
     exit 1
 fi
 
-echo -e "\nplz preview the target dir \n"
+echo -e "\nplz preview the target dir: \n"
 ls "$tardir" | head -n 5
 open "$tardir"
 echo -e "\nis this your target dir?"
