@@ -1,5 +1,7 @@
 #!/bin/env bash
 
+# use varible to replace static path
+
 shopt -s globstar
 
 for file in ./anime/**/*.{jpg,png}; do
