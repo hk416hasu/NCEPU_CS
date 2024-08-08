@@ -9,3 +9,6 @@ for file in /path/to/targetDir/**/*; do
 done | sort -u 
 
 exit 0
+
+
+am i here?
