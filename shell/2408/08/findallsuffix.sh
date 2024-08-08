@@ -2,7 +2,7 @@
 
 shopt -s globstar
 
-for file in **/*; do
+for file in /path/to/targetDir/**/*; do
     if [[ -f "$file" ]]; then
         echo "${file##*.}"
     fi
