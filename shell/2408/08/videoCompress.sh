@@ -1,7 +1,11 @@
 #!/bin/env bash
 
+# this script can help u copy photos and compress videos with dir structures.
+
 # plz use findallsuffix.sh to collect all suffix of your target dir first
 # then u need to modify those suffix in this script
+
+resolution="-1:640"
 
 shopt -s globstar
 
@@ -26,7 +30,7 @@ fi
 
 cd "$(dirname "$tardir")" || exit 1
 name=$(basename "$tardir")
-newname="[abab]$name"
+newname="[$resolution]$name"
 
 for file in "./$name"/**/*.{jpg,png}; do
     newpath="${file/"$name"/"$newname"}"
@@ -39,7 +43,7 @@ for file in "./$name"/**/*.mp4; do
     newpath="${file/"$name"/"$newname"}"
     newdir="$(dirname "$newpath")"
     mkdir -p "$newdir"
-    ffmpeg -i "$file" -vf scale=640:-1 "$newpath"
+    ffmpeg -i "$file" -vf scale="$resolution" "$newpath"
 done
 
 exit 0
