@@ -12,6 +12,7 @@ fi
 
 if [[ ! (-d "$1" || -f "$1") ]]; then # if $1 is not a dir or file
     echo "plz enter the correct Path"
+    exit 2
 fi
 
 mpv --shuffle --no-audio-display --vo=null --no-osc "$1"
