@@ -5,7 +5,7 @@ if [[ $# -eq 0 || $1 == '-h' || $1 == '--help' ]]; then
     echo "Change the sound of your computer"
     echo 
     echo "  -s, --set=INT   set sound volumn by 100%"
-    echo "  --mute          mute the speaker"
+    echo "  -m, --mute      mute the speaker"
     echo "  --unmute        unmute the speaker"
     echo "  -h, --help      show help"
 #    echo "  -c, --current   show current sound value"
@@ -14,7 +14,7 @@ if [[ $# -eq 0 || $1 == '-h' || $1 == '--help' ]]; then
     exit 1
 fi
 
-if [[ $1 == '--mute' ]]; then
+if [[ $1 == '--mute' || $1 == '-m' ]]; then
     amixer -D pulse sset Master mute
 fi
 
@@ -22,7 +22,7 @@ if [[ $1 == '--unmute' ]]; then
     amixer -D pulse sset Master unmute
 fi
 
-if [[ -n $2 ]]; then
+if [[ -z $2 ]]; then # if the length of $2 is zero; then
     echo "plz enter the value(0 - 100)"
     exit 2
 fi
