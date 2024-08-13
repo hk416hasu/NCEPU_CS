@@ -5,17 +5,18 @@ if [[ $# -eq 0 || $1 == '-h' || $1 == '--help' ]]; then
     echo "using mpv easily in Command lines"
 fi
 
-if [[ -z $1 ]]; then # if the length of $1is zero; then
+if [[ -z $1 ]]; then # if the length of $1 is zero; then
     echo "plz enter the Music Path"
     exit 1
 fi
 
-path=$1
-
-# add the trans of ~
-if [[ ${path%%/*} = "~" ]]; then
-    path="${HOME}/${path#*/}"     
-fi 
+# path=$1
+# 
+# # add the trans of ~
+# # emmm.. it seems that there is no need to trans, because mpv will do it...
+# if [[ ${path%%/*} = "~" ]]; then
+#     path="${HOME}/${path#*/}"     
+# fi 
 
 if [[ ! (-d "$1" || -f "$1") ]]; then # if $1 is not a dir or file
     echo "plz enter the correct Path"
