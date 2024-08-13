@@ -12,6 +12,7 @@ fi
 
 path=$1
 
+# add the trans of ~
 if [[ ${path%%/*} = "~" ]]; then
     path="${HOME}/${path#*/}"     
 fi 
