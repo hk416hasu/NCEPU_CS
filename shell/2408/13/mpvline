@@ -1,0 +1,21 @@
+#!/bin/env bash
+
+if [[ $# -eq 0 || $1 == '-h' || $1 == '--help' ]]; then
+    echo "Usage: mpvline [MusicPath]"
+    echo "using mpv easily in Command lines"
+fi
+
+if [[ -z $1 ]]; then # if the length of $1is zero; then
+    echo "plz enter the Music Path"
+    exit 1
+fi
+
+if [[ ! (-d "$1" || -f "$1") ]]; then # if $1 is not a dir or file
+    echo "plz enter the correct Path"
+fi
+
+if [[ $1 == '-s' || $1 == '--set' ]]; then
+    amixer -D pulse sset Master "${2}%"
+fi 
+
+exit 0
