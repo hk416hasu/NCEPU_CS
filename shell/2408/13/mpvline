@@ -10,6 +10,12 @@ if [[ -z $1 ]]; then # if the length of $1is zero; then
     exit 1
 fi
 
+path=$1
+
+if [[ ${path%%/*} = "~" ]]; then
+    path="${HOME}/${path#*/}"     
+fi 
+
 if [[ ! (-d "$1" || -f "$1") ]]; then # if $1 is not a dir or file
     echo "plz enter the correct Path"
     exit 2
