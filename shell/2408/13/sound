@@ -1,0 +1,29 @@
+#!/bin/env bash
+
+if [[ $# -eq 0 || $1 == '-h' || $1 == '--help' ]]; then
+    echo "Usage: sound [OPTION]..."
+    echo "Change the sound of your computer"
+    echo 
+    echo "  -s, --set=INT   set sound volumn by 100%"
+    echo "  --mute          mute the speaker"
+    echo "  --unmute        unmute the speaker"
+    echo "  -h, --help      show help"
+#    echo "  -c, --current   show current sound value"
+    echo 
+    echo "only when realy changed sound, then return 0" 
+    exit 1
+fi
+
+if [[ $1 == '--mute' ]]; then
+    amixer -D pulse sset Master mute
+fi
+
+if [[ $1 == '--unmute' ]]; then
+    amixer -D pulse sset Master unmute
+fi
+
+if [[ -n $2 && ($1 == '-s' || $1 == '--set') ]]; then
+    amixer -D pulse sset Master "${2}%"
+fi 
+
+exit 0
