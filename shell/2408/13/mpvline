@@ -14,8 +14,6 @@ if [[ ! (-d "$1" || -f "$1") ]]; then # if $1 is not a dir or file
     echo "plz enter the correct Path"
 fi
 
-if [[ $1 == '-s' || $1 == '--set' ]]; then
-    amixer -D pulse sset Master "${2}%"
-fi 
+mpv --shuffle --no-audio-display --vo=null --no-osc "$1"
 
 exit 0
