@@ -23,6 +23,7 @@ if [[ ! (-d "$1" || -f "$1") ]]; then # if $1 is not a dir or file
     exit 2
 fi
 
-mpv --shuffle --no-audio-display --vo=null --no-osc "$1"
+mpv --shuffle --no-audio-display --vo=null "$1"
+# --no-terminal
 
 exit 0
