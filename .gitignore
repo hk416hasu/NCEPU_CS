@@ -4,7 +4,6 @@ a
 *.txt
 *.in
 *.out
-*.c.swp
 *.zip
 *.7z
 *.rar
