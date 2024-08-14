@@ -1,6 +1,5 @@
 #!/bin/env bash
 
-# how to make brightness -mc ??
 
 MAX_BRIGHTNESS=`cat /sys/class/backlight/amdgpu_bl0/max_brightness`
 BRIGHTNESS_PATH='/sys/class/backlight/amdgpu_bl0/brightness'
@@ -10,7 +9,6 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-# case might be better? 
 if [[ $1 == '-h' || $1 == '--help' ]]; then
     echo "Usage: brightness [OPTION]..."
     echo "Change the brightness of your computer"
@@ -37,7 +35,8 @@ fi
 
 if [[ -n $2 && ($1 == '-s' || $1 == '--set') ]]; then
     BRIGHTNESS=$(( $2>MAX_BRIGHTNESS?MAX_BRIGHTNESS:$2 ))
-    echo $BRIGHTNESS | sudo tee /sys/class/backlight/amdgpu_bl0/brightness
+    echo 'password' | sudo -S env BRIGHTNESS="$BRIGHTNESS" bash -c 'echo $BRIGHTNESS | tee /sys/class/backlight/amdgpu_bl0/brightness > /dev/null'
+    # echo 'password' | sudo -S echo $BRIGHTNESS | tee /sys/class/backlight/amdgpu_bl0/brightness
     echo set over~
 fi 
 
