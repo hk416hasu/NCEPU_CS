@@ -1,0 +1,10 @@
+#!/bin/env bash
+
+if [[ ! $(pgrep clash) ]]; then
+    # echo "clash doesn't exist"
+   clash-verge &
+fi
+
+firefox chatgpt.com > /dev/null 2>&1 &
+disown
+exit 0
