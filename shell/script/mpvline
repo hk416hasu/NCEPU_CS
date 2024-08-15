@@ -1,0 +1,38 @@
+#!/bin/env bash
+
+if [[ $# -eq 0 || $1 == '-h' || $1 == '--help' ]]; then
+    echo "Usage: mpvline [MusicPath]"
+    echo "using mpv easily in Command lines"
+    echo "-c, --close       close mpvline"
+    echo
+    echo "play "~/Music" by default"
+fi
+
+if [[ $(pgrep mpv) && ("$1" = '-c' || "$1" = '--close') ]]; then
+    kill -STOP $(pgrep mpv)
+    exit 0
+fi
+
+if [[ -z $1 ]]; then # if the length of $1 is zero; then
+    # echo "plz enter the Music Path"
+    mpv --shuffle -no-audio-display --vo=null "/home/hk416/Music"
+    exit 0 
+fi
+
+# path=$1
+# 
+# # add the trans of ~
+# # emmm.. it seems that there is no need to trans, because bash will do it...
+# if [[ ${path%%/*} = "~" ]]; then
+#     path="${HOME}/${path#*/}"     
+# fi 
+
+if [[ ! (-d "$1" || -f "$1") ]]; then # if $1 is not a dir or file
+    echo "plz enter the correct Path"
+    exit 2
+fi
+
+mpv --shuffle --no-audio-display --vo=null "$1"
+# --no-terminal
+
+exit 0
