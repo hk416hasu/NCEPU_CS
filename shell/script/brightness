@@ -35,8 +35,8 @@ fi
 
 if [[ -n $2 && ($1 == '-s' || $1 == '--set') ]]; then
     BRIGHTNESS=$(( $2>MAX_BRIGHTNESS?MAX_BRIGHTNESS:$2 ))
-    echo 'vbcgfh2333' | sudo -S env BRIGHTNESS="$BRIGHTNESS" bash -c 'echo $BRIGHTNESS | tee /sys/class/backlight/amdgpu_bl1/brightness > /dev/null 2>&1'
-    # echo 'vbcgfh2333' | sudo -S echo $BRIGHTNESS | tee /sys/class/backlight/amdgpu_bl1/brightness
+    # echo 'password' | sudo -S env BRIGHTNESS="$BRIGHTNESS" bash -c 'echo $BRIGHTNESS | tee /sys/class/backlight/amdgpu_bl1/brightness > /dev/null 2>&1'
+    echo $BRIGHTNESS | sudo tee /sys/class/backlight/amdgpu_bl1/brightness
     echo set over~
 fi 
 
