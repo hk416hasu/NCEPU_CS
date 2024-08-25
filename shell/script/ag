@@ -1,5 +1,12 @@
 #!/bin/env bash
 
+# Make sure the wifi is enabled
+if [[ $(nmcli radio wifi) = "disabled" ]]; then
+    # echo "wifi is disabled"
+    nmcli radio wifi on
+    sleep 7
+fi
+
 if [[ ! $(pgrep clash) ]]; then
     # echo "clash doesn't exist"
    clash-verge &
