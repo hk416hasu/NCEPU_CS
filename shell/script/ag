@@ -12,6 +12,11 @@ if [[ ! $(pgrep clash) ]]; then
    clash-verge &
 fi
 
+if [[ $(pgrep firefox) ]]; then
+    # echo "firefox exists"
+    sleep 1
+fi
+
 firefox chatgpt.com > /dev/null 2>&1 &
 disown
 exit 0
