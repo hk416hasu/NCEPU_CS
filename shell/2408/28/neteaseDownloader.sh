@@ -33,4 +33,13 @@ bash downloadList
 
 # Add metadata
 for file in *.mp3; do
-    ffmpeg -i "$file" -metadata title="${file%.mp3}" -codec copy "$file"
+    ffmpeg -i "$file" -metadata title="${file%.mp3}" -codec copy "tmp_$file"
+    rm "$file"
+    mv "tmp_$file" "$HOME/Music/fav/$file"
+done
+
+# Clean
+cd ../
+rm -r tmp
+
+exit 0
