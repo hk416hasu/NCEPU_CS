@@ -30,6 +30,7 @@ echo "plz enter how many songs would u like to download"
 read -r num
 if [[ ! "$num" =~ ^[0-9]+$ ]]; then
     echo "plz enter correct num"
+    exit 2
 fi
 head -n "$num" curl.sh > downloadList
 bash downloadList
@@ -39,6 +40,11 @@ for file in *.mp3; do
     ffmpeg -i "file:$file" -metadata title="${file%.mp3}" -codec copy "tmp_$file"
         # the "files:" prefix tells ffmpeg to treat the following string as a file path
         # , avoiding the protocol confusion
+    # Make sure the dir exist
+    if [[ ! -d "$HOME/Music/fav" ]]; then
+        echo 'the ~/Music/fav doesn't exist!'
+        exit 3
+    fi
     mv "tmp_$file" "$HOME/Music/fav/$file"
 done
 
