@@ -21,3 +21,8 @@ rm favSongs && mv favSong_tmp favSongs
 cat favSongs | sed -E 's/(<\/li>)/\1\n/g' > favSong_tmp
 rm favSongs && mv favSong_tmp favSongs
 
+# Data Wrangling 2 : Generate the curl.sh
+cat favSongs | sed -E 's/.*\"\/song(\?id=[0-9]+)\">(.*)<\/a><\/li>/curl\ -L\ https:\/\/music.163.com\/song\/media\/outer\/url\1\ \-o\ \"\2.mp3\"/g' > curl.sh
+
+# Download as wish
+
