@@ -1,0 +1,1 @@
+cat favSongs_formated | sed -E 's/.*\"\/song(\?id=[0-9]+)\">(.*)<\/a><\/li>/curl -L https:\/\/music.163.com\/song\/media\/outer\/url\1\ \-o\ \"\2.mp3\"/g' > curl.sh
