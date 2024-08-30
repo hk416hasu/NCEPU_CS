@@ -1,6 +1,7 @@
 .vscode/
 a
 *.exe
+*.EXE
 *.txt
 *.in
 *.out
@@ -11,3 +12,5 @@ a
 # *.png
 *.jpg
 *.swo
+*.OBJ
+*.obj
