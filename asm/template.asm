@@ -1,16 +1,24 @@
-data segment
+;data segment
     ; some data
-data ends
+;data ends
 
-stack segment
+;stack segment
     ; stack 
-stack ends
+;stack ends
 
 code segment
-    assume cs:code, ds:data, ss:stacks
+    assume cs:code ;, ds:data, ss:stacks
 start:
 
+
+
     ; codes
+
+
+
+    ; return control to the terminal
+    mov ah, 4ch
+    int 21h
 
 code ends
     end start
