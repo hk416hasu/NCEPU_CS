@@ -1,0 +1,4 @@
+using SDCC as compiler
+    u can install it with " sudo apt-get install sdcc " 
+
+
