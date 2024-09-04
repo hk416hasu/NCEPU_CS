@@ -21,5 +21,17 @@ then u can use
     print variable      # print value of a variable
     print/t variable    # in binary
     print/x variable    # in hex
-```
 
+    info locals         # print all variables in local
+```
+---
+
+some shortcuts about gdb's TUI mode
+
+```bash
+    <c-x>,a     # enter or leave TUI mode
+    <c-x>,2     # change windows number? and it can show asm code 
+    <c-x>,1     # select the curr window to remain
+
+    up, down, left, right to move the code
+```
