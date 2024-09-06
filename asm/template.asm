@@ -9,17 +9,17 @@ stack segment stack
 stack ends
 
 code segment
-    assume cs:code, ds:data, ss:stack
+    assume cs:code, ds:data, ss:stack   ; put into segment registers
 
 start:
     ; Set up the data segment
-    mov ax, data
+    mov ax, data    ; because INTEL tells us to use segment register
     mov ds, ax
 
     ; Display the message
     lea dx, msg
     mov ah, 9
-    int 21h
+    int 21h         ; system calls, plz RTFM(about dos) for more
 
     ; Return control to DOS
     mov ah, 4ch
