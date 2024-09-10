@@ -1,20 +1,27 @@
 #!/bin/env bash
 
 if [[ $# -eq 0 || $1 == '-h' || $1 == '--help' ]]; then
-    echo "Usage: mpvline [MusicPath]"
+    echo "Usage: mpvline [-option] [MusicPath]"
     echo "using mpv easily in Command lines"
     echo "-c, --close       close mpvline"
+    echo "-L, --latest      play latest 30 music of ~/Music"
     echo
     echo "play "~/Music" by default"
 fi
 
 if [[ $(pgrep mpv) && ("$1" = '-c' || "$1" = '--close') ]]; then
-    kill -STOP $(pgrep mpv)
+    kill -KILL $(pgrep mpv)
     exit 0
 fi
 
+if [[ "$1" = '-L' || "$1" = '--latest' ]]; then
+    find ${HOME}/Music -type f -iname "*.mp3" -printf '%T@ %p\0' | \
+        sort -znr | head -zn30 | cut -zd' ' -f2- | \
+        xargs -0 mpv --shuffle --no-audio-display --vo=null
+fi
+
 if [[ -z $1 ]]; then # if the length of $1 is zero; then
-    # echo "plz enter the Music Path"
+    # play ~/Music by default
     mpv --shuffle -no-audio-display --vo=null "/home/hk416/Music"
     exit 0 
 fi
@@ -22,7 +29,7 @@ fi
 # path=$1
 # 
 # # add the trans of ~
-# # emmm.. it seems that there is no need to trans, because bash will do it...
+# # emmm.. it seems that there's no need to trans, because mpv can resolve it
 # if [[ ${path%%/*} = "~" ]]; then
 #     path="${HOME}/${path#*/}"     
 # fi 
