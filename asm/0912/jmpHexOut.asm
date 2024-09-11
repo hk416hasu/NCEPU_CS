@@ -23,7 +23,8 @@ abab:
     shr dx, cl
 ;ascii output
     cmp dl, 9
-    jle notGreaterThanNine
+    jbe notGreaterThanNine  ; JBE is for unsigned comparisons (CF and ZF).
+                            ; JLE is for signed comparisons (SF, OF, ZF).
     add dl, 7
 notGreaterThanNine:
     add dl, 48
