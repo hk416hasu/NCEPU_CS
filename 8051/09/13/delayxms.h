@@ -1,5 +1,5 @@
-#ifndef __DELAY_H__
-#define __DELAY_H__
+#ifndef DELAYXMS_H
+#define DELAYXMS_H
 
 void delayxms(unsigned int xms);
 
