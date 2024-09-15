@@ -3,7 +3,9 @@
 shopt -s globstar
 
 for file in **/*.{asm,hex,ihx,lk,lst,map,mem,rel,rst,sym}; do
-    rm "$file"
+    if [[ -f "$file" ]]; then
+        rm "$file"
+    fi
 done
 
 exit 0
