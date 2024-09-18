@@ -65,10 +65,17 @@ Additionally, maybe u need a .hex file, **packihx** can help u.
 
 ---
 
-addtional notes:
-char                1 byte      -128~127
-unsigned char       1 byte      0~255
-int                 2 bytes     -32768~32767
-unsigned int        2 bytes     0~65535
-long int            4 bytes     -2147483648~2147483647
-unsigned long int   4 bytes     0~0xFFFFh
+**Data Types:**
+char                1 Byte      -128~127
+unsigned char       1 Byte      0~255
+int                 2 Bytes     -32768~32767
+unsigned int        2 Bytes     0~65535
+long int            4 Bytes     -2147483648~2147483647
+unsigned long int   4 Bytes     0~0xFFFFh
+float               4 Bytes     
+*                   1~3 Bytes   (the address of objects)
+bit                 1 bit       0 or 1 (general bit variable)
+sbit                1 bit       0 or 1 (special 1 bit register)
+sfr                 1 Byte      0~255 (special 1 Byte register)
+sfr16               2 Bytes     0~65535 (special 2 Bytes register)
+
