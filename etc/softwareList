@@ -1,0 +1,100 @@
+clash-verge
+typora
+yesplaymusic
+downkyi
+
+vim     sudo apt install vim
+mpv     sudo apt-get install mpv
+libre	sudo apt install libreoffice
+htop	sudo apt install htop
+tweaks	sudo apt install gnome-tweaks
+tmux	sudo apt install tmux
+tldr	sudo apt install tldr && git clone https://github.com/tldr-pages/tldr.git ~/.local/share/tldr && tldr --update
+acpi	sudo apt install acpi
+7-zip	sudo apt install p7zip-full
+tree	sudo apt install tree
+exa     sudo apt install exa
+strace	sudo apt install strace
+dosbox  sudo apt install dosbox
+steam   sudo apt install steam
+
+disk usage  # from snap store
+
+sudo apt install qbittorrent
+sudo apt install hardinfo
+sudo apt install wireshark
+sudo apt install net-tools
+sudo apt install traceroute
+
+sudo apt-get install imagemagick pdftk
+	sudo vim /etc/ImageMagick-6/policy.xml
+	change this : <policy domain="coder" rights="none" pattern="PDF" />
+	to this : <policy domain="coder" rights="read|write" pattern="PDF" />
+
+tlp:
+    tlp     sudo apt install tlp tlp-rdw
+        sudo systemctl enable tlp.service
+        sudo systemctl start tlp.service
+        # only on AC mode.
+        tlp.conf : wifi and blueteeth not setup by default
+
+    # maybe u need to change bluetooth's conf to make it off when opening laptop.
+        /etc/bluetooth/main.conf : AutoEnable=false
+
+vimgolf:
+    sudo apt install ruby-full
+    sudo apt-get install gem
+    sudo gem install vimgolf
+    vimgolf setup
+        0b1096f4d88fa50239b1fbcfb0992df0
+
+keyReMap:
+    vim /etc/default/keyboard
+        line7: XKBOPTIONS="ctrl:nocaps"
+
+sudo passwd root # 手动激活root用户
+
+单片机(8051):
+    sudo apt-get install sdcc
+        /usr/share/sdcc/
+
+    sudo apt install python3-pip
+    sudo pip install stcgal
+
+    # to solve the conflict that brltty continully claimed the CH340 device
+    sudo systemctl stop brltty
+    sudo systemctl disable brltty
+    sudo apt remove brltty
+
+
+中文输入法:
+    sudo apt install fcitx5 fcitx5-config-qt fcitx5-chinese-addons
+    # 下载词库文件
+    wget https://github.com/felixonmars/fcitx5-pinyin-zhwiki/releases/download/0.2.4/zhwiki-20220416.dict
+    # 创建存储目录
+    mkdir -p ~/.local/share/fcitx5/pinyin/dictionaries/
+    # 移动词库文件至该目录
+    mv zhwiki-20220416.dict ~/.local/share/fcitx5/pinyin/dictionaries/
+
+
+
+
+
+
+
+
+
+apt-get install build-essential    # build-essential packages, include binary utilities, gcc, make, and so on
+apt-get install man                # on-line reference manual
+apt-get install gcc-doc            # on-line reference manual for gcc
+apt-get install gdb                # GNU debugger
+apt-get install git                # revision control system
+apt-get install libreadline-dev    # a library used later
+apt-get install libsdl2-dev        # a library used later
+apt-get install llvm llvm-dev      # llvm project, which contains libraries used later
+sudo apt-get install clang
+sudo apt-get install llvm
+
+sudo systemctl set-default multi-user.target
+
+sudo vim /etc/default/locale; # then :%s/zh_CN/en_US/g
