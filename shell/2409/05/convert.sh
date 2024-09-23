@@ -1,5 +1,8 @@
 #!/bin/env bash
 
+# Before first, remove files NOT png
+find . -type f ! -name "*.png" -delete
+
 # At first, rename here
 for file in *.png; do 
     name=${file%.*}
