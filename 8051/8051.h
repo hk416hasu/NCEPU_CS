@@ -64,10 +64,10 @@ __sbit __at (0x85) P0_5 ;
 __sbit __at (0x86) P0_6 ;
 __sbit __at (0x87) P0_7 ;
 
-/*  TCON  */
-__sbit __at (0x88) IT0  ;
+/*  TCON  */    // 定时器控制寄存器 page114, 138
+__sbit __at (0x88) IT0  ;   // 控制外部中断0的触发方式
 __sbit __at (0x89) IE0  ;
-__sbit __at (0x8A) IT1  ;
+__sbit __at (0x8A) IT1  ;   // 控制外部中断1的触发方式
 __sbit __at (0x8B) IE1  ;
 __sbit __at (0x8C) TR0  ;
 __sbit __at (0x8D) TF0  ;
@@ -84,7 +84,7 @@ __sbit __at (0x95) P1_5 ;
 __sbit __at (0x96) P1_6 ;
 __sbit __at (0x97) P1_7 ;
 
-/*  SCON  */
+/*  SCON  */    // 串口控制寄存器 page114
 __sbit __at (0x98) RI   ;
 __sbit __at (0x99) TI   ;
 __sbit __at (0x9A) RB8  ;
@@ -104,7 +104,7 @@ __sbit __at (0xA5) P2_5 ;
 __sbit __at (0xA6) P2_6 ;
 __sbit __at (0xA7) P2_7 ;
 
-/*  IE   */
+/*  IE   */     // interrupt enable : 各中断源单独的开关 章节6.1 中断结构
 __sbit __at (0xA8) EX0  ;
 __sbit __at (0xA9) ET0  ;
 __sbit __at (0xAA) EX1  ;
@@ -131,7 +131,7 @@ __sbit __at (0xB5) T1   ;
 __sbit __at (0xB6) WR   ;
 __sbit __at (0xB7) RD   ;
 
-/*  IP   */
+/*  IP   */     // interrupt priority : 一般不自行配置中断优先级
 __sbit __at (0xB8) PX0  ;
 __sbit __at (0xB9) PT0  ;
 __sbit __at (0xBA) PX1  ;
