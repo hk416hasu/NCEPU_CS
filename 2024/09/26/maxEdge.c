@@ -7,8 +7,8 @@ int main() {
     int n = 0;
     for (int i = 0; i < T; i++) {
         scanf("%d", &n);
-        int half = n >> 1;
-        printf("%d\n", half * (half + (n & 0x01)));
+        long half = n >> 1;
+        printf("%ld\n", half * (half + (n & 0x01)));
     }
     return 0;
 }
