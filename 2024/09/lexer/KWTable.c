@@ -25,6 +25,38 @@ bool InitKWTable() {
     return 1;
 }
 
+bool isInKWTable(char *str, int len) {
+    char Item[KWlength] = {0};
+    strncpy(Item, str, len);
+    for ( int i = 0; i < KWnum; i++ ) {
+        if ( strcmp(KWTable[i], Item) == 0 ) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
+int getKWtokenType(char *str, int len) {
+    char Item[KWlength] = {0};
+    strncpy(Item, str, len);
+
+    if ( !strcmp(Item, "main") ) {
+        return 1;
+    } else if ( !strcmp(Item, "int") ) {
+        return 2;
+    } else if ( !strcmp(Item, "float") ) {
+        return 3;
+    } else if ( !strcmp(Item, "if") ) {
+        return 4;
+    } else if ( !strcmp(Item, "else") ) {
+        return 5;
+    } else if ( !strcmp(Item, "while") ) {
+        return 6;
+    }
+
+    return -1;
+}
+
 void checkKWTable() {
     for ( int i = 0; i < KWnum; i++ ) {
         // output until an empty item

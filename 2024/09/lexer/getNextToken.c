@@ -107,6 +107,11 @@ bool getNextToken(int *pos) {
         }
 
         // diff keywords from identifier
+        if ( isInKWTable(tokenBuffer, tokenLength) ) {
+            int typeId = getKWtokenType(tokenBuffer, tokenLength);
+            printf ("%d %d\n", typeId, 0);
+            return 0;
+        }
 
 // for test
 // printf("%s\n", tokenBuffer);
@@ -121,8 +126,9 @@ printf("\n");
 
 
 
-    // if doesn't match any state (for test when programming)
+    // if doesn't match any state, skip
     (*pos)++;
+
     return 1;
 }
 
