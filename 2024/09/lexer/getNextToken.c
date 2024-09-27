@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "loadFileToArray.h"
+#include "KWTable.h"
 
 char tokenBuffer[100] = {0};
 int tokenLength = 0;

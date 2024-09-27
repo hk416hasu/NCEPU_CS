@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include "loadFileToArray.h"
 #include "getNextToken.h"
+#include "KWTable.h"
 
 int main() {
+
+    InitKWTable();
 
     // const char *fileName = "./source.txt";
     loadFileToArray();
