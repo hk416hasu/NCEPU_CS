@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "loadFileToArray.h"
 
 bool isWhiteButNotSpace(int ch) {
     if ( ch == '\n' || ch == '\t' \

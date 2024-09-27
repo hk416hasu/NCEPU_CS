@@ -1,7 +1,5 @@
 #include <stdio.h>
-#include "loadFileToArray.h"
-#include "getNextToken.h"
-#include "KWTable.h"
+#include "global.h"
 
 int main() {
 
