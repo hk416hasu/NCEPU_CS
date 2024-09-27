@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-bool isWhiteSpace(int ch) {
-    if ( ch == ' ' || ch == '\n' || ch == '\t' \
+bool isWhiteButNotSpace(int ch) {
+    if ( ch == '\n' || ch == '\t' \
             || ch == '\r' || ch == '\f' || ch == '\v' )
     {
         return 1;
@@ -15,7 +15,7 @@ int srcFileLength = 0;
 int srcFile[10000] = {0};
 
 /**
-  @brief: load src file to an array, and filter all WhiteSpace
+  @brief: load src file to an array, and filter multi-Space
   */
 bool loadFileToArray() {
     // open a file: get its file describer or pointer
@@ -28,11 +28,16 @@ bool loadFileToArray() {
     // get that file's content and put it into array(buffer)
     int i = 0;
     int ch = 0; // note: int, not char, required to handle EOF
+    int old_ch = 0;
     while ( (ch = fgetc(srcFD)) != EOF ) {
-        if ( isWhiteSpace(ch) ) {
-            continue;   // skip whitespace
+        if ( isWhiteButNotSpace(ch) ) {
+            continue;   // skip those White char BUT NOT Space
         }
-        srcFile[i++] = ch;
+        // remove multi-Space
+        if ( old_ch != ' ' || ch != ' ' ) {
+            srcFile[i++] = ch;
+        }
+        old_ch = ch;
     }
     srcFileLength = i;
 
