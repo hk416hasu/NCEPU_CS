@@ -3,7 +3,6 @@
 
 #include <stdbool.h>
 
-bool isWhiteSpace(int ch);
 bool loadFileToArray();
 extern int srcFileLength;
 extern int srcFile[];

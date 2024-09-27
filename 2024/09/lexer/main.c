@@ -10,9 +10,8 @@ int main() {
     int pos = 0;    // each time, start to get token from pos
     while ( pos < srcFileLength && srcFile[pos] != 0 ) {
 
-        // pos will NOT be updated in getNextToken()
-        getNextToken(pos);
-        pos++;
+        // pos will be updated in getNextToken()
+        getNextToken(&pos);
 
         // print token to somewhere
 
