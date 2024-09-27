@@ -4,7 +4,7 @@
 
 bool isWhiteSpace(int ch) {
     if ( ch == ' ' || ch == '\n' || ch == '\t' \
-            || ch == '\r')
+            || ch == '\r' || ch == '\f' || ch == '\v' )
     {
         return 1;
     }
@@ -12,7 +12,7 @@ bool isWhiteSpace(int ch) {
 }
 
 int srcFileBufferLength = 0;
-int srcFileBuffer[2000] = {0};
+int srcFileBuffer[10000] = {0};
 
 /**
   @brief: load src file to an array, and filter all WhiteSpace
@@ -30,7 +30,7 @@ bool loadFileToArray() {
     int ch = 0; // note: int, not char, required to handle EOF
     while ( (ch = fgetc(srcFD)) != EOF ) {
         if ( isWhiteSpace(ch) ) {
-            continue;
+            continue;   // skip whitespace
         }
         srcFileBuffer[i++] = ch;
     }

@@ -6,6 +6,6 @@
 bool isWhiteSpace(int ch);
 bool loadFileToArray();
 extern int srcFileBufferLength;
-extern int srcFileBuffer[2000];
+extern int srcFileBuffer[];
 
 #endif
