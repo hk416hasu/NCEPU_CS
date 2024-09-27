@@ -3,8 +3,12 @@
 #include <stdbool.h>
 #include "loadFileToArray.h"
 
-char token[100] = {0};
-int tokenBufferLength = 0;
+char tokenBuffer[100] = {0};
+int tokenLength = 0;
+
+bool isLetter(char ch);
+bool isDigit(char ch);
+bool isLetterOrDigit(char ch);
 
 bool getNextToken(int *pos) {
 
@@ -91,6 +95,28 @@ bool getNextToken(int *pos) {
         }
     }
 
+    // Identifier and Keywords(Reserved-words)
+    if ( isLetter(peek) ) {
+        tokenLength = 0;
+        while ( isLetterOrDigit(peek) ) {
+            tokenBuffer[tokenLength] = peek;
+            tokenLength++;
+            (*pos)++;
+            peek = srcFile[(*pos)];
+        }
+
+        // diff keywords from identifier
+
+// for test
+// printf("%s\n", tokenBuffer);
+for (int i = 0; i < tokenLength; i++) {
+    printf("%c", tokenBuffer[i]);
+}
+printf("\n");
+
+        return 0;
+    }
+
 
 
 
@@ -98,3 +124,24 @@ bool getNextToken(int *pos) {
     (*pos)++;
     return 1;
 }
+
+bool isLetter(char ch) {
+    if ( (ch >= 'A' && ch <= 'Z') ||
+            (ch >= 'a' && ch <= 'z') )
+    {
+        return 1;
+    }
+    return 0;
+}
+
+bool isDigit(char ch) {
+    if ( ch >= '0' && ch <= '9' ) {
+        return 1;
+    }
+    return 0;
+}
+
+bool isLetterOrDigit(char ch) {
+    return isLetter(ch) || isDigit(ch);
+}
+
