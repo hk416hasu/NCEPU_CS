@@ -4,6 +4,7 @@
 int main() {
 
     InitKWTable();
+    InitSymbolTable();
 
     // const char *fileName = "./source.txt";
     loadFileToArray();

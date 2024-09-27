@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 #include "KWTable.h"
 
 char KWTable[KWnum][KWlength];
