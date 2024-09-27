@@ -11,6 +11,9 @@ bool isLetter(char ch);
 bool isDigit(char ch);
 bool isLetterOrDigit(char ch);
 
+bool ID(int *pos);
+bool NUMBER(int *pos);
+
 bool getNextToken(int *pos) {
 
     char peek = srcFile[*pos];
@@ -98,28 +101,7 @@ bool getNextToken(int *pos) {
 
     // Identifier and Keywords(Reserved-words)
     if ( isLetter(peek) ) {
-        tokenLength = 0;
-        while ( isLetterOrDigit(peek) ) {
-            tokenBuffer[tokenLength] = peek;
-            tokenLength++;
-            (*pos)++;
-            peek = srcFile[(*pos)];
-        }
-
-        // diff keywords from identifier
-        if ( isInKWTable(tokenBuffer, tokenLength) ) {
-            int typeId = getKWtokenType(tokenBuffer, tokenLength);
-            printf ("%d %d\n", typeId, 0);
-            return 0;
-        }
-
-// for test
-// printf("%s\n", tokenBuffer);
-for (int i = 0; i < tokenLength; i++) {
-    printf("%c", tokenBuffer[i]);
-}
-printf("\n");
-
+        ID(pos);
         return 0;
     }
 
@@ -152,3 +134,31 @@ bool isLetterOrDigit(char ch) {
     return isLetter(ch) || isDigit(ch);
 }
 
+bool ID(int *pos) {
+    char peek = srcFile[*pos];
+    tokenLength = 0;
+    while ( isLetterOrDigit(peek) ) {
+        tokenBuffer[tokenLength] = peek;
+        tokenLength++;
+        (*pos)++;
+        peek = srcFile[(*pos)];
+    }
+
+    // diff keywords from identifier
+    if ( isInKWTable(tokenBuffer, tokenLength) ) {
+        int typeId = getKWtokenType(tokenBuffer, tokenLength);
+        printf ("%d %d\n", typeId, 0);
+        return 0;
+    } else {    // is just an identifier
+
+
+    }
+
+    // output normal identifier for test
+    for (int i = 0; i < tokenLength; i++) {
+        printf("%c", tokenBuffer[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
