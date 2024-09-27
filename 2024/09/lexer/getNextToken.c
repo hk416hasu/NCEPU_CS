@@ -78,6 +78,21 @@ bool getNextToken(int *pos) {
         }
     }
 
+    // Logical-operators
+    if ( peek == '|' ) {
+        if ( srcFile[(*pos)+1] == '|' ) {
+            printf("%d %d\n", 7, 0);
+            (*pos) += 2; return 0;
+        }
+    } else if ( peek == '&' ) {
+        if ( srcFile[(*pos)+1] == '&' ) {
+            printf("%d %d\n", 8, 0);
+            (*pos) += 2; return 0;
+        }
+    }
+
+
+
 
     // if doesn't match any state (for test when programming)
     (*pos)++;
