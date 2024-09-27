@@ -8,7 +8,7 @@ CFLAGS = -Wall -g
 TARGET = ./a
 
 # source files
-SRCS = main.c loadFileToArray.c
+SRCS = main.c loadFileToArray.c getNextToken.c
 
 $(TARGET): $(SRCS) # Dependency
 	$(cc) $(CFLAGS) $(SRCS) -o $(TARGET) 

@@ -11,8 +11,8 @@ bool isWhiteSpace(int ch) {
     return 0;
 }
 
-int srcFileBufferLength = 0;
-int srcFileBuffer[10000] = {0};
+int srcFileLength = 0;
+int srcFile[10000] = {0};
 
 /**
   @brief: load src file to an array, and filter all WhiteSpace
@@ -32,9 +32,9 @@ bool loadFileToArray() {
         if ( isWhiteSpace(ch) ) {
             continue;   // skip whitespace
         }
-        srcFileBuffer[i++] = ch;
+        srcFile[i++] = ch;
     }
-    srcFileBufferLength = i;
+    srcFileLength = i;
 
     return 1;
 }

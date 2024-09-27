@@ -1,12 +1,22 @@
 #include <stdio.h>
 #include "loadFileToArray.h"
+#include "getNextToken.h"
 
 int main() {
 
+    // const char *fileName = "./source.txt";
     loadFileToArray();
 
-    for ( int i = 0; i < srcFileBufferLength; i++) {
-        printf("%c", srcFileBuffer[i]);
+    int pos = 0;    // each time, start to get token from pos
+    while ( pos < srcFileLength && srcFile[pos] != 0 ) {
+
+        // pos will NOT be updated in getNextToken()
+        getNextToken(pos);
+        pos++;
+
+        // print token to somewhere
+
     }
-    printf("\n");
+
+    return 0;
 }
