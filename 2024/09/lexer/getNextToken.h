@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 bool getNextToken(int *pos, FILE *fp);
-bool InitTokenOutputFile();
+bool InitTokenOutputFile(FILE **fpp);
 extern char tokenBuffer[];
 extern int tokenLength;
 

@@ -10,7 +10,7 @@ void step(int *pos) {
 bool ID(int *pos, FILE *fp);
 bool NUMBER(int *pos, FILE *fp);
 
-bool InitTokenOutputFile();
+bool InitTokenOutputFile(FILE **fpp);
 void printTokenBufferForTest();
 
 bool getNextToken(int *pos, FILE *fp) {
@@ -216,12 +216,25 @@ void printTokenBufferForTest() {
     printf("\n");
 }
 
-bool InitTokenOutputFile() {
-    FILE *fp = fopen("./token.txt", "w");
+/**
+brief: clear the token.txt, and return the file describer
+    with append mode. It will be close in main.c
+    */
+bool InitTokenOutputFile(FILE **fpp) {
+    FILE *fp = NULL;
+    fp = fopen("./token.txt", "w");
     if ( fp == NULL ) {
         perror("failed to open token.txt");
         return 0;
     }
     fclose(fp);
+
+    fp = fopen("./token.txt", "a");
+    if ( fp == NULL ) {
+        perror("failed to open token.txt");
+        return 0;
+    }
+    *fpp = fp;
+
     return 1;
 }
