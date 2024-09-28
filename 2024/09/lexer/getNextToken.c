@@ -3,12 +3,18 @@
 char tokenBuffer[100] = {0};
 int tokenLength = 0;
 
+void step(int *pos) {
+    (*pos)++;
+}
+
 bool isLetter(char ch);
 bool isDigit(char ch);
 bool isLetterOrDigit(char ch);
 
 bool ID(int *pos);
 bool NUMBER(int *pos);
+
+void printTokenBufferForTest();
 
 bool getNextToken(int *pos) {
 
@@ -133,7 +139,7 @@ bool isLetterOrDigit(char ch) {
 }
 
 bool ID(int *pos) {
-    char peek = srcFile[*pos];
+    char peek = srcFile[(*pos)];
     tokenLength = 0;
     // get the whole identifier
     while ( isLetterOrDigit(peek) ) {
@@ -154,15 +160,73 @@ bool ID(int *pos) {
     }
 
     // output normal identifier for test
-    //for (int i = 0; i < tokenLength; i++) {
-    //    printf("%c", tokenBuffer[i]);
-    //}
-    //printf("\n");
+    // printTokenBufferForTest();
 
     return 0;
 }
 
 bool NUMBER(int *pos) {
-    (*pos)++;
+    char peek;
+    tokenLength = 0;
+
+    // get the Number ( INT or REAL )
+    int state = 20;
+    while (true) {
+        switch (state) {
+            case 20:
+                peek = srcFile[(*pos)];
+                if ( isDigit(peek) ) {
+                    tokenBuffer[tokenLength++] = peek;
+                    step(pos);
+                    state = 20;
+                } else if ( peek == '.' ) {
+                    tokenBuffer[tokenLength++] = peek;
+                    step(pos);
+                    state = 22;
+                } else {
+                    // no need to step(pos) when meet "others"
+                    state = 21;
+                }
+                break;
+            case 21:
+                printTokenBufferForTest();
+                return 0;
+            case 22:
+                peek = srcFile[(*pos)];
+                if ( isDigit(peek) ) {
+                    tokenBuffer[tokenLength++] = peek;
+                    step(pos);
+                    state = 23;
+                } else {
+                    // i don't know how to handle "others" here
+                }
+                break;
+            case 23:
+                peek = srcFile[(*pos)];
+                if ( isDigit(peek) ) {
+                    tokenBuffer[tokenLength++] = peek;
+                    step(pos);
+                    state = 23;
+                } else {
+                    // no need to step(pos) here
+                    state = 24;
+                }
+                break;
+            case 24:
+                printTokenBufferForTest();
+                return 0;
+            default:
+                perror("Unknown Token");
+        }
+    }
+
     return 0;
+}
+
+void printTokenBufferForTest() {
+    printf("token:");
+    for ( int i = 0; i < tokenLength; i++ ) {
+        printf("%c", tokenBuffer[i]);
+    }
+    printf("\n");
 }
