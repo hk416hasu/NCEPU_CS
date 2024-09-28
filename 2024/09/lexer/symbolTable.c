@@ -10,7 +10,7 @@ const int ID_INDEXMAX = 101;
 int numIndex = 101; // numbers' index
 const int NUM_INDEXMAX = symbolNum;
 // int  STableLength = 0;
-// char EmptySTitem[TextLength] = {0};
+char EmptySTitem[TextLength] = {0};
 
 bool InitSymbolTable() {
     for ( int i = 0; i < symbolNum; i++ ) {
@@ -82,4 +82,17 @@ int STableAddToken(char *str, int len) {
         tokenTextID = tokenStatus;
     }
     return tokenTextID;
+}
+
+/**
+brief: output all items but not EmptySTitem
+    if success, return 1
+    */
+bool printSTable() {
+    for (int i = 1; i < symbolNum; i++) {
+        if ( strcmp(STable[i], EmptySTitem) != 0 ) {
+            printf("%d %s\n", i, STable[i]);
+        }
+    }
+    return 1;
 }

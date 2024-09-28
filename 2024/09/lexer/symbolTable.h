@@ -12,6 +12,6 @@ extern char STable[symbolNum][TextLength];
 bool InitSymbolTable();
 int isInStable(char *str, int len);
 int STableAddToken(char *str, int len);
-
+bool printSTable();
 
 #endif

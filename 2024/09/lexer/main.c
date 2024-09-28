@@ -19,5 +19,7 @@ int main() {
 
     }
 
+    printSTable();
+
     return 0;
 }
