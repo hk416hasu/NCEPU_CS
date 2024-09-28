@@ -27,7 +27,7 @@ tokenTextID: it's the mapping ID to tokenText, range as
 */
 
 /**
-brief: is token in SymbolTable? if yes, return its tokenTextID;
+brief: is token in STable? if yes, return its tokenTextID;
     if the token is NOT in STable, return -1;
 */
 int isInSTable(char *str, int len) {
@@ -36,7 +36,7 @@ int isInSTable(char *str, int len) {
     int i;
     for ( i = 1; i < symbolNum; i++ ) {
         // if reach an EmptyItem, then break
-// BUT there're many EmptyItems between identifiers and const nums
+// BUT there're many EmptyItems between identifiers and numbers
 // , so this should not work.
         //if ( strcmp(STable[i], EmptySTitem) == 0 ) {
         //    break;
@@ -52,7 +52,7 @@ int isInSTable(char *str, int len) {
 }
 
 /**
-brief: symbolTable.add(identifier), return the tokenTextID
+brief: STable.add(token), return the tokenTextID
     if failed, return -1
 */
 int STableAddToken(char *str, int len) {
