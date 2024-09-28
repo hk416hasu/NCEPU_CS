@@ -167,9 +167,9 @@ bool NUMBER(int *pos, FILE *fp) {
                 }
                 break;
             case 21:
-                int INT = 11;
+                // int INT = 11;
                 ID = STableAddToken(tokenBuffer, tokenLength);
-                fprintf(fp, "%d %d\n", INT, ID);
+                fprintf(fp, "%d %d\n", 11, ID);
                 // this is an accept state, so we will return
                 return 0;
             case 22:
@@ -194,9 +194,9 @@ bool NUMBER(int *pos, FILE *fp) {
                 }
                 break;
             case 24:
-                int REAL = 12;
+                // int REAL = 12;
                 ID = STableAddToken(tokenBuffer, tokenLength);
-                fprintf(fp, "%d %d\n", REAL, ID);
+                fprintf(fp, "%d %d\n", 12, ID);
                 // this is an accept state, so we will return
                 return 0;
             default:
