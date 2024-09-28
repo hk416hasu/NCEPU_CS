@@ -101,8 +101,10 @@ bool getNextToken(int *pos) {
         return 0;
     }
 
-
-
+    if ( isDigit(peek) ) {
+        NUMBER(pos);
+        return 0;
+    }
 
     // if doesn't match any state, skip
     (*pos)++;
@@ -133,6 +135,7 @@ bool isLetterOrDigit(char ch) {
 bool ID(int *pos) {
     char peek = srcFile[*pos];
     tokenLength = 0;
+    // get the whole identifier
     while ( isLetterOrDigit(peek) ) {
         tokenBuffer[tokenLength] = peek;
         tokenLength++;
@@ -143,18 +146,23 @@ bool ID(int *pos) {
     // diff keywords from identifier
     if ( isInKWTable(tokenBuffer, tokenLength) ) {
         int typeId = getKWtokenType(tokenBuffer, tokenLength);
-        printf ("%d %d\n", typeId, 0);
+        printf("%d %d\n", typeId, 0);
         return 0;
     } else {    // is just an identifier
-
-
+    int tokenTextID = STableAddToken(tokenBuffer, tokenLength);
+        printf("%d %d\n", 10, tokenTextID);
     }
 
     // output normal identifier for test
-    for (int i = 0; i < tokenLength; i++) {
-        printf("%c", tokenBuffer[i]);
-    }
-    printf("\n");
+    //for (int i = 0; i < tokenLength; i++) {
+    //    printf("%c", tokenBuffer[i]);
+    //}
+    //printf("\n");
 
+    return 0;
+}
+
+bool NUMBER(int *pos) {
+    (*pos)++;
     return 0;
 }

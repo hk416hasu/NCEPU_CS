@@ -4,7 +4,7 @@
 #include "KWTable.h"
 
 char KWTable[KWnum][KWlength];
-char EmptyItem[KWlength] = {0};
+char EmptyKW[KWlength] = {0};
 
 bool InitKWTable() {
     for ( int i = 0; i < KWnum; i++ ) {
@@ -30,6 +30,12 @@ bool isInKWTable(char *str, int len) {
     char Item[KWlength] = {0};
     strncpy(Item, str, len);
     for ( int i = 0; i < KWnum; i++ ) {
+        // if reach an EmptyKW, then break
+        if ( strcmp(KWTable[i], EmptyKW) == 0 ) {
+            break;
+        }
+
+        // if match, return success
         if ( strcmp(KWTable[i], Item) == 0 ) {
             return 1;
         }
@@ -61,7 +67,7 @@ int getKWtokenType(char *str, int len) {
 void checkKWTable() {
     for ( int i = 0; i < KWnum; i++ ) {
         // output until an empty item
-        if ( strcmp(KWTable[i], EmptyItem) == 0 ) {
+        if ( strcmp(KWTable[i], EmptyKW) == 0 ) {
             break;
         }
         printf("%s\n", KWTable[i]);
