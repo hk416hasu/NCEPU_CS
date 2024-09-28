@@ -3,7 +3,6 @@
 
 int main() {
 
-    InitKWTable();
     InitSymbolTable();
 
     FILE *fp = NULL;
