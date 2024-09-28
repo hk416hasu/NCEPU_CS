@@ -7,10 +7,6 @@ void step(int *pos) {
     (*pos)++;
 }
 
-bool isLetter(char ch);
-bool isDigit(char ch);
-bool isLetterOrDigit(char ch);
-
 bool ID(int *pos);
 bool NUMBER(int *pos);
 
@@ -118,26 +114,6 @@ bool getNextToken(int *pos) {
     return 1;
 }
 
-bool isLetter(char ch) {
-    if ( (ch >= 'A' && ch <= 'Z') ||
-            (ch >= 'a' && ch <= 'z') )
-    {
-        return 1;
-    }
-    return 0;
-}
-
-bool isDigit(char ch) {
-    if ( ch >= '0' && ch <= '9' ) {
-        return 1;
-    }
-    return 0;
-}
-
-bool isLetterOrDigit(char ch) {
-    return isLetter(ch) || isDigit(ch);
-}
-
 bool ID(int *pos) {
     char peek = srcFile[(*pos)];
     tokenLength = 0;
@@ -168,6 +144,7 @@ bool ID(int *pos) {
 bool NUMBER(int *pos) {
     char peek;
     tokenLength = 0;    // clean tokenBuffer
+    int ID = -1;    // tokenTextID
 
     // get the Number ( INT or REAL )
     int state = 20; // in fact, the state is "Next-State"
@@ -190,7 +167,9 @@ bool NUMBER(int *pos) {
                 }
                 break;
             case 21:
-                printTokenBufferForTest();
+                int INT = 11;
+                ID = STableAddToken(tokenBuffer, tokenLength);
+                printf("%d %d\n", INT, ID);
                 // this is an accept state, so we will return
                 return 0;
             case 22:
@@ -215,7 +194,9 @@ bool NUMBER(int *pos) {
                 }
                 break;
             case 24:
-                printTokenBufferForTest();
+                int REAL = 12;
+                ID = STableAddToken(tokenBuffer, tokenLength);
+                printf("%d %d\n", REAL, ID);
                 // this is an accept state, so we will return
                 return 0;
             default:

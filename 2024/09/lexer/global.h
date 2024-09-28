@@ -9,5 +9,6 @@
 #include "getNextToken.h"
 #include "symbolTable.h"
 #include "KWTable.h"
+#include "character.h"
 
 #endif

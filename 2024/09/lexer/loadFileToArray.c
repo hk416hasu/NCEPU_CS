@@ -2,15 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "loadFileToArray.h"
-
-bool isWhiteButNotSpace(int ch) {
-    if ( ch == '\n' || ch == '\t' \
-            || ch == '\r' || ch == '\f' || ch == '\v' )
-    {
-        return 1;
-    }
-    return 0;
-}
+#include "character.h"
 
 int srcFileLength = 0;
 int srcFile[10000] = {0};
