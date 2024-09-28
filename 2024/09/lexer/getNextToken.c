@@ -167,10 +167,10 @@ bool ID(int *pos) {
 
 bool NUMBER(int *pos) {
     char peek;
-    tokenLength = 0;
+    tokenLength = 0;    // clean tokenBuffer
 
     // get the Number ( INT or REAL )
-    int state = 20;
+    int state = 20; // in fact, the state is "Next-State"
     while (true) {
         switch (state) {
             case 20:
@@ -185,11 +185,13 @@ bool NUMBER(int *pos) {
                     state = 22;
                 } else {
                     // no need to step(pos) when meet "others"
+                    // due to *
                     state = 21;
                 }
                 break;
             case 21:
                 printTokenBufferForTest();
+                // this is an accept state, so we will return
                 return 0;
             case 22:
                 peek = srcFile[(*pos)];
@@ -208,15 +210,16 @@ bool NUMBER(int *pos) {
                     step(pos);
                     state = 23;
                 } else {
-                    // no need to step(pos) here
+                    // also no need to step(pos) here
                     state = 24;
                 }
                 break;
             case 24:
                 printTokenBufferForTest();
+                // this is an accept state, so we will return
                 return 0;
             default:
-                perror("Unknown Token");
+                perror("Unreachable State");
         }
     }
 
