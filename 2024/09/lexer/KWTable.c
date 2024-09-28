@@ -7,7 +7,8 @@ char KWTable[KWnum][KWlength];
 char EmptyKW[KWlength] = {0};
 
 bool InitKWTable() {
-    for ( int i = 0; i < KWnum; i++ ) {
+    int i;
+    for ( i = 0; i < KWnum; i++ ) {
         memset(KWTable[i], 0, sizeof(char) * KWlength);
     }
 
@@ -29,7 +30,8 @@ bool InitKWTable() {
 bool isInKWTable(char *str, int len) {
     char Item[KWlength] = {0};
     strncpy(Item, str, len);
-    for ( int i = 0; i < KWnum; i++ ) {
+    int i;
+    for ( i = 0; i < KWnum; i++ ) {
         // if reach an EmptyKW, then break
         if ( strcmp(KWTable[i], EmptyKW) == 0 ) {
             break;
@@ -65,7 +67,8 @@ int getKWtokenType(char *str, int len) {
 }
 
 void checkKWTable() {
-    for ( int i = 0; i < KWnum; i++ ) {
+    int i;
+    for ( i = 0; i < KWnum; i++ ) {
         // output until an empty item
         if ( strcmp(KWTable[i], EmptyKW) == 0 ) {
             break;

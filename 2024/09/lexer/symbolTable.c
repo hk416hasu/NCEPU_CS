@@ -13,7 +13,8 @@ const int NUM_INDEXMAX = symbolNum;
 char EmptySTitem[TextLength] = {0};
 
 bool InitSymbolTable() {
-    for ( int i = 0; i < symbolNum; i++ ) {
+    int i;
+    for ( i = 0; i < symbolNum; i++ ) {
         memset(STable[i], 0, sizeof(char) * TextLength);
     }
     return 0;
@@ -32,7 +33,8 @@ brief: is token in SymbolTable? if yes, return its tokenTextID;
 int isInSTable(char *str, int len) {
     char Item[TextLength] = {0};
     strncpy(Item, str, len);
-    for ( int i = 1; i < symbolNum; i++ ) {
+    int i;
+    for ( i = 1; i < symbolNum; i++ ) {
         // if reach an EmptyItem, then break
 // BUT there're many EmptyItems between identifiers and const nums
 // , so this should not work.
@@ -95,7 +97,8 @@ bool printSTable() {
         return 0;
     }
 
-    for (int i = 1; i < symbolNum; i++) {
+    int i;
+    for ( i = 1; i < symbolNum; i++) {
         if ( strcmp(STable[i], EmptySTitem) != 0 ) {
             fprintf(fp, "%d %s\n", i, STable[i]);
         }

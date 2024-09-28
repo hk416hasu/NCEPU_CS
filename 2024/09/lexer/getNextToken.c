@@ -209,7 +209,8 @@ bool NUMBER(int *pos, FILE *fp) {
 
 void printTokenBufferForTest() {
     printf("token:");
-    for ( int i = 0; i < tokenLength; i++ ) {
+    int i;
+    for ( i = 0; i < tokenLength; i++ ) {
         printf("%c", tokenBuffer[i]);
     }
     printf("\n");
