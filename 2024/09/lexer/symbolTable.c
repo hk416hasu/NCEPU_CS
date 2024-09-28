@@ -85,14 +85,22 @@ int STableAddToken(char *str, int len) {
 }
 
 /**
-brief: output all items but not EmptySTitem
+brief: output all items but not EmptySTitem to ./symbol.txt
     if success, return 1
     */
 bool printSTable() {
+    FILE *fp = fopen("./symbol.txt", "w");
+    if ( fp == NULL ) {
+        perror("failed to open ./symbol.txt");
+        return 0;
+    }
+
     for (int i = 1; i < symbolNum; i++) {
         if ( strcmp(STable[i], EmptySTitem) != 0 ) {
-            printf("%d %s\n", i, STable[i]);
+            fprintf(fp, "%d %s\n", i, STable[i]);
         }
     }
+
+    fclose(fp);
     return 1;
 }
