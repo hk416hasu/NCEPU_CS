@@ -18,7 +18,7 @@
          <IfSta> → if(<BoolExp>)<StaBlock><Opt_Else>
       <Opt_Else> → else<StaBlock> 
                  | ε
-      <WhileSta> → while(<BoolSta>)<StaBlock>
+      <WhileSta> → while(<BoolExp>)<StaBlock>
            <Exp> → <Item><An_Exp>
         <An_Exp> → <Suffix_Exp><An_Exp> 
                  | ε
