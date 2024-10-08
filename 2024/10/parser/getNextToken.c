@@ -3,14 +3,16 @@
 #include <stdbool.h>
 #include <string.h>
 
-char tokenBuf[4] = {0};
+#define bufLen 4
+char tokenBuf[bufLen] = {0};
+char tokenEmptyBuf[bufLen] = {0};
 
 FILE *fp = NULL;
 
 // if not meet EOF, update buf and return 1
 bool getNextToken() {
     if (fgets(tokenBuf, sizeof(tokenBuf), fp) == NULL) {
-        memset(tokenBuf, '0', sizeof(tokenBuf));
+        memset(tokenBuf, 0, sizeof(tokenBuf));
         return 0;
     }
     return 1;
