@@ -1,35 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+
+char tokenBuf[4] = {0};
 
 FILE *fp = NULL;
 
-_Bool getNextToken() {
-    char buf[5];
-    if (fgets(buf, sizeof(buf), fp) != NULL) {
-        printf("%s", buf);
-    } else {
+// if not meet EOF, update buf and return 1
+bool getNextToken() {
+    if (fgets(tokenBuf, sizeof(tokenBuf), fp) == NULL) {
+        memset(tokenBuf, '0', sizeof(tokenBuf));
         return 0;
     }
     return 1;
 }
 
-
-void InitTokens() {
+bool InitTokens() {
     // use awk helping me format token.txt ( unix makes life eaiser. )
     system("awk '{ print $1 }' ./token.txt > formattedTokens");
     // open the file containing formatted tokens
     fp = fopen("./formattedTokens", "r");
         // error handle
+    return 1;
 }
 
-void CloseTokens() {
+bool CloseTokens() {
     fclose(fp);
-}
-
-int main() {
-    InitTokens();
-    while (getNextToken());
-    CloseTokens();
-
-    return 0;
+    return 1;
 }
