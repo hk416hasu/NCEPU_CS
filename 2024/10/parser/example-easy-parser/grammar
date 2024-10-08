@@ -1,0 +1,4 @@
+Grammar:
+    S → F
+      | (S+F)
+    F → a
