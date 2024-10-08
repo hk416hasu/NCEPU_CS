@@ -7,20 +7,25 @@ int peek = 0;
 
 char token;
 
-// return the next token, get it from array or file or something else
+/**
+brief: return the next token from array or file or something else
+    so u can wait for lexer here, by a file-lock or others
+    */
 char getNextToken() {
     return inputType[peek++];
 }
 
 /**
-brief: try to match the "expecting Terminal" with the "actual obtained Token"
+brief: try to match the "actual obtained Token" with "expecting Terminal"
     if matched, then getNextToken()
     if not, then print error
     */
-void match(char ch) {
-    if ( ch == token ) {
+void match(char expectedTerminal) {
+    if ( token == expectedTerminal ) {
         token = getNextToken();
     } else {
+        // perror("the curr token is: xxx");
+        // perror("the expected terminal is : yyy");
         exit(1);
     }
 }
@@ -31,6 +36,7 @@ void F() {
     if ( token == 'a' ) {
         match('a');
     } else {
+        // some error messages
         exit(1);
     }
     // echo its name before return
@@ -47,6 +53,7 @@ void S() {
     } else if ( token == 'a' ) {
         F();
     } else {
+        // some error messages
         exit(1);
     }
     // echo its name before return
