@@ -30,23 +30,20 @@ void StaBlock() {
     printf("StaBlock\n");
 }
 
-void OptElse(int p) {
-    if ( p <= 1 ) {
+// OptElse() try to match only ONCE
+// if<BoolExp><StaBlock>(<OptElse>)?
+void OptElse() {
+    if ( !strcmp(token, "else") ) {
         match("else");
         StaBlock();
-        OptElse(2);
-    }
-    if ( p <= 2 ) {
         printf("OptElse\n");
-        return;
     }
-    // printf("OptElse\n");
 }
 
 void IfSta() {
     match("if");
     match("BoolExp");
     StaBlock();
-    OptElse(0);
+    OptElse();
     printf("IfSta\n");
 }

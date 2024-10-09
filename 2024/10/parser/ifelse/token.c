@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *inputType[] = { "if", "BoolExp", "if", "BoolExp", "StaBlock", "else", "StaBlock", "else", "StaBlock", "EOF" };
+char *inputType[] = { "if", "BoolExp", "if", "BoolExp", "StaBlock", "else", "StaBlock", "EOF" };
+// char *inputType[] = { "if", "BoolExp", "if", "BoolExp", "StaBlock", "else", "StaBlock", "else", "StaBlock", "EOF" };
+// char *inputType[] = { "if", "BoolExp", "if", "BoolExp", "StaBlock", "else", "StaBlock", "else", "StaBlock", "else", "StaBlock", "EOF" };
 int len = sizeof(inputType) / sizeof(inputType[0]);
 int peek = 0;
 
