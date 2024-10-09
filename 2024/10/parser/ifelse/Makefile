@@ -1,10 +1,10 @@
-cc = gcc
-cflags = -g -Wall
-target = ./a
-srcs = ifels.c
+CC = gcc
+CFLAGS = -g -Wall
+TARGET = ./a
+SRCS = ifels.c token.c
 
-$(target) : $(srcs)
-	$(cc) $(cflags) $(srcs) -o $(target)
+$(TARGET) : $(SRCS)
+	$(CC) $(CFLAGS) $(SRCS) -o $(TARGET)
 
 clean:
-	rm -f $(target)
+	rm -f $(TARGET)

@@ -1,15 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "token.h"
 
-char *token[] = { "if", "BoolExp", "StaBlock", "else", "StaBlock" };
+void IfSta() {
+    match("if");
+    match("BoolExp");
+    match("StaBlock");
+    match("else");
+    match("StaBlock");
+}
 
 int main() {
 
-    int len = sizeof(token) / sizeof(token[0]);
-
-    for ( int i = 0; i < len; i++ ) {
-        printf("%s\n", token[i]);
-    }
+    getNextToken();
+    IfSta();
 
     return 0;
 }
