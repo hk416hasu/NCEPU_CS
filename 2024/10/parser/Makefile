@@ -8,7 +8,7 @@ CFLAGS = -Wall -g
 TARGET = ./a
 
 # source files
-SRCS = main.c getNextToken.c 
+SRCS = main.c getNextToken.c ntr.c
 
 $(TARGET): $(SRCS)
 	$(cc) $(CFLAGS) $(SRCS) -o $(TARGET) 

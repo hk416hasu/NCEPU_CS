@@ -7,7 +7,8 @@
 int main() {
     InitTokens();
 
-    while (getNextToken());
+    getNextToken();
+    Program();
 
     // make sure the derivation is over
     if (strcmp(tokenBuf, tokenEmptyBuf) != 0) {
