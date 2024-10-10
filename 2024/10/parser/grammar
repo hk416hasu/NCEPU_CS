@@ -1,0 +1,48 @@
+       <Program> → main(){<StaList>}
+       <StaList> → <Statement><Opt_StaList>
+   <Opt_StaList> → <StaList> 
+                 | ε
+     <Statement> → <DecSta> 
+                 | <AssSta> 
+                 | <IfSta> 
+                 | <WhileSta>
+      <StaBlock> → <Statement> 
+                 | {<StaList>}
+        <DecSta> → <DataType><VarList>;
+       <VarList> → id<Opt_VarList>
+   <Opt_VarList> → ,<VarList> 
+                 | ε
+      <DataType> → int 
+                 | float
+        <AssSta> → id=<Exp>;
+    #    <IfSta> → if(<BoolExp>)<StaBlock><Opt_Else>
+    # <Opt_Else> → else<StaBlock>
+    #            | ε
+      <WhileSta> → while(<BoolExp>)<StaBlock>
+           <Exp> → <Item><An_Exp>
+        <An_Exp> → <Suffix_Exp><An_Exp> 
+                 | ε
+    <Suffix_Exp> → +<Item> 
+                 | -<Item> 
+          <Item> → <Factor><An_Item>
+       <An_Item> → <Suffix_Item><An_Item> 
+                 | ε
+   <Suffix_Item> → *<Factor> 
+                 | /<Factor>
+        <Factor> → id 
+                 | (<Exp>)
+       <BoolExp> → <BoolItem><An_BoolExp>
+    <An_BoolExp> → ||<BoolItem><An_BoolExp> 
+                 | ε
+      <BoolItem> → <BoolFactor><An_BoolItem>
+   <An_BoolItem> → &&<BoolFactor><An_BoolItem> 
+                 | ε
+    <BoolFactor> → !<RelExp> 
+                 | <RelExp>
+        <RelExp> → id<Relop>id
+         <Relop> → < 
+                 | <= 
+                 | > 
+                 | >= 
+                 | == 
+                 | !=
