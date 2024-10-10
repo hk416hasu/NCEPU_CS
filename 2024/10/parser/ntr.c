@@ -10,7 +10,6 @@ _Bool isMatch(int expect) {
 
 // warning : const num CAN NOT be a left-value
 _Bool isMatchIDorINTorREAL() {
-    int tokenType = atoi(tokenBuf);
     return ( isMatch(10) || isMatch(11) || isMatch(12) );
 }
 
@@ -48,7 +47,7 @@ void Program() {
 }
 
 void StaList() {
-    if ( isMatch(2) || isMatch(3) || isMatch(4) \ 
+    if ( isMatch(2) || isMatch(3) || isMatch(4)
             || isMatch(6) || isMatch(10) )
     {
         Statement();
@@ -61,7 +60,7 @@ void StaList() {
 void Opt_StaList() {
     if ( isMatch(29) ) { // if peek a "}"
         // do nothing, which mean N -> ε
-    } else if ( isMatch(2) || isMatch(3) || isMatch(4) \ 
+    } else if ( isMatch(2) || isMatch(3) || isMatch(4)
             || isMatch(6) || isMatch(10) )
     {
         StaList();
@@ -194,7 +193,7 @@ void WhileSta() {
 }
 
 void Exp() {
-    if ( isMatchIDorINTorREAL() || is Match(26) ) {
+    if ( isMatchIDorINTorREAL() || isMatch(26) ) {
         Item();
         An_Exp();
         printf("Exp\n");
@@ -239,7 +238,7 @@ void An_Item() {
     if ( isMatch(16) || isMatch(17) ) { // * or /
         Suffix_Item();
         An_Item();
-    } else if ( isMatch(14) || isMatch(15) \ // + or -
+    } else if ( isMatch(14) || isMatch(15)  // + or -
             || isMatch(24) || isMatch(27) ) // ; or )
     {
         // do nothing
@@ -270,3 +269,84 @@ void Factor() {
     }
 }
 
+void BoolExp() {
+    if ( isMatchIDorINTorREAL() || isMatch(9) ) { // !
+        BoolItem();
+        An_BoolExp();
+        printf("BoolExp\n");
+    } else {
+        printf("error in BoolExp()\n");
+    }
+}
+
+void An_BoolExp() {
+    if ( isMatch(7) ) { // ||
+        consume(7);
+        BoolItem();
+        An_BoolExp();
+    } else if ( isMatch(27) ) { // )
+        // do nothing
+    } else {
+        printf("error in An_BoolExp()\n");
+    }
+}
+
+void BoolItem() {
+    if ( isMatchIDorINTorREAL() || isMatch(9) ) { // !
+        BoolFactor();
+        An_BoolExp();
+    } else {
+        printf("error in BoolItem()\n");
+    }
+}
+
+void An_BoolItem() {
+    if ( isMatch(8) ) { // &&
+        consume(8);
+        BoolFactor();
+        An_BoolItem();
+    } else if ( isMatch(7) || isMatch(27) ) { // || or )
+        // do nothing
+    } else {
+        printf("error in An_BoolItem()\n");
+    }
+}
+
+void BoolFactor() {
+    if ( isMatch(9) ) { // !
+        consume(9);
+        RelExp();
+    } else if ( isMatchIDorINTorREAL() ) {
+        RelExp();
+    } else {
+        printf("error in BoolFactor()\n");
+    }
+}
+
+void RelExp() {
+    if ( isMatchIDorINTorREAL() ) {
+        consumeIDorINTorREAL();
+        Relop();
+        consumeIDorINTorREAL();
+    } else {
+        printf("error in RelExp()\n");
+    }
+}
+
+void Relop() {
+    if ( isMatch(18) ) { // <
+        consume(18);
+    } else if ( isMatch(19) ) { // <=
+        consume(19);
+    } else if ( isMatch(20) ) { // >
+        consume(20);
+    } else if ( isMatch(21) ) { // >=
+        consume(21);
+    } else if ( isMatch(22) ) { // ==
+        consume(22);
+    } else if ( isMatch(23) ) { // !=
+        consume(23);
+    } else {
+        printf("error in Relop()\n");
+    }
+}
