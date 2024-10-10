@@ -220,6 +220,15 @@ void Exp() {
     }
 }
 
+void Exp_noOutput() {
+    if ( isMatchIDorINTorREAL() || isMatch(26) ) {
+        Item();
+        An_Exp();
+    } else {
+        fprintf(fp_syn, "error in Exp_noOutput()\n");
+    }
+}
+
 void An_Exp() {
     if ( isMatch(14) || isMatch(15) ) { // + or -
         Suffix_Exp();
@@ -282,7 +291,7 @@ void Factor() {
         consumeIDorINTorREAL();
     } else if ( isMatch(26) ) { // (
         consume(26); // (
-        Exp();
+        Exp_noOutput();
         consume(27); // )
     } else {
         fprintf(fp_syn, "error in Factor()\n");
