@@ -16,4 +16,6 @@ a
 *.obj
 *.o
 *.odt
+*.odt#
 *.ods
+*.ods#
