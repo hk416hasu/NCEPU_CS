@@ -6,6 +6,7 @@
 
 int main() {
     InitTokens();
+    InitNTR();
 
     getNextToken();
     Program();
@@ -16,6 +17,7 @@ int main() {
     }
 
     CloseTokens();
+    CloseNTR();
 
     return 0;
 }

@@ -2,6 +2,8 @@
 #ifndef NTR_H
 #define NTR_H
 
+_Bool InitNTR();
+void CloseNTR();
 void Program();
 void StaList();
 void Opt_StaList();

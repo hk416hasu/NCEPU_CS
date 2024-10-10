@@ -3,6 +3,18 @@
 #include <string.h>
 #include "global.h"
 
+FILE *fp_syn = NULL;
+
+_Bool InitNTR() {
+    fp_syn = fopen("./syntax.txt", "w");
+        // error handle
+    return 1;
+}
+
+void CloseNTR() {
+    fclose(fp_syn);
+}
+
 _Bool isMatch(int expect) {
     int tokenType = atoi(tokenBuf);
     return ( tokenType == expect );
@@ -18,7 +30,7 @@ void consume(int expect) {
     if ( tokenType == expect ) {
         getNextToken();
     } else {
-        printf("error in consume()!\n");
+        fprintf(fp_syn, "error in consume()!\n");
         exit(1);
     }
 }
@@ -28,7 +40,7 @@ void consumeIDorINTorREAL() {
     if ( (tType == 10) || (tType == 11) || (tType == 12) ) {
         getNextToken();
     } else {
-        printf("error in consumeIDorINTorREAL()\n");
+        fprintf(fp_syn, "error in consumeIDorINTorREAL()\n");
     }
 }
 
@@ -40,9 +52,9 @@ void Program() {
         consume(28); // {
         StaList();
         consume(29); // }
-        printf("Program\n");
+        fprintf(fp_syn, "Program\n");
     } else {
-        printf("error in Program()\n");
+        fprintf(fp_syn, "error in Program()\n");
     }
 }
 
@@ -53,7 +65,7 @@ void StaList() {
         Statement();
         Opt_StaList();
     } else {
-        printf("error in StaList()\n");
+        fprintf(fp_syn, "error in StaList()\n");
     }
 }
 
@@ -65,7 +77,7 @@ void Opt_StaList() {
     {
         StaList();
     } else {
-        printf("error in StaList()\n");
+        fprintf(fp_syn, "error in StaList()\n");
     }
 }
 
@@ -79,7 +91,7 @@ void Statement() {
     } else if ( isMatch(6) ) { // peek "while"
         WhileSta();
     } else {
-        printf("error in Statement()\n");
+        fprintf(fp_syn, "error in Statement()\n");
     }
 }
 
@@ -93,7 +105,7 @@ void StaBlock() {
         StaList();
         consume(29); // }
     } else {
-        printf("error in StaBlock()\n");
+        fprintf(fp_syn, "error in StaBlock()\n");
     }
 }
 
@@ -102,9 +114,9 @@ void DecSta() {
         DataType();
         VarList();
         consume(24); // ;
-        printf("DecSta\n");
+        fprintf(fp_syn, "DecSta\n");
     } else {
-        printf("error in DecSta()\n");
+        fprintf(fp_syn, "error in DecSta()\n");
     }
 }
 
@@ -113,7 +125,7 @@ void VarList() {
         consume(10);
         Opt_VarList();
     } else {
-        printf("error in VarList()\n");
+        fprintf(fp_syn, "error in VarList()\n");
     }
 }
 
@@ -124,7 +136,7 @@ void Opt_VarList() {
     } else if ( isMatch(24) ) { // ;
         // do nothing
     } else {
-        printf("error in Opt_VarList()\n");
+        fprintf(fp_syn, "error in Opt_VarList()\n");
     }
 }
 
@@ -134,7 +146,7 @@ void DataType() {
     } else if ( isMatch(3) ) { // float
         consume(3);
     } else {
-        printf("error in Datatype()\n");
+        fprintf(fp_syn, "error in Datatype()\n");
     }
 }
 
@@ -144,9 +156,9 @@ void AssSta() {
         consume(13); // =
         Exp();
         consume(24); // ;
-        printf("AssSta\n"); 
+        fprintf(fp_syn, "AssSta\n"); 
     } else {
-        printf("error in AssSta()\n");
+        fprintf(fp_syn, "error in AssSta()\n");
     }
 }
 
@@ -158,9 +170,9 @@ void IfSta() {
         consume(27); // )
         StaBlock();
         Opt_Else();
-        printf("IfSta\n");
+        fprintf(fp_syn, "IfSta\n");
     } else {
-        printf("error in IfSta()\n");
+        fprintf(fp_syn, "error in IfSta()\n");
     }
 }
 
@@ -174,8 +186,14 @@ void Opt_Else() {
         // do nothing
     } else if ( isMatch(4) ) { // if
         // do nothing
+    } else if ( isMatch(6) ) { // while
+        // do nothing
+    } else if ( isMatch(10) ) { // id
+        // do nothing
+    } else if ( isMatch(29) ) { // }
+        // do nothing
     } else {
-        printf("error in Opt_Else()\n");
+        fprintf(fp_syn, "error in Opt_Else()\n");
     }
 }
 
@@ -186,9 +204,9 @@ void WhileSta() {
         BoolExp();
         consume(27); // )
         StaBlock();
-        printf("WhileSta\n");
+        fprintf(fp_syn, "WhileSta\n");
     } else {
-        printf("error in WhileSta()\n");
+        fprintf(fp_syn, "error in WhileSta()\n");
     }
 }
 
@@ -196,9 +214,9 @@ void Exp() {
     if ( isMatchIDorINTorREAL() || isMatch(26) ) {
         Item();
         An_Exp();
-        printf("Exp\n");
+        fprintf(fp_syn, "Exp\n");
     } else {
-        printf("error in Exp()\n");
+        fprintf(fp_syn, "error in Exp()\n");
     }
 }
 
@@ -209,7 +227,7 @@ void An_Exp() {
     } else if ( isMatch(24) || isMatch(27) ) {
         // do nothing
     } else {
-        printf("error in AnExp()\n");
+        fprintf(fp_syn, "error in AnExp()\n");
     }
 }
 
@@ -221,7 +239,7 @@ void Suffix_Exp() {
         consume(15);
         Item();
     } else {
-        printf("error in Suffix_Exp()\n");
+        fprintf(fp_syn, "error in Suffix_Exp()\n");
     }
 }
 
@@ -230,7 +248,7 @@ void Item() {
         Factor();
         An_Item();
     } else {
-        printf("error in Item()\n");
+        fprintf(fp_syn, "error in Item()\n");
     }
 }
 
@@ -243,7 +261,7 @@ void An_Item() {
     {
         // do nothing
     } else {
-        printf("error in An_Item()\n");
+        fprintf(fp_syn, "error in An_Item()\n");
     }
 }
 
@@ -255,7 +273,7 @@ void Suffix_Item() {
         consume(17);
         Factor();
     } else {
-        printf("error in Suffix_Item()\n");
+        fprintf(fp_syn, "error in Suffix_Item()\n");
     }
 }
 
@@ -264,8 +282,10 @@ void Factor() {
         consumeIDorINTorREAL();
     } else if ( isMatch(26) ) { // (
         consume(26); // (
+        Exp();
+        consume(27); // )
     } else {
-        printf("error in Factor()\n");
+        fprintf(fp_syn, "error in Factor()\n");
     }
 }
 
@@ -273,9 +293,9 @@ void BoolExp() {
     if ( isMatchIDorINTorREAL() || isMatch(9) ) { // !
         BoolItem();
         An_BoolExp();
-        printf("BoolExp\n");
+        fprintf(fp_syn, "BoolExp\n");
     } else {
-        printf("error in BoolExp()\n");
+        fprintf(fp_syn, "error in BoolExp()\n");
     }
 }
 
@@ -287,16 +307,16 @@ void An_BoolExp() {
     } else if ( isMatch(27) ) { // )
         // do nothing
     } else {
-        printf("error in An_BoolExp()\n");
+        fprintf(fp_syn, "error in An_BoolExp()\n");
     }
 }
 
 void BoolItem() {
     if ( isMatchIDorINTorREAL() || isMatch(9) ) { // !
         BoolFactor();
-        An_BoolExp();
+        An_BoolItem();
     } else {
-        printf("error in BoolItem()\n");
+        fprintf(fp_syn, "error in BoolItem()\n");
     }
 }
 
@@ -308,7 +328,7 @@ void An_BoolItem() {
     } else if ( isMatch(7) || isMatch(27) ) { // || or )
         // do nothing
     } else {
-        printf("error in An_BoolItem()\n");
+        fprintf(fp_syn, "error in An_BoolItem()\n");
     }
 }
 
@@ -319,7 +339,7 @@ void BoolFactor() {
     } else if ( isMatchIDorINTorREAL() ) {
         RelExp();
     } else {
-        printf("error in BoolFactor()\n");
+        fprintf(fp_syn, "error in BoolFactor()\n");
     }
 }
 
@@ -329,7 +349,7 @@ void RelExp() {
         Relop();
         consumeIDorINTorREAL();
     } else {
-        printf("error in RelExp()\n");
+        fprintf(fp_syn, "error in RelExp()\n");
     }
 }
 
@@ -347,6 +367,6 @@ void Relop() {
     } else if ( isMatch(23) ) { // !=
         consume(23);
     } else {
-        printf("error in Relop()\n");
+        fprintf(fp_syn, "error in Relop()\n");
     }
 }
