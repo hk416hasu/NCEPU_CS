@@ -7,6 +7,9 @@ LCD1602.rel: LCD1602.c LCD1602.h
 delayxms.rel: delayxms.c delayxms.h
 	sdcc -c delayxms.c
 
+xpt2046.rel: xpt2046.c xpt2046.h
+	sdcc -c xpt2046.c
+
 clock: timer0.rel LCD1602.rel
 	sdcc clock.c timer0.rel LCD1602.rel
 	sudo stcgal clock.ihx
@@ -22,6 +25,10 @@ star: timer0.rel
 matrix: delayxms.rel
 	sdcc matrix.c delayxms.rel
 	sudo stcgal matrix.ihx
+
+voltmeter: delayxms.rel xpt2046.rel LCD1602.rel
+	sdcc voltmeter.c delayxms.rel xpt2046.rel LCD1602.rel
+	sudo stcgal voltmeter.ihx
 
 clean:
 	rm *.rel *.lst *.asm *.map *.mem *.lk *.ihx *.sym *.rst
