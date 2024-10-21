@@ -3,34 +3,38 @@
 #include "LCD1602.h"
 #include "xpt2046.h"
 #include "delayxms.h"
+#include "timer0.h"
 
 #define sampleNum 8
 
+long sum = 0;
+unsigned int each_voltage_val = 0;  // 0 ~ 255 * 0.02V
+int effective_voltage_digital = 0;  // 0 ~ 255 * 0.02V
+int effective_voltage_analog = 0;   // 0 ~ 5V
+char times = 0;
+
 void main() {
-    // initialize
     LCD_Init();
-    long sum = 0;
-    int each_voltage_val = 0;   // 0 ~ 255
-    int effective_voltage_digital = 0;  // 0 ~ 255
-    int effective_voltage_analog = 0;   // 0 ~ 5V
+    Timer0_Init();
+    while (1);
+}
 
-    // sample, calculate and output
-    while (1) {
-        // sample and calculate
-        for ( int i = 0; i < sampleNum; i++ ) {
-            each_voltage_val = xpt2046_read(xptCommand_XP);
-            sum += each_voltage_val * each_voltage_val;
-        }
+void ISR() __interrupt 1 {
+    TH0 = (65536 - 2500) >> 8;   // 50hz, 8 sample a cycle
+    TL0 = (65536 - 2500) & 0xff; // so 0.0025s
 
+    times++;
+    // calculate
+    if ( times <= sampleNum ) {
+        each_voltage_val = xpt2046_read(xptCommand_XP);
+        sum += each_voltage_val * each_voltage_val;
+    }
+    // output
+    if ( times == sampleNum ) {
         effective_voltage_digital = sqrtf(1.0 * (sum/sampleNum));
-        effective_voltage_analog = (effective_voltage_digital * 5) >> 8;
-
-        // output
-        LCD_ShowNum(1, 1, effective_voltage_analog, 1);
-        LCD_ShowChar(1, 2, 'V');
-
-        // update
+        LCD_ShowNum(1, 1, effective_voltage_digital, 3);
+        LCD_ShowString(1, 4, " * 0.02V");
         sum = 0;
-        delayxms(10);
+        times = 0;
     }
 }

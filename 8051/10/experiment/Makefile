@@ -26,8 +26,8 @@ matrix: delayxms.rel
 	sdcc matrix.c delayxms.rel
 	sudo stcgal matrix.ihx
 
-voltmeter: delayxms.rel xpt2046.rel LCD1602.rel
-	sdcc voltmeter.c delayxms.rel xpt2046.rel LCD1602.rel
+voltmeter: delayxms.rel xpt2046.rel LCD1602.rel timer0.rel
+	sdcc voltmeter.c delayxms.rel xpt2046.rel LCD1602.rel timer0.rel
 	sudo stcgal voltmeter.ihx
 
 clean:
