@@ -26,6 +26,11 @@ matrix: delayxms.rel
 	sdcc matrix.c delayxms.rel
 	sudo stcgal matrix.ihx
 
+serial: delayxms.rel
+	sdcc serial.c delayxms.rel
+	sudo stcgal serial.ihx
+	sudo minicom --baudrate 9600
+
 voltmeter: delayxms.rel xpt2046.rel LCD1602.rel timer0.rel
 	sdcc voltmeter.c delayxms.rel xpt2046.rel LCD1602.rel timer0.rel
 	sudo stcgal voltmeter.ihx
