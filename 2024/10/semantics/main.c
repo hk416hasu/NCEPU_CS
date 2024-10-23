@@ -1,7 +1,12 @@
 #include <stdio.h>
-#include "set.h"
+#include "global.h"
 
 int main() {
+
+    InitTokens();
+    while (getNextToken()) {
+        fprintf(stdout, "%s %s", tokenBuf, tIdBuf);
+    }
 
     struct set *s1 = newSet();
     struct set *s2 = newSet();
