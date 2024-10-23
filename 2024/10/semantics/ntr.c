@@ -350,32 +350,47 @@ void BoolFactor() {
     } else {
         fprintf(fp_syn, "error in BoolFactor()\n");
     }
+
+    // semantics
 }
 
 void RelExp() {
+    struct set *truelist = newSet();
+    struct set *falselist = newSet();
+    int op = 0, id1 = 0, id2 = 0;
     if ( isMatchIDorINTorREAL() ) {
-        consumeIDorINTorREAL();
-        Relop();
-        consumeIDorINTorREAL();
+        id1 = atoi(tIdBuf);
+        consumeIDorINTorREAL(); // id1
+        op = Relop();
+        id2 = atoi(tIdBuf);
+        consumeIDorINTorREAL(); // id2
     } else {
         fprintf(fp_syn, "error in RelExp()\n");
     }
+
+    // semantics
+    addNewElemToSet(truelist, getPC());
+    addNewElemToSet(falselist, getPC()+1);
+    genIR(op, id1, id2, -1);
+    genIR(30, 0, 0, -1);
 }
 
-void Relop() {
+int Relop() {
+    int op = 0;
     if ( isMatch(18) ) { // <
-        consume(18);
+        consume(18); op = 18;
     } else if ( isMatch(19) ) { // <=
-        consume(19);
+        consume(19); op = 19;
     } else if ( isMatch(20) ) { // >
-        consume(20);
+        consume(20); op = 20;
     } else if ( isMatch(21) ) { // >=
-        consume(21);
+        consume(21); op = 21;
     } else if ( isMatch(22) ) { // ==
-        consume(22);
+        consume(22); op = 22;
     } else if ( isMatch(23) ) { // !=
-        consume(23);
+        consume(23); op = 23;
     } else {
         fprintf(fp_syn, "error in Relop()\n");
     }
+    return op;
 }

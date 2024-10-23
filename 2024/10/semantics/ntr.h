@@ -30,6 +30,6 @@ void BoolItem();
 void An_BoolItem();
 void BoolFactor();
 void RelExp();
-void Relop();
+int Relop();
 
 #endif
