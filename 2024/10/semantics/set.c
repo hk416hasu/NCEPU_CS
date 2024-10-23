@@ -3,12 +3,6 @@
 #include <assert.h>
 #include "set.h"
 
-#define maxSize 20
-struct set {
-    int len;
-    int arr[maxSize];
-};
-
 struct set* newSet() {
     struct set *p = (struct set*)malloc(sizeof(struct set));
     assert(p != NULL);
