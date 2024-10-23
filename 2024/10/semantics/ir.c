@@ -35,7 +35,7 @@ void genIR(int op, int arg1, int arg2, int res) {
 }
 
 void printIR() {
-//    FILE *fp = fopen("./quad.txt", w);
+//    FILE *fp = fopen("./quad.txt", "w");
     for (int i = 1; i < pc; i++) {
         printf("%d %d %d %d %d\n", 
                 i, ir[i][0], ir[i][1], ir[i][2], ir[i][3]);

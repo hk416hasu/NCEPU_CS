@@ -5,5 +5,6 @@
 #include "ntr.h"
 #include "set.h"
 #include "ir.h"
+#include "symbolTable.h"
 
 #endif
