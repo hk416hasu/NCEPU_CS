@@ -301,48 +301,90 @@ void Factor() {
     }
 }
 
-void BoolExp() {
+void BoolExp(set_s **ptrue, set_s **pfalse) {
+    struct set *BItruelist = NULL;
+    struct set *BIfalselist = NULL;
+    int child_M = 0;
+    struct set *child_ABEtruelist = NULL;
+    struct set *child_ABEfalselist = NULL;
+
+    // parser
     if ( isMatchIDorINTorREAL() || isMatch(9) ) { // !
-        BoolItem();
-        An_BoolExp();
+        BoolItem(&BItruelist, &BIfalselist);
+        An_BoolExp(&child_M,
+                &child_ABEtruelist, &child_ABEfalselist);
+        // semantics
+        if (child_M == 0) {
+//          *ptrue = BItruelist;
+//          *pfalse = BIfalselist;
+        } else {
+            backpatch(BIfalselist, child_M);
+//          *pfalse = child_ABEfalselist;
+//          merge(*ptrue, BItruelist, child_ABEtruelist);
+        }
         fprintf(fp_syn, "BoolExp\n");
     } else {
         fprintf(fp_syn, "error in BoolExp()\n");
     }
 }
 
-void An_BoolExp() {
+void An_BoolExp(int *pM, set_s **ptrue, set_s **pfalse) {
+    int M = 0;
+    struct set *BItruelist = NULL;
+    struct set *BIfalselist = NULL;
+    int child_M = 0;
+    struct set *child_ABEtruelist = NULL;
+    struct set *child_ABEfalselist = NULL;
+
+    // parser
     if ( isMatch(7) ) { // ||
         consume(7);
-        BoolItem();
-        An_BoolExp();
+        M = getPC();
+        BoolItem(&BItruelist, &BIfalselist);
+        An_BoolItem(&child_M,
+                &child_ABEtruelist, &child_ABEfalselist);
+        // semantics
+        if (child_M == 0) {
+            *ptrue = BItruelist;
+            *pfalse = BIfalselist;
+        } else {
+            backpatch(BIfalselist, child_M);
+            *pfalse = child_ABEfalselist;
+            merge(*ptrue, BItruelist, child_ABEtruelist);
+        }
+        *pM = M;
     } else if ( isMatch(27) ) { // )
-        // do nothing
+        // do nothing for parser
+        // these are for semantics
+        *pM = 0;
+//        *ptrue = newSet();
+//        *pfalse = newSet();
     } else {
         fprintf(fp_syn, "error in An_BoolExp()\n");
     }
 }
 
-void BoolItem() {
+void BoolItem(set_s **ptrue, set_s **pfalse) {
     struct set *BFtruelist = NULL;
     struct set *BFfalselist = NULL;
     int child_M = 0; // but BoolItems needn't synthesize this
     struct set *child_ABItruelist = NULL;
     struct set *child_ABIfalselist = NULL;
+
+    // parser
     if ( isMatchIDorINTorREAL() || isMatch(9) ) { // !
         BoolFactor(&BFtruelist, &BFfalselist);
         An_BoolItem(&child_M,
                 &child_ABItruelist, &child_ABIfalselist);
         // semantics
         if (child_M == 0) {
-//          *ptrue = BFtruelist;
-//          *pfalse = BFfalselist;
+            *ptrue = BFtruelist;
+            *pfalse = BFfalselist;
         } else {
             backpatch(BFtruelist, child_M);
-//          *ptrue = child_ABItruelist;
-//          merge(*pfalse, BFfalselist, child_ABIfalselist);
+            *ptrue = child_ABItruelist;
+            merge(*pfalse, BFfalselist, child_ABIfalselist);
         }
-//      *pM = M;
     } else {
         fprintf(fp_syn, "error in BoolItem()\n");
     }
@@ -350,9 +392,6 @@ void BoolItem() {
 
 void An_BoolItem(int *pM, set_s **ptrue, set_s **pfalse) {
     int M = 0;
-//  struct set *truelist = NULL;
-//  struct set *falselist = NULL;
-    // children's variables
     struct set *BFtruelist = NULL;
     struct set *BFfalselist = NULL;
     int child_M = 0;
@@ -380,8 +419,8 @@ void An_BoolItem(int *pM, set_s **ptrue, set_s **pfalse) {
         // do nothing for parser
         // these are for semantics
         *pM = 0;
-        *ptrue = newSet();
-        *pfalse = newSet();
+//        *ptrue = newSet();
+//        *pfalse = newSet();
     } else {
         fprintf(fp_syn, "error in An_BoolItem()\n");
     }

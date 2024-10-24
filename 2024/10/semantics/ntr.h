@@ -2,6 +2,8 @@
 #ifndef NTR_H
 #define NTR_H
 
+#include "set.h"
+
 _Bool InitNTR();
 void CloseNTR();
 void Program();
@@ -24,12 +26,12 @@ void Item();
 void An_Item();
 void Suffix_Item();
 void Factor();
-void BoolExp();
-void An_BoolExp();
-void BoolItem();
-void An_BoolItem();
-void BoolFactor();
-void RelExp();
+void BoolExp(set_s **ptrue, set_s **pfalse);
+void An_BoolExp(int *pM, set_s **ptrue, set_s **pfalse);
+void BoolItem(set_s **ptrue, set_s **pfalse);
+void An_BoolItem(int *pM, set_s **ptrue, set_s **pfalse);
+void BoolFactor(set_s **ptrue, set_s **pfalse);
+void RelExp(set_s **ptrue, set_s **pfalse);
 int Relop();
 
 #endif
