@@ -7,9 +7,7 @@ int main() {
     InitNTR();
     InitSTable();
 
-    getNextToken();
     Program();
-    genIR(88, 0, 0, 0);
 
     printIR();
 

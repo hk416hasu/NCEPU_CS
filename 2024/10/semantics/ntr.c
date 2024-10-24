@@ -45,6 +45,7 @@ void consumeIDorINTorREAL() {
 }
 
 void Program() {
+    getNextToken();
     if ( isMatch(1) ) { // if peek a "main"
         consume(1);  // main
         consume(26); // (
@@ -53,6 +54,8 @@ void Program() {
         StaList();
         consume(29); // }
         fprintf(fp_syn, "Program\n");
+        // semantics
+        genIR(88, 0, 0, 0);
     } else {
         fprintf(fp_syn, "error in Program()\n");
     }
@@ -321,40 +324,81 @@ void An_BoolExp() {
 }
 
 void BoolItem() {
+    struct set *BFtruelist = NULL;
+    struct set *BFfalselist = NULL;
+    int child_M = 0; // but BoolItems needn't synthesize this
+    struct set *child_ABItruelist = NULL;
+    struct set *child_ABIfalselist = NULL;
     if ( isMatchIDorINTorREAL() || isMatch(9) ) { // !
-        BoolFactor();
-        An_BoolItem();
+        BoolFactor(&BFtruelist, &BFfalselist);
+        An_BoolItem(&child_M,
+                &child_ABItruelist, &child_ABIfalselist);
+        // semantics
+        if (child_M == 0) {
+//          *ptrue = BFtruelist;
+//          *pfalse = BFfalselist;
+        } else {
+            backpatch(BFtruelist, child_M);
+//          *ptrue = child_ABItruelist;
+//          merge(*pfalse, BFfalselist, child_ABIfalselist);
+        }
+//      *pM = M;
     } else {
         fprintf(fp_syn, "error in BoolItem()\n");
     }
 }
 
-void An_BoolItem() {
+void An_BoolItem(int *pM, set_s **ptrue, set_s **pfalse) {
+    int M = 0;
+//  struct set *truelist = NULL;
+//  struct set *falselist = NULL;
+    // children's variables
+    struct set *BFtruelist = NULL;
+    struct set *BFfalselist = NULL;
+    int child_M = 0;
+    struct set *child_ABItruelist = NULL;
+    struct set *child_ABIfalselist = NULL;
+
+    // parser
     if ( isMatch(8) ) { // &&
         consume(8);
-        BoolFactor();
-        An_BoolItem();
+        M = getPC();
+        BoolFactor(&BFtruelist, &BFfalselist);
+        An_BoolItem(&child_M,
+                &child_ABItruelist, &child_ABIfalselist);
+        // semantics
+        if (child_M == 0) {
+            *ptrue = BFtruelist;
+            *pfalse = BFfalselist;
+        } else {
+            backpatch(BFtruelist, child_M);
+            *ptrue = child_ABItruelist;
+            merge(*pfalse, BFfalselist, child_ABIfalselist);
+        }
+        *pM = M;
     } else if ( isMatch(7) || isMatch(27) ) { // || or )
-        // do nothing
+        // do nothing for parser
+        // these are for semantics
+        *pM = 0;
+        *ptrue = newSet();
+        *pfalse = newSet();
     } else {
         fprintf(fp_syn, "error in An_BoolItem()\n");
     }
 }
 
-void BoolFactor() {
+void BoolFactor(set_s **ptrue, set_s **pfalse) {
     if ( isMatch(9) ) { // !
         consume(9);
-        RelExp();
+        RelExp(pfalse, ptrue);
     } else if ( isMatchIDorINTorREAL() ) {
-        RelExp();
+        RelExp(ptrue, pfalse);
     } else {
         fprintf(fp_syn, "error in BoolFactor()\n");
     }
-
-    // semantics
 }
 
-void RelExp() {
+void RelExp(set_s **ptrue, set_s **pfalse) {
     struct set *truelist = newSet();
     struct set *falselist = newSet();
     int op = 0, id1 = 0, id2 = 0;
@@ -364,15 +408,17 @@ void RelExp() {
         op = Relop();
         id2 = atoi(tIdBuf);
         consumeIDorINTorREAL(); // id2
+        // semantics
+        addNewElemToSet(truelist, getPC());
+        addNewElemToSet(falselist, getPC()+1);
+        genIR(op, id1, id2, -1);
+        genIR(30, 0, 0, -1);
+        // synthesize
+        *ptrue = truelist;
+        *pfalse = falselist;
     } else {
         fprintf(fp_syn, "error in RelExp()\n");
     }
-
-    // semantics
-    addNewElemToSet(truelist, getPC());
-    addNewElemToSet(falselist, getPC()+1);
-    genIR(op, id1, id2, -1);
-    genIR(30, 0, 0, -1);
 }
 
 int Relop() {
