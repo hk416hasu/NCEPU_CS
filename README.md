@@ -17,7 +17,7 @@
 10. __菜鸡互啄?__ Yes.. and No!!  
     大家的确都是菜鸡, 我不应因 **<span style="color: #FF5733;">比其他人不菜一点就沾沾自喜..</span>**  
     也许我可以做一只 **<span style="color: #FF5733;">保持梦想、好奇、热爱和行动力的菜鸡!</span>**
-11. **<span style="color: #FF5733;">不评价别人</span>**
+11. **<span style="color: #FF5733;">不评价人</span>**
 ---
 
 do some projects, find practice, stay curious, just do it with my own pace, **I am on the Right Path!**
