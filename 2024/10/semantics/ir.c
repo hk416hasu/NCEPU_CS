@@ -14,6 +14,10 @@ int getPC() {
 }
 
 _Bool backpatch(struct set *s, int M) {
+    // if s is an emptySet, do nothing
+    if (s == NULL || s->len == 0) {
+        return 0;
+    }
     int i = 0;
     while (i < s->len) {
         if (s->arr[i] >= IRlen) {

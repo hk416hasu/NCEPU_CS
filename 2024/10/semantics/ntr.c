@@ -166,14 +166,23 @@ void AssSta() {
 }
 
 void IfSta() {
+    int M = 0;
+    struct set *BEtruelist = NULL;
+    struct set *BEfalselist = NULL;
     if ( isMatch(4) ) { // if
         consume(4); // if
         consume(26); // (
-        BoolExp();
+        BoolExp(&BEtruelist, &BEfalselist);
         consume(27); // )
+        M = getPC();
         StaBlock();
         Opt_Else();
         fprintf(fp_syn, "IfSta\n");
+
+        assert(BEtruelist != NULL);
+        // semantics
+        backpatch(BEtruelist, M);
+
     } else {
         fprintf(fp_syn, "error in IfSta()\n");
     }
@@ -315,12 +324,12 @@ void BoolExp(set_s **ptrue, set_s **pfalse) {
                 &child_ABEtruelist, &child_ABEfalselist);
         // semantics
         if (child_M == 0) {
-//          *ptrue = BItruelist;
-//          *pfalse = BIfalselist;
+            *ptrue = BItruelist;
+            *pfalse = BIfalselist;
         } else {
             backpatch(BIfalselist, child_M);
-//          *pfalse = child_ABEfalselist;
-//          merge(*ptrue, BItruelist, child_ABEtruelist);
+            *pfalse = child_ABEfalselist;
+            merge(ptrue, BItruelist, child_ABEtruelist);
         }
         fprintf(fp_syn, "BoolExp\n");
     } else {
@@ -350,15 +359,12 @@ void An_BoolExp(int *pM, set_s **ptrue, set_s **pfalse) {
         } else {
             backpatch(BIfalselist, child_M);
             *pfalse = child_ABEfalselist;
-            merge(*ptrue, BItruelist, child_ABEtruelist);
+            merge(ptrue, BItruelist, child_ABEtruelist);
         }
         *pM = M;
     } else if ( isMatch(27) ) { // )
         // do nothing for parser
-        // these are for semantics
-        *pM = 0;
-//        *ptrue = newSet();
-//        *pfalse = newSet();
+        *pM = 0; // for semantics
     } else {
         fprintf(fp_syn, "error in An_BoolExp()\n");
     }
@@ -383,7 +389,7 @@ void BoolItem(set_s **ptrue, set_s **pfalse) {
         } else {
             backpatch(BFtruelist, child_M);
             *ptrue = child_ABItruelist;
-            merge(*pfalse, BFfalselist, child_ABIfalselist);
+            merge(pfalse, BFfalselist, child_ABIfalselist);
         }
     } else {
         fprintf(fp_syn, "error in BoolItem()\n");
@@ -412,15 +418,12 @@ void An_BoolItem(int *pM, set_s **ptrue, set_s **pfalse) {
         } else {
             backpatch(BFtruelist, child_M);
             *ptrue = child_ABItruelist;
-            merge(*pfalse, BFfalselist, child_ABIfalselist);
+            merge(pfalse, BFfalselist, child_ABIfalselist);
         }
         *pM = M;
     } else if ( isMatch(7) || isMatch(27) ) { // || or )
         // do nothing for parser
-        // these are for semantics
-        *pM = 0;
-//        *ptrue = newSet();
-//        *pfalse = newSet();
+        *pM = 0; // for semantics
     } else {
         fprintf(fp_syn, "error in An_BoolItem()\n");
     }
