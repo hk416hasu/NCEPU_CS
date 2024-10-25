@@ -154,10 +154,13 @@ void DataType() {
 }
 
 void AssSta() {
+    int AssID = 0, child_ExpID = 0;
     if ( isMatch(10) ) { // id
+        AssID = atoi(tIdBuf); assert(isInSTable(AssID));
         consume(10); // id
         consume(13); // =
-        Exp();
+        Exp(&child_ExpID);
+        genIR(13, child_ExpID, 0, AssID);
         consume(24); // ;
         fprintf(fp_syn, "AssSta\n"); 
     } else {
@@ -222,29 +225,57 @@ void WhileSta() {
     }
 }
 
-void Exp() {
+void Exp(int *id) {
+    int child_ItemID = 0;
+    int child_AnExpOP = 0, child_AnExpID = 0;
     if ( isMatchIDorINTorREAL() || isMatch(26) ) {
-        Item();
-        An_Exp();
+        Item(&child_ItemID);
+        An_Exp(&child_AnExpOP, &child_AnExpID);
         fprintf(fp_syn, "Exp\n");
+        if (child_AnExpOP != 0) {
+            *id = newTemp();
+            genIR(child_AnExpOP, child_ItemID,
+                    child_AnExpID, *id);
+        } else { // child_<An_Exp> → ε
+            *id = child_ItemID;
+        }
     } else {
         fprintf(fp_syn, "error in Exp()\n");
     }
 }
 
-void Exp_noOutput() {
+void Exp_noOutput(int *id) {
+    int child_ItemID = 0;
+    int child_AnExpOP = 0, child_AnExpID = 0;
     if ( isMatchIDorINTorREAL() || isMatch(26) ) {
-        Item();
-        An_Exp();
+        Item(&child_ItemID);
+        An_Exp(&child_AnExpOP, &child_AnExpID);
+        if (child_AnExpOP != 0) {
+            *id = newTemp();
+            genIR(child_AnExpOP, child_ItemID,
+                    child_AnExpID, *id);
+        } else { // child_<An_Exp> → ε
+            *id = child_ItemID;
+        }
     } else {
         fprintf(fp_syn, "error in Exp_noOutput()\n");
     }
 }
 
-void An_Exp() {
+void An_Exp(int *op, int *id) {
+    int child_SExpOP = 0, child_SExpID = 0;
+    int child_AnExpOP = 0, child_AnExpID = 0;
     if ( isMatch(14) || isMatch(15) ) { // + or -
-        Suffix_Exp();
-        An_Exp();
+        Suffix_Exp(&child_SExpOP, &child_SExpID);
+        An_Exp(&child_AnExpOP, &child_AnExpID);
+        *op = child_SExpOP;
+        if (child_AnExpOP != 0) {
+            *id = newTemp();
+            genIR(child_AnExpOP, child_SExpID,
+                    child_AnExpID, *id);
+        } else { // child_<An_Exp> → ε
+            *id = child_SExpID;
+        }
     } else if ( isMatch(24) || isMatch(27) ) {
         // do nothing
     } else {
@@ -252,31 +283,52 @@ void An_Exp() {
     }
 }
 
-void Suffix_Exp() {
+void Suffix_Exp(int *op, int *id) {
     if ( isMatch(14) ) { // +
         consume(14);
-        Item();
+        *op = 14;
+        Item(id);
     } else if ( isMatch(15) ) { // -
         consume(15);
-        Item();
+        *op = 15;
+        Item(id);
     } else {
         fprintf(fp_syn, "error in Suffix_Exp()\n");
     }
 }
 
-void Item() {
+void Item(int *id) {
+    int child_FactorID = 0;
+    int child_AnItemOP = 0, child_AnItemID = 0;
     if ( isMatchIDorINTorREAL() || isMatch(26) ) { // id*3 or (
-        Factor();
-        An_Item();
+        child_FactorID = Factor();
+        An_Item(&child_AnItemOP, &child_AnItemID);
+        if (child_AnItemOP != 0) {
+            *id = newTemp();
+            genIR(child_AnItemOP, child_FactorID,
+                    child_AnItemID, *id);
+        } else { // child_<An_Item> → ε
+            *id = child_FactorID;
+        }
     } else {
         fprintf(fp_syn, "error in Item()\n");
     }
 }
 
-void An_Item() {
+void An_Item(int *op, int *id) {
+    int child_SItemOP = 0, child_SItemID = 0;
+    int child_AnItemOP = 0, child_AnItemID = 0;
     if ( isMatch(16) || isMatch(17) ) { // * or /
-        Suffix_Item();
-        An_Item();
+        Suffix_Item(&child_SItemOP, &child_SItemID);
+        An_Item(&child_AnItemOP, &child_AnItemID);
+        *op = child_SItemOP;
+        if (child_AnItemOP != 0) {
+            *id = newTemp();
+            genIR(child_AnItemOP, child_SItemID,
+                    child_AnItemID, *id);
+        } else { // child_<An_Item> → ε
+            *id = child_SItemID;
+        }
     } else if ( isMatch(14) || isMatch(15)  // + or -
             || isMatch(24) || isMatch(27) ) // ; or )
     {
@@ -286,28 +338,33 @@ void An_Item() {
     }
 }
 
-void Suffix_Item() {
+void Suffix_Item(int *op, int *id) {
     if ( isMatch(16) ) { // *
         consume(16);
-        Factor();
+        *op = 16;
+        *id = Factor();
     } else if ( isMatch(17) ) { // /
         consume(17);
-        Factor();
+        *op = 17;
+        *id = Factor();
     } else {
         fprintf(fp_syn, "error in Suffix_Item()\n");
     }
 }
 
-void Factor() {
+int Factor() {
+    int id = 0;
     if ( isMatchIDorINTorREAL() ) {
+        id = atoi(tIdBuf); assert(isInSTable(id));
         consumeIDorINTorREAL();
     } else if ( isMatch(26) ) { // (
         consume(26); // (
-        Exp_noOutput();
+        Exp_noOutput(&id);
         consume(27); // )
     } else {
         fprintf(fp_syn, "error in Factor()\n");
     }
+    return id;
 }
 
 void BoolExp(set_s **ptrue, set_s **pfalse) {

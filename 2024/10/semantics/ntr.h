@@ -25,7 +25,7 @@ void Suffix_Exp();
 void Item();
 void An_Item();
 void Suffix_Item();
-void Factor();
+int Factor();
 //void BoolExp(set_s **ptrue, set_s **pfalse);
 void BoolExp();
 void An_BoolExp(int *pM, set_s **ptrue, set_s **pfalse);
