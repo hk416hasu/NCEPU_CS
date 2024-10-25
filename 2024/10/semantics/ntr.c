@@ -96,7 +96,9 @@ void Statement() {
         M = getPC();
         backpatch(child_next, M);
     } else if ( isMatch(6) ) { // peek "while"
-        WhileSta();
+        WhileSta(&child_next);
+        M = getPC();
+        backpatch(child_next, M);
     } else {
         fprintf(fp_syn, "error in Statement()\n");
     }
@@ -229,14 +231,23 @@ void Opt_Else(int *pM, set_s **pNext) {
     }
 }
 
-void WhileSta() {
+void WhileSta(struct set **pNext) {
+    int M1 = 0, M2 = 0;
+    struct set *BEtruelist = NULL;
+    struct set *BEfalselist = NULL;
     if ( isMatch(6) ) { // while
         consume(6); // while
         consume(26); // (
-        BoolExp();
+        M1 = getPC();
+        BoolExp(&BEtruelist, &BEfalselist);
         consume(27); // )
+        M2 = getPC();
         StaBlock();
         fprintf(fp_syn, "WhileSta\n");
+        //semantics
+        backpatch(BEtruelist, M2);
+        *pNext = BEfalselist;
+        genIR(30, 0, 0, M1);
     } else {
         fprintf(fp_syn, "error in WhileSta()\n");
     }
