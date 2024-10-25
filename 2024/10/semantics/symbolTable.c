@@ -3,26 +3,25 @@
 #include <string.h>
 #include "symbolTable.h"
 
-#define sTableMaxLen 20
+#define sTableMaxLen 300
 #define idMaxLen 10
+#define indexBufLen 4
 char* sTable[sTableMaxLen] = {0};
-int sTableLen = 0;
 int tempVarNum = 0;
 
 _Bool InitSTable() {
     FILE *fp = fopen("./symbol.txt", "r");
         // error handle
-    char indexBuf[3] = {0};
+    char indexBuf[indexBufLen] = {0};
     int c = 0, i = 0;
 
     while (1) {
         if ((c = fgetc(fp)) == EOF) { break; }
 
-        sTableLen++;
         // get index of symbol
         do {
             indexBuf[i++] = c;
-        } while ((c = fgetc(fp) != 32));
+        } while ((c = fgetc(fp)) != 32);
         int index = atoi(indexBuf);
 
         // let symbol's name into sTable[index]
@@ -30,8 +29,8 @@ _Bool InitSTable() {
         sTable[index] = 
             fgets(sTable[index], sizeof(sTable[index]), fp);
 
-        i = 0; c = 0; index = 0;
-        indexBuf[0] = 0; indexBuf[1] = 0; indexBuf[2] = 0;
+        i = 0; c = '\0'; index = 0;
+        memset(indexBuf, 0, sizeof(char)*indexBufLen);
     }
 
     fclose(fp);
@@ -39,8 +38,10 @@ _Bool InitSTable() {
 }
 
 void printSTable() {
-    for (int i = 1; i <= sTableLen; i++) {
-        printf("%d %s\n", i, sTable[i]);
+    for (int i = 1; i < sTableMaxLen; i++) {
+        if (sTable[i] != NULL) {
+            printf("%d %s", i, sTable[i]);
+        }
     }
 }
 
