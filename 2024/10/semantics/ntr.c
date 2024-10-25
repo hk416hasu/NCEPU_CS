@@ -85,12 +85,16 @@ void Opt_StaList() {
 }
 
 void Statement() {
+    int M = 0;
+    struct set *child_next = NULL;
     if ( isMatch(2) || isMatch(3) ) { // if peek "int" or "float"
         DecSta();
     } else if ( isMatch(10) ) { // const num CANNOT be left-val
         AssSta();
     } else if ( isMatch(4) ) { // peek "if"
-        IfSta();
+        IfSta(&child_next);
+        M = getPC();
+        backpatch(child_next, M);
     } else if ( isMatch(6) ) { // peek "while"
         WhileSta();
     } else {
@@ -168,8 +172,9 @@ void AssSta() {
     }
 }
 
-void IfSta() {
-    int M = 0;
+void IfSta(struct set **next) {
+    int M = 0, OptElse_M = 0;
+    struct set *OptElseNext = NULL;
     struct set *BEtruelist = NULL;
     struct set *BEfalselist = NULL;
     if ( isMatch(4) ) { // if
@@ -179,22 +184,34 @@ void IfSta() {
         consume(27); // )
         M = getPC();
         StaBlock();
-        Opt_Else();
+        Opt_Else(&OptElse_M, &OptElseNext);
         fprintf(fp_syn, "IfSta\n");
-
         assert(BEtruelist != NULL);
         // semantics
         backpatch(BEtruelist, M);
-
+        if (OptElse_M != 0) {
+            backpatch(BEfalselist, OptElse_M);
+            *next = OptElseNext;
+        } else {
+            *next = BEfalselist;
+        }
     } else {
         fprintf(fp_syn, "error in IfSta()\n");
     }
 }
 
-void Opt_Else() {
+void Opt_Else(int *pM, set_s **pNext) {
+    struct set *N = newSet();
+    int M = 0;
     if ( isMatch(5) ) { // else
+        addNewElemToSet(N, getPC());
+        genIR(30, 0, 0, -1);
         consume(5); // else
+        M = getPC();
         StaBlock();
+        // semantics
+        *pNext = N;
+        *pM = M;
     } else if ( isMatch(2) ) { // int
         // do nothing
     } else if ( isMatch(3) ) { // float
