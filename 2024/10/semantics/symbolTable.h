@@ -2,7 +2,7 @@
 #define SYMBOLTABLE_H
 
 _Bool InitSTable();
-_Bool isInSTable();
+_Bool isInSTable(int index);
 int newTemp();
 
 #endif

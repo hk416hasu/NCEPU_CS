@@ -30,13 +30,6 @@ _Bool InitSTable() {
         sTable[index] = 
             fgets(sTable[index], sizeof(sTable[index]), fp);
 
-        // remove '\n'
-        for (int m = 0; m < idMaxLen; m++) {
-            if (sTable[index][m] == '\n') {
-                sTable[index][m] = '\0';
-            }
-        }
-
         i = 0; c = 0; index = 0;
         indexBuf[0] = 0; indexBuf[1] = 0; indexBuf[2] = 0;
     }
@@ -56,11 +49,6 @@ int newTemp() {
     return (200 + tempVarNum);
 }
 
-_Bool isInSTable(char *str) {
-    for (int i = 1; i <= sTableLen; i++) {
-        if (!strcmp(sTable[i], str)) {
-            return 1;
-        }
-    }
-    return 0;
+_Bool isInSTable(int index) {
+    return (sTable[index] != NULL);
 }

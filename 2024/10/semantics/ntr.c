@@ -445,10 +445,10 @@ void RelExp(set_s **ptrue, set_s **pfalse) {
     struct set *falselist = newSet();
     int op = 0, id1 = 0, id2 = 0;
     if ( isMatchIDorINTorREAL() ) {
-        id1 = atoi(tIdBuf);
+        id1 = atoi(tIdBuf); assert(isInSTable(id1));
         consumeIDorINTorREAL(); // id1
         op = Relop();
-        id2 = atoi(tIdBuf);
+        id2 = atoi(tIdBuf); assert(isInSTable(id2));
         consumeIDorINTorREAL(); // id2
         // semantics
         addNewElemToSet(truelist, getPC());
