@@ -4,7 +4,7 @@
 #include "ir.h"
 
 #define IRlen 100
-int ir[IRlen][4] = {0};
+int ir[IRlen][4] = {{0}};
 int pc = 1; // program counter for IR
 
 #define unknown -1
@@ -39,10 +39,11 @@ void genIR(int op, int arg1, int arg2, int res) {
 }
 
 void printIR() {
-//    FILE *fp = fopen("./quad.txt", "w");
-    for (int i = 1; i < pc; i++) {
-        printf("%d %d %d %d %d\n", 
+    FILE *fp = fopen("./quad.txt", "w");
+    int i = 1;
+    for (i = 1; i < pc; i++) {
+        fprintf(fp, "%d %d %d %d %d\n",
                 i, ir[i][0], ir[i][1], ir[i][2], ir[i][3]);
     }
-//    fclose(fp);
+    fclose(fp);
 }

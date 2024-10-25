@@ -24,7 +24,8 @@ _Bool addNewElemToSet(struct set *pSet, int elem) {
 // if elem in Set, retrun 1
 _Bool isInSet(const struct set *pSet, int elem) {
     assert(pSet != NULL);
-    for (int i = 0; i < pSet->len; i++) {
+    int i = 0;
+    for (i = 0; i < pSet->len; i++) {
         if (elem == pSet->arr[i]) {
             return 1;
         }
@@ -42,12 +43,13 @@ _Bool merge(struct set **s1, struct set *s2, struct set *s3) {
     *s1 = newSet();
     assert(s2 != NULL); assert(s3 != NULL);
 
-    for (int i = 0; i < s2->len; i++) {
+    int i = 0;
+    for (i = 0; i < s2->len; i++) {
         addNewElemToSet(*s1, s2->arr[i]);
     }
 
     int elem = 0;
-    for (int i = 0; i < s3->len; i++) {
+    for (i = 0; i < s3->len; i++) {
         elem = s3->arr[i];
         if (!isInSet(*s1, elem)) {
             addNewElemToSet(*s1, elem);
@@ -64,12 +66,13 @@ _Bool merge3Sets(set_s **s1, set_s *s2, set_s *s3, set_s *s4) {
     *s1 = newSet();
     assert(s2 != NULL); assert(s3 != NULL); assert(s4 != NULL);
 
-    for (int i = 0; i < s2->len; i++) {
+    int i = 0;
+    for (i = 0; i < s2->len; i++) {
         addNewElemToSet(*s1, s2->arr[i]);
     }
 
     int elem = 0;
-    for (int i = 0; i < s3->len; i++) {
+    for (i = 0; i < s3->len; i++) {
         elem = s3->arr[i];
         if (!isInSet(*s1, elem)) {
             addNewElemToSet(*s1, elem);
@@ -77,7 +80,7 @@ _Bool merge3Sets(set_s **s1, set_s *s2, set_s *s3, set_s *s4) {
     }
 
     elem = 0;
-    for (int i = 0; i < s4->len; i++) {
+    for (i = 0; i < s4->len; i++) {
         elem = s4->arr[i];
         if (!isInSet(*s1, elem)) {
             addNewElemToSet(*s1, elem);

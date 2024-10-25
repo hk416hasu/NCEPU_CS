@@ -38,7 +38,8 @@ _Bool InitSTable() {
 }
 
 void printSTable() {
-    for (int i = 1; i < sTableMaxLen; i++) {
+    int i = 1;
+    for (i = 1; i < sTableMaxLen; i++) {
         if (sTable[i] != NULL) {
             printf("%d %s", i, sTable[i]);
         }
