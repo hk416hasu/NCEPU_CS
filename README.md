@@ -1,8 +1,8 @@
-### <span style="color: #000000;">祝你十年后不会后悔！</span>
+## 黑发不知勤学早，白首方悔读书迟！
 
 >**—— <span style="color: #C70039;">我们的征途是星辰大海！！</span>**  
 >
->>**—— <span style="color: #C70039;">朝闻道且笃行之! 然后夕死可矣.</span>**
+>**—— <span style="color: #C70039;">朝闻道且笃行之! 然后夕死可矣.</span>**
 
 #### <span style="color: #000000;">行为准则：</span>
 
