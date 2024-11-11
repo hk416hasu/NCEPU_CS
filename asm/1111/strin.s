@@ -1,19 +1,19 @@
 .model small
 .stack
 .data
-    str db 'hello, world!!$'
+    buf db 10 dup (0)
+    zhan dw ?,?
 
 .code
 main proc
     mov ax, @data
     mov ds, ax
 
-    b equ [bp+8]
-    mov ax, b
-
-    mov dx, offset str
-    mov ah, 9h
+    mov dx, offset buf
+    mov buf, 5
+    mov ah, 10
     int 21h
+
 
     mov ah, 4ch
     int 21h
