@@ -1,8 +1,6 @@
 ## 黑发不知勤学早，白首方悔读书迟！
 
->**—— <span style="color: #C70039;">我们的征途是星辰大海！！</span>**  
->
->**—— <span style="color: #C70039;">朝闻道且笃行之! 然后夕死可矣.</span>**
+>**—— <span style="color: #C70039;">朝闻道且笃行之, 我们的征途是星辰大海！！</span>**  
 
 #### <span style="color: #000000;">行为准则：</span>
 
@@ -16,13 +14,9 @@
 8. 不争分数之多寡，**<span style="color: #FF5733;">惟问学问之有无</span>**
 10. __菜鸡互啄?__ Yes.. and No!!  
     大家的确都是菜鸡, 我不应因 **<span style="color: #FF5733;">比其他人不菜一点就沾沾自喜..</span>**  
-    也许我可以做一只 **<span style="color: #FF5733;">保持梦想、好奇、热爱和行动力的菜鸡!</span>**
+    也许我可以做一只 **<span style="color: #FF5733;">保持梦想、好奇、热爱和行动力</span>** 的菜鸡!
 11. **<span style="color: #FF5733;">不评价人, 做好自己！</span>**
----
+
+<img src="./etc/pic/精神内耗.jpg" alt="精神内耗" style="zoom:50%;" />
 
 do some projects, find practice, stay curious, just do it with my own pace, **I am on the Right Path!**
-
----
-
-
-
