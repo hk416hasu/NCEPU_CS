@@ -4,14 +4,13 @@
 
 _Bool InitNTR();
 void CloseNTR();
+
 void Program();
-void StaList();
-void Opt_StaList();
-void Statement();
+_Bool StaList();
+_Bool Statement();
 void StaBlock();
 void DecSta();
-void VarList();
-void Opt_VarList();
+_Bool VarList();
 void DataType();
 void AssSta();
 void IfSta();
