@@ -5,11 +5,28 @@ void test_2();
 void test_3();
 void test_4();
 void test_5();
+void return_val();
 
 int main() {
 
+    return_val();
 
     return 0;
+}
+
+/***
+  * brief : check the return-val of scanf();
+  * input-1 : 1 2 3
+  * output-1: 3
+  * conclusion: On success, scanf() will return the number of input items successfully matched and assigned.
+  * input-2 : <EOF>
+  * output-2: -1
+  */
+void return_val() {
+    int num = 0;
+    int ret = 0;
+    ret = scanf("%d%d%d", &num, &num, &num);
+    printf("%d\n", ret);
 }
 
 /*
