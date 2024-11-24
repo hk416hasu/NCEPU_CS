@@ -1,0 +1,4 @@
+{
+printf("i love ChatGPT\n");
+return 0;
+}
