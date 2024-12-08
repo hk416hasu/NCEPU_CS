@@ -2,6 +2,9 @@
 #ifndef NTR_H
 #define NTR_H
 
+void initDotFile();
+void closeDotFile();
+
 _Bool InitNTR();
 void CloseNTR();
 void Program();

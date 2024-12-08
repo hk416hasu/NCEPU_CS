@@ -210,92 +210,199 @@ void WhileSta() {
     }
 }
 
+#include <stdio.h>
+
+// 全局变量
+FILE *fp_dot;
+int nodeCounter = 0; // 用于唯一标识每个节点
+int currentParent = -1; // 当前父节点
+
+// 初始化DOT文件
+void initDotFile() {
+    currentParent = -1;
+    fp_dot = fopen("syntax_tree.dot", "w");
+    fprintf(fp_dot, "digraph SyntaxTree {\n");
+}
+
+// 结束DOT文件
+void closeDotFile() {
+    fprintf(fp_dot, "}\n");
+    fclose(fp_dot);
+}
+
+// 辅助函数
+int createNode(const char *label) {
+    int nodeId = nodeCounter++;
+    fprintf(fp_dot, "  node%d [label=\"%s\"];\n", nodeId, label);
+    return nodeId;
+}
+
+void connectNodes(int parent, int child) {
+    if (parent != -1) {
+        fprintf(fp_dot, "  node%d -> node%d;\n", parent, child);
+    }
+}
+
+// 修改每个规则函数，插入DOT生成逻辑
 void Exp() {
-    if ( isMatchIDorINTorREAL() || isMatch(26) ) {
+    int nodeId = createNode("Exp");
+    connectNodes(currentParent, nodeId);
+
+    int prevParent = currentParent;
+    currentParent = nodeId;
+
+    if (isMatchIDorINTorREAL() || isMatch(26)) {
         Item();
         An_Exp();
         fprintf(fp_syn, "Exp\n");
     } else {
         fprintf(fp_syn, "error in Exp()\n");
     }
+
+    currentParent = prevParent;
 }
 
 void Exp_noOutput() {
-    if ( isMatchIDorINTorREAL() || isMatch(26) ) {
+    int nodeId = createNode("Exp_noOutput");
+    connectNodes(currentParent, nodeId);
+
+    int prevParent = currentParent;
+    currentParent = nodeId;
+
+    if (isMatchIDorINTorREAL() || isMatch(26)) {
         Item();
         An_Exp();
     } else {
         fprintf(fp_syn, "error in Exp_noOutput()\n");
     }
+
+    currentParent = prevParent;
 }
 
 void An_Exp() {
-    if ( isMatch(14) || isMatch(15) ) { // + or -
+    int nodeId = createNode("An_Exp");
+    connectNodes(currentParent, nodeId);
+
+    int prevParent = currentParent;
+    currentParent = nodeId;
+
+    if (isMatch(14) || isMatch(15)) { // + or -
         Suffix_Exp();
         An_Exp();
-    } else if ( isMatch(24) || isMatch(27) ) {
+    } else if (isMatch(24) || isMatch(27)) {
         // do nothing
     } else {
-        fprintf(fp_syn, "error in AnExp()\n");
+        fprintf(fp_syn, "error in An_Exp()\n");
     }
+
+    currentParent = prevParent;
 }
 
 void Suffix_Exp() {
-    if ( isMatch(14) ) { // +
+    int nodeId = createNode("Suffix_Exp");
+    connectNodes(currentParent, nodeId);
+
+    int prevParent = currentParent;
+    currentParent = nodeId;
+
+    if (isMatch(14)) { // +
         consume(14);
+    int nodeId = createNode("+");
+    connectNodes(currentParent, nodeId);
         Item();
-    } else if ( isMatch(15) ) { // -
+    } else if (isMatch(15)) { // -
         consume(15);
+    int nodeId = createNode("-");
+    connectNodes(currentParent, nodeId);
         Item();
     } else {
         fprintf(fp_syn, "error in Suffix_Exp()\n");
     }
+
+    currentParent = prevParent;
 }
 
 void Item() {
-    if ( isMatchIDorINTorREAL() || isMatch(26) ) { // id*3 or (
+    int nodeId = createNode("Item");
+    connectNodes(currentParent, nodeId);
+
+    int prevParent = currentParent;
+    currentParent = nodeId;
+
+    if (isMatchIDorINTorREAL() || isMatch(26)) {
         Factor();
         An_Item();
     } else {
         fprintf(fp_syn, "error in Item()\n");
     }
+
+    currentParent = prevParent;
 }
 
 void An_Item() {
-    if ( isMatch(16) || isMatch(17) ) { // * or /
+    int nodeId = createNode("An_Item");
+    connectNodes(currentParent, nodeId);
+
+    int prevParent = currentParent;
+    currentParent = nodeId;
+
+    if (isMatch(16) || isMatch(17)) { // * or /
         Suffix_Item();
         An_Item();
-    } else if ( isMatch(14) || isMatch(15)  // + or -
-            || isMatch(24) || isMatch(27) ) // ; or )
-    {
+    } else if (isMatch(14) || isMatch(15) || // + or -
+               isMatch(24) || isMatch(27)) { // ; or )
         // do nothing
     } else {
         fprintf(fp_syn, "error in An_Item()\n");
     }
+
+    currentParent = prevParent;
 }
 
 void Suffix_Item() {
-    if ( isMatch(16) ) { // *
+    int nodeId = createNode("Suffix_Item");
+    connectNodes(currentParent, nodeId);
+
+    int prevParent = currentParent;
+    currentParent = nodeId;
+
+    if (isMatch(16)) { // *
         consume(16);
+    int nodeId = createNode("*");
+    connectNodes(currentParent, nodeId);
         Factor();
-    } else if ( isMatch(17) ) { // /
+    } else if (isMatch(17)) { // /
         consume(17);
+    int nodeId = createNode("/");
+    connectNodes(currentParent, nodeId);
         Factor();
     } else {
         fprintf(fp_syn, "error in Suffix_Item()\n");
     }
+
+    currentParent = prevParent;
 }
 
 void Factor() {
-    if ( isMatchIDorINTorREAL() ) {
+    int nodeId = createNode("Factor");
+    connectNodes(currentParent, nodeId);
+
+    int prevParent = currentParent;
+    currentParent = nodeId;
+
+    if (isMatchIDorINTorREAL()) {
         consumeIDorINTorREAL();
-    } else if ( isMatch(26) ) { // (
+    int nodeId = createNode("id");
+    connectNodes(currentParent, nodeId);
+    } else if (isMatch(26)) { // (
         consume(26); // (
         Exp_noOutput();
         consume(27); // )
     } else {
         fprintf(fp_syn, "error in Factor()\n");
     }
+
+    currentParent = prevParent;
 }
 
 void BoolExp() {

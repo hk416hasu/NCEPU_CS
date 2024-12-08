@@ -7,6 +7,7 @@
 int main() {
     InitTokens();
     InitNTR();
+    initDotFile();
 
     getNextToken();
     Program();
@@ -16,6 +17,7 @@ int main() {
         printf("error! Tokens were NOT consumed completed\n");
     }
 
+    closeDotFile();
     CloseTokens();
     CloseNTR();
 
