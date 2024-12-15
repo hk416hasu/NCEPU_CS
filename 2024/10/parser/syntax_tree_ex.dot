@@ -1,0 +1,19 @@
+digraph SyntaxTree {
+    Expr [label="Expr"];
+    Term [label="Term"];
+    Plus [label="+"];
+    Factor [label="Factor"];
+    A [label="a"];
+    B [label="b"];
+    C [label="c"];
+    Multiply [label="*"];
+    
+    Expr -> Term;
+    Expr -> Plus;
+    Expr -> Factor;
+    Term -> A;
+    Factor -> B;
+    Factor -> Multiply;
+    Multiply -> C;
+}
+
