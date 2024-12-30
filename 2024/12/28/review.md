@@ -21,27 +21,27 @@
     - it will gen a .sql file, which can be imported into mysql (restore: `tldr mysql`)
 10. The front-end will POST the hash value of users'plain-passwd
     - ~~(advanced) a dynamic hash passed is better, but more challenging~~
-    - We use https😎
+    - We use https😎 + nonce(challenge and response)
+11. We can send email to users
 
 
 
 
 ### Need more concern
-1. The mysql server is remote, so the unit test maybe a little confused and challenging
-2. We haven't determine 
+1. the APIs of each modules should be designed and discussed, at least one time
+    - design indenpendly, and review together
+2. Our architecture is good enough, or not? Try to solve your teamers question!
+3. The mysql server is remote, so the unit test maybe a little confused and challenging
+4. We haven't determine 
     - the depandency of software, like version of mysql C api, mysql, nodejs, npm, mysql2 module, express etc.
     - the C/C++ version/standard, C++11, or C++17 or C++23?
         - no need to concern about OS (i think)
     - the compiler and its version
     - the APIs design of modules
-3. How to prepare for the future?
+5. How to prepare for the future?
     - No prepare: KISS + YAGNI
-4. i want to employ the Scrum?
-5. (advanced) Exponential Backoff Strategy for Network Timeouts
-6. We will communicate by static files, how can we resolve .json in C/C++?
-
-
-#### What should we do next?
-1. the APIs of each modules should be designed and discussed, at least one time
-    - design indenpendly, and review together
-2. Our architecture is good enough, or not? Try to solve your teamers question!
+6. i want to employ the Scrum?
+7. (advanced) Exponential Backoff Strategy for Network Timeouts
+8. We will communicate by static files, how can we resolve .json in C/C++?
+9. When to go home?
+10. Who will be resposibility for what?
