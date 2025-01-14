@@ -5,12 +5,12 @@
 
 void isbn_search(const char *isbn) {
     char command[100];
-    snprintf(command, sizeof(command), "nodejs ./isbn.js %s > ./info.json", isbn);
+    snprintf(command, sizeof(command), "nodejs ./isbn2.js %s > ./info.json", isbn);
     assert(system(command) != -1);
 }
 
 int main(void) {
-    const char isbn[] = "9787115539168";
+    const char isbn[] = "9787559646224";
     isbn_search(isbn);
     return 0;
 }
