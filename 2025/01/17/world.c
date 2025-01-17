@@ -9,15 +9,7 @@
 int main() {
   int fd = open("./foo.txt", O_WRONLY | O_CREAT, S_IWUSR | S_IRUSR);
   assert(fd >= 0);
-  int rc = fork();
-  assert(rc >= 0);
-  if (rc != 0) {
-    write(fd, "Hello", 5);
-  } else {
-    write(fd, "World", 5);
-  }
-  fsync(fd);
-  close(fd);
+  write(fd, "world", 5);
 
   return 0;
 }
