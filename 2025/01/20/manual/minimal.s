@@ -11,6 +11,10 @@ _start:
   mov $(message_end - message), %rdx
   syscall
 
+loop:
+  jmp loop
+# pmap $(pidof minimal)
+
   mov $60, %rax; mov $0, %rdi; syscall
 
 .section .data
