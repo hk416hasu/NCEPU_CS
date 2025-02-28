@@ -17,7 +17,8 @@ public:
     }
 
     void pop() {
-        if (q.front() == minDeque.front()) {
+    	assert(!q.empty());
+        if (!q.empty() && q.front() == minDeque.front()) {
             minDeque.pop_front();
         }
         q.pop();
