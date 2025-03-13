@@ -16,7 +16,7 @@ $(TARGET): $(OBJS)
 %.o: %.cc
 	$(CC) $(CFLAGS) -c $< -o $@
 
-debug: CFLAGS = DEBUG_FLAGS
+debug: CFLAGS = $(DEBUG_FLAGS)
 debug: clean $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(TARGET)
 
